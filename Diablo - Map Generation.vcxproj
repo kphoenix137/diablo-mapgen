@@ -164,6 +164,7 @@
     <ClCompile Include="Source\level.cpp" />
     <ClCompile Include="Source\lighting.cpp" />
     <ClCompile Include="Source\quests.cpp" />
+    <ClCompile Include="Source\trigs.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

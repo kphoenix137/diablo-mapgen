@@ -10,6 +10,7 @@
 //#include "gendung.h"
 #include "all.h"
 #include "level.h"
+#include "trigs.h"
 #include <iostream>
 #include <iomanip>
 
@@ -62,6 +63,20 @@ void whatleveltype(int l)
 	}
 }
 
+void InitStairCordinates(int l)
+{
+	if (l == 0) { }
+	if (l >= 1 && l <= 4)
+		InitL1Triggers();
+	if (l >= 5 && l <= 8)
+		InitL2Triggers();
+	if (l >= 9 && l <= 12)
+		InitL3Triggers();
+	if (l >= 13 && l <= 16)
+		InitL4Triggers();
+	int wkz = 1;
+}
+
 void createSpecificDungeon(int i)
 {
 	if (leveltype == DTYPE_CATHEDRAL)
@@ -110,6 +125,7 @@ int main()
 			whatleveltype(i);
 
 			createSpecificDungeon(i);
+			InitStairCordinates(i);
 
 			for (int boby = 0; boby < MAXDUNY; boby++)
 			{
@@ -125,6 +141,10 @@ int main()
 				}
 				std::cout << std::endl;
 			}
+			
+			std::cout << std::hex << trigs[0]._tmsg << std::dec << " : (" << trigs[0]._tx << "," << trigs[0]._ty << ")" << std::endl;
+			std::cout << std::hex << trigs[1]._tmsg << std::dec << " : (" << trigs[1]._tx << "," << trigs[1]._ty << ")" << std::endl;
+			std::cout << std::hex << trigs[2]._tmsg << std::dec << " : (" << trigs[2]._tx << "," << trigs[2]._ty << ")" << std::endl;
 			std::cout << "--------------------------" << std::endl;
 		}
 		ExportDun();
