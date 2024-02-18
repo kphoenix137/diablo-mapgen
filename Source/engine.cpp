@@ -1,11 +1,12 @@
-#include "all.h"
-
 #include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <malloc.h>
 #include <stdio.h>
 #include <unistd.h>
+
+#include "engine.h"
+#include "gendung.h"
 
 PlayerStruct plr[MAX_PLRS];
 DWORD glSeedTbl[NUMLEVELS];
@@ -17,6 +18,7 @@ const int RndMult = 0x015A4E35;
 const int RndInc = 1;
 BYTE gbMaxPlayers = 1;
 BOOL leveldebug = false;
+bool zoomflag = false;
 
 /** Seed value before the most recent call to SetRndSeed() */
 int orgseed;
@@ -159,6 +161,16 @@ void app_fatal(const char* dummystring)
 }
 
 void SetAutomapView(int nXPos, int nYPos)
+{
+
+}
+
+void SetMapMonsters(BYTE *pMap, int startx, int starty)
+{
+
+}
+
+void SetMapObjects(BYTE *pMap, int startx, int starty)
 {
 
 }

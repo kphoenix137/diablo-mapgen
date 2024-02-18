@@ -1,8 +1,10 @@
+#include "level.h"
+
 #include <cstdint>
 #include <stdio.h>
 
-#include "all.h"
-
+#include "../types.h"
+#include "gendung.h"
 
 inline void WriteLE16(FILE* out, uint16_t val)
 {

@@ -1,19 +1,16 @@
-//#include "types.h"
-//#include "enums.h"
-//#include "level.h"
-//#include "drlg_l1.h"
-//#include "drlg_l2.h"
-//#include "drlg_l3.h"
-//#include "drlg_l4.h"
-//
-//#include "engine.h"
-//#include "gendung.h"
-#include "all.h"
-#include "level.h"
 #include <iostream>
 #include <iomanip>
 
+#include "../types.h"
 
+#include "drlg_l1.h"
+#include "drlg_l2.h"
+#include "drlg_l3.h"
+#include "drlg_l4.h"
+#include "engine.h"
+#include "gendung.h"
+#include "level.h"
+#include "quests.h"
 
 static int InitLevelType(int l)
 {
