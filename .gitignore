@@ -377,6 +377,7 @@ ASALocalRun/
 
 # MPQ files
 *.mpq
+levels/
 
 # ddraw wrapper configuration file
 ddraw_settings.ini

@@ -202,6 +202,7 @@ void FillSolidBlockTbls()
 		break;
 	default:
 		app_fatal("FillSolidBlockTbls");
+		exit(1);
 	}
 
 	pTmp = pSBFile;
@@ -657,17 +658,17 @@ void SetDungeonMicros()
 	MakeSpeedCels();
 	SetSpeedCels();
 
-	if (zoomflag) {
-		ViewDX = SCREEN_WIDTH;
-		ViewDY = VIEWPORT_HEIGHT;
-		ViewBX = SCREEN_WIDTH / TILE_WIDTH;
-		ViewBY = VIEWPORT_HEIGHT / TILE_HEIGHT;
-	} else {
-		ViewDX = ZOOM_WIDTH;
-		ViewDY = ZOOM_HEIGHT;
-		ViewBX = ZOOM_WIDTH / TILE_WIDTH;
-		ViewBY = ZOOM_HEIGHT / TILE_HEIGHT;
-	}
+	//if (zoomflag) {
+	//	ViewDX = SCREEN_WIDTH;
+	//	ViewDY = VIEWPORT_HEIGHT;
+	//	ViewBX = SCREEN_WIDTH / TILE_WIDTH;
+	//	ViewBY = VIEWPORT_HEIGHT / TILE_HEIGHT;
+	//} else {
+	//	ViewDX = ZOOM_WIDTH;
+	//	ViewDY = ZOOM_HEIGHT;
+	//	ViewBX = ZOOM_WIDTH / TILE_WIDTH;
+	//	ViewBY = ZOOM_HEIGHT / TILE_HEIGHT;
+	//}
 }
 
 void DRLG_InitTrans()

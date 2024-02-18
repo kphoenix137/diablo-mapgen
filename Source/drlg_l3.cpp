@@ -1184,6 +1184,7 @@ static void DRLG_L3River()
 	bail = FALSE;
 	trys = 0;
 	/// BUGFIX: pdir is uninitialized, add code `pdir = -1;`
+	pdir = -1;
 
 	while (trys < 200 && rivercnt < 4) {
 		bail = FALSE;
@@ -2796,8 +2797,8 @@ void LoadL3Dungeon(const char *sFileName, int vx, int vy)
 	DRLG_Init_Globals();
 	ViewX = 31;
 	ViewY = 83;
-	SetMapMonsters(pLevelMap, 0, 0);
-	SetMapObjects(pLevelMap, 0, 0);
+//	SetMapMonsters(pLevelMap, 0, 0);
+//	SetMapObjects(pLevelMap, 0, 0);
 
 	for (j = 0; j < MAXDUNY; j++) {
 		for (i = 0; i < MAXDUNX; i++) {
