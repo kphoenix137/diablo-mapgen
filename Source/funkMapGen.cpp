@@ -111,6 +111,15 @@ void printAsciiLevel()
 	std::cout << std::endl;
 }
 
+void printHelp()
+{
+	std::cout << "--help         Print this message and exit" << std::endl;
+	std::cout << "--quiet        Do not print to console" << std::endl;
+	std::cout << "--export       Export levels as .dun files" << std::endl;
+	std::cout << "--start <#>    The seed to start from" << std::endl;
+	std::cout << "--count <#>    The number of seeds to process" << std::endl;
+}
+
 int main(int argc, char **argv)
 {
 	int startSeed = 0;
@@ -121,11 +130,7 @@ int main(int argc, char **argv)
 	for (int i = 0; i < argc; i++) {
 		std::string arg = argv[i];
 		if (arg == "--help") {
-			std::cout << "--help         Print this message and exit" << std::endl;
-			std::cout << "--quiet        Do not print to console" << std::endl;
-			std::cout << "--export       Export levels as .dun files" << std::endl;
-			std::cout << "--start <#>    The seed to start from" << std::endl;
-			std::cout << "--count <#>    The number of seeds to process" << std::endl;
+			printHelp();
 			return 0;
 		} else if (arg == "--quiet") {
 			quiet = true;
