@@ -1,11 +1,11 @@
 #include "all.h"
 
-#include "math.h"
-#include <malloc.h>
-
-#include <stdio.h>
+#include <algorithm>
+#include <cmath>
 #include <iostream>
-
+#include <malloc.h>
+#include <stdio.h>
+#include <unistd.h>
 
 PlayerStruct plr[MAX_PLRS];
 DWORD glSeedTbl[NUMLEVELS];
@@ -81,18 +81,30 @@ void mem_free_dbg(void* p)
  * @param pdwFileLen Will be set to file size if non-NULL
  * @return Buffer with content of file
  */
-BYTE* LoadFileInMem(const char* pszName, DWORD* pdwFileLen)
+BYTE* LoadFileInMem(std::string pszName, DWORD* pdwFileLen)
 {
 	BYTE* buf;
 	int fileLen;
 
-	FILE* filestream = fopen(pszName, "r+b");
+#ifndef WIN32
+    // Convert to lowercase
+    std::transform(pszName.begin(), pszName.end(), pszName.begin(), [](unsigned char c){ return std::tolower(c); });
+
+    // Replace backslashes with forward slashes
+    std::replace(pszName.begin(), pszName.end(), '\\', '/');
+#endif
+
+	FILE* filestream = fopen(pszName.c_str(), "r+b");
 
 	if (!filestream)
 	{
 		char cwd[MAX_PATH];
 		cwd[0] = '\0';
-		GetCurrentDirectoryA(MAX_PATH, cwd);
+#ifdef WIN32
+		GetCurrentDirectoryA(sizeof(cwd), cwd);
+#else
+		getcwd(cwd, sizeof(cwd));
+#endif
 		std::cout << cwd << std::endl;
 		app_fatal("FILE NOT FOUND");
 	}
@@ -142,7 +154,7 @@ void LoadLvlGFX()
 
 void app_fatal(const char* dummystring)
 {
-	printf(dummystring);
+	std::cout << dummystring << std::endl;
 	exit(1);
 }
 

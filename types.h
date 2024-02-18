@@ -6,23 +6,36 @@
 #ifndef _TYPES_H
 #define _TYPES_H
 
-#define WIN32_LEAN_AND_MEAN
-
 #include "resource.h"
 
-#include <windows.h>
-#include <mmsystem.h>
+#include <cstdint>
+#include <cstring>
+
+typedef uint8_t UCHAR;
+typedef uint8_t BYTE;
+typedef uint8_t BOOLEAN;
+typedef uint16_t WORD;
+typedef int32_t LONG;
+typedef uint32_t DWORD;
+typedef uint32_t BOOL;
+typedef void* HANDLE;
+typedef void* HWND;
+
+#define TRUE 1
+#define FALSE 0
+#define MAX_PATH 260
+
+// stubs for unused stuff
+typedef uint64_t FILETIME;
+typedef uint64_t WAVEFORMATEX;
+typedef uint64_t LPDIRECTSOUNDBUFFER;
+#define __stdcall
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <ddraw.h>
-#include <dsound.h>
-#include <io.h>
 #include <limits.h>
 #include <math.h>
 #include <time.h>
-#include <process.h>
-#include <shlobj.h>
-#include <shellapi.h>
 
 #ifdef __GNUC__
 #include <ctype.h>
