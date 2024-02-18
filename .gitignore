@@ -381,3 +381,5 @@ levels/
 
 # ddraw wrapper configuration file
 ddraw_settings.ini
+/build*
+.codelite
