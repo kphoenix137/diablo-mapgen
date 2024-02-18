@@ -95,40 +95,46 @@ void seedSelection(int s)
 	}
 }
 
-int main()
+void printAsciiLevel()
 {
-	for (int q = 0; q < 1; q++)
-	{
-		seedSelection(q);
+	for (int boby = 16; boby < MAXDUNY - 17; boby++) {
+		for (int bobx = 16; bobx < MAXDUNX - 17; bobx++) {
+			if (nSolidTable[dPiece[bobx][boby]])
+				std::cout << "#";
+			else
+				std::cout << " ";
+		}
+		std::cout << std::endl;
+	}
+}
+
+int main(int argc, char **argv)
+{
+	int startSeed = 0;
+	int seedCount = 1;
+	bool quiet = false;
+	bool printLevels = true;
+	bool exportLevels = true;
+
+	for (int seed = startSeed; seed < seedCount; seed++) {
+		if (!quiet)
+			std::cout << "processing seed " << seed << std::endl;
+
+		seedSelection(seed);
 		InitQuests();
 
-		int abc = 1;
+		for (int level = 1; level < NUMLEVELS; level++) {
+			currlevel = level;
+			whatleveltype(level);
 
-		for (int i = abc; i < NUMLEVELS; i++)
-		{
-			currlevel = i;
-			whatleveltype(i);
-
-			createSpecificDungeon(i);
-
-			for (int boby = 0; boby < MAXDUNY; boby++)
-			{
-				for (int bobx = 0; bobx < MAXDUNX; bobx++)
-				{
-					if (nSolidTable[dPiece[bobx][boby]])
-						std::cout << "#";
-					else
-						std::cout << " ";
-					//std::cout << (0 + (dPiece[bobx][boby] % 10));
-					dPiece[bobx][boby];
-					//std::cout << min(max(dPiece[bobx][boby]-8,0),9);
-				}
-				std::cout << std::endl;
-			}
-			std::cout << "--------------------------" << std::endl;
+			createSpecificDungeon(level);
+			if (printLevels && !quiet)
+				printAsciiLevel();
+			if (exportLevels)
+				ExportDun();
 		}
-		ExportDun();
 	}
+
 	return 0;
 }
 
