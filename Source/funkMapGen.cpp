@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 	int seedCount = 1;
 	bool quiet = false;
 	bool printLevels = true;
-	bool exportLevels = true;
+	bool exportLevels = false;
 
 	for (int seed = startSeed; seed < seedCount; seed++) {
 		if (!quiet)
