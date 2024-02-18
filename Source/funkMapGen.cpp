@@ -25,19 +25,22 @@ static int InitLevelType(int l)
 	return DTYPE_HELL;
 }
 
-void whatleveltype(int l)
+void whatleveltype()
 {
-	if (l == 0) {
-		leveltype = DTYPE_TOWN;
-	} else if (l == 1) {
+	switch (currlevel) {
+	case 1:
 		leveltype = DTYPE_CATHEDRAL;
-	} else if (l == 5) {
+		break;
+	case 5:
 		leveltype = DTYPE_CATACOMBS;
-	} else if (l == 9) {
+		break;
+	case 9:
 		leveltype = DTYPE_CAVES;
-	} else if (l == 13) {
+		break;
+	case 13:
 		leveltype = DTYPE_HELL;
-	} else {
+		break;
+	default:
 		return;
 	}
 
@@ -45,34 +48,33 @@ void whatleveltype(int l)
 	FillSolidBlockTbls();
 }
 
-void createSpecificDungeon(int i)
+void createSpecificDungeon()
 {
+	uint32_t lseed = glSeedTbl[currlevel];
 	if (leveltype == DTYPE_CATHEDRAL)
-		CreateL5Dungeon(glSeedTbl[i], 0);
+		CreateL5Dungeon(lseed, 0);
 	else if (leveltype == DTYPE_CATACOMBS)
-		CreateL2Dungeon(glSeedTbl[i], 0);
+		CreateL2Dungeon(lseed, 0);
 	else if (leveltype == DTYPE_CAVES)
-		CreateL3Dungeon(glSeedTbl[i], 0);
+		CreateL3Dungeon(lseed, 0);
 	else if (leveltype == DTYPE_HELL)
-		CreateL4Dungeon(glSeedTbl[i], 0);
+		CreateL4Dungeon(lseed, 0);
 }
 
 /**
  * @brief GET MAIN SEED, GET ALL MAP SEEDS
  * @return nothing, but updates RNG seeds list glSeedTbl[i]
  */
-void seedSelection(int s)
+void seedSelection(int seed)
 {
-	int i;
-
 	SetRndSeed(0);
-	sgGameInitInfo.dwSeed = s;
+	sgGameInitInfo.dwSeed = seed;
 	sgGameInitInfo.bDiff = gnDifficulty;
 
 	gnDifficulty = sgGameInitInfo.bDiff;
 	SetRndSeed(sgGameInitInfo.dwSeed);
 
-	for (i = 0; i < NUMLEVELS; i++) {
+	for (int i = 0; i < NUMLEVELS; i++) {
 		glSeedTbl[i] = GetRndSeed();
 		gnLevelTypeTbl[i] = InitLevelType(i);
 	}
@@ -89,6 +91,7 @@ void printAsciiLevel()
 		}
 		std::cout << std::endl;
 	}
+	std::cout << std::endl;
 }
 
 int main(int argc, char **argv)
@@ -96,10 +99,29 @@ int main(int argc, char **argv)
 	int startSeed = 0;
 	int seedCount = 1;
 	bool quiet = false;
-	bool printLevels = true;
 	bool exportLevels = false;
 
-	for (int seed = startSeed; seed < seedCount; seed++) {
+	for (int i = 0; i < argc; i++) {
+		std::string arg = argv[i];
+		if (arg == "--help") {
+			std::cout << "--help         Print this message and exit" << std::endl;
+			std::cout << "--quiet        Do not print to console" << std::endl;
+			std::cout << "--export       Export levels as .dun files" << std::endl;
+			std::cout << "--start <#>    The seed to start from" << std::endl;
+			std::cout << "--count <#>    The number of seeds to process" << std::endl;
+			return 0;
+		} else if (arg == "--quiet") {
+			quiet = true;
+		} else if (arg == "--export") {
+			exportLevels = true;
+		} else if (arg == "--start" && argc >= i + 1) {
+			startSeed = std::stoi(argv[i + 1]);
+		} else if (arg == "--count" && argc >= i + 1) {
+			seedCount = std::stoi(argv[i + 1]);
+		}
+	}
+
+	for (int seed = startSeed; seed < startSeed + seedCount; seed++) {
 		if (!quiet)
 			std::cout << "processing seed " << seed << std::endl;
 
@@ -108,10 +130,10 @@ int main(int argc, char **argv)
 
 		for (int level = 1; level < NUMLEVELS; level++) {
 			currlevel = level;
-			whatleveltype(level);
+			whatleveltype();
+			createSpecificDungeon();
 
-			createSpecificDungeon(level);
-			if (printLevels && !quiet)
+			if (!quiet)
 				printAsciiLevel();
 			if (exportLevels)
 				ExportDun();
