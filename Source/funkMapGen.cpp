@@ -27,36 +27,22 @@ static int InitLevelType(int l)
 
 void whatleveltype(int l)
 {
-	if (l == 0)
-	{
+	if (l == 0) {
 		leveltype = DTYPE_TOWN;
-		FillSolidBlockTbls();
-		LoadLvlGFX();
-	}
-	if (l == 1)
-	{
+	} else if (l == 1) {
 		leveltype = DTYPE_CATHEDRAL;
-		FillSolidBlockTbls();
-		LoadLvlGFX();
-	}
-	if (l == 5)
-	{
+	} else if (l == 5) {
 		leveltype = DTYPE_CATACOMBS;
-		FillSolidBlockTbls();
-		LoadLvlGFX();
-	}
-	if (l == 9)
-	{
+	} else if (l == 9) {
 		leveltype = DTYPE_CAVES;
-		FillSolidBlockTbls();
-		LoadLvlGFX();
-	}
-	if (l == 13)
-	{
+	} else if (l == 13) {
 		leveltype = DTYPE_HELL;
-		FillSolidBlockTbls();
-		LoadLvlGFX();
+	} else {
+		return;
 	}
+
+	LoadLvlGFX();
+	FillSolidBlockTbls();
 }
 
 void createSpecificDungeon(int i)
@@ -134,7 +120,3 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-
-
-
-//if (dungeon[bobx][boby] == 6) //CATH:15, CATA:3, HELL:6

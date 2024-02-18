@@ -6,14 +6,14 @@
 #include "../types.h"
 #include "gendung.h"
 
-inline void WriteLE16(FILE* out, uint16_t val)
+inline void WriteLE16(FILE *out, uint16_t val)
 {
 	fwrite(&val, 1, 2, out);
 }
 
 void ExportDun()
 {
-	FILE* dunFile = fopen("levelName.dun", "wb");
+	FILE *dunFile = fopen("levelName.dun", "wb");
 
 	WriteLE16(dunFile, DMAXX);
 	WriteLE16(dunFile, DMAXY);
@@ -36,14 +36,14 @@ void ExportDun()
 	for (int y = 16; y < MAXDUNY - 16; y++) {
 		for (int x = 16; x < MAXDUNX - 16; x++) {
 			uint16_t monsterId = 0;
-			//if (dMonster[x][y] > 0) {
+			// if (dMonster[x][y] > 0) {
 			//	for (int i = 0; i < 157; i++) {
 			//		if (MonstConvTbl[i] == Monsters[std::abs(dMonster[x][y]) - 1].type().type) {
 			//			monsterId = i + 1;
 			//			break;
 			//		}
 			//	}
-			//}
+			// }
 			WriteLE16(dunFile, monsterId);
 		}
 	}
@@ -52,15 +52,15 @@ void ExportDun()
 	for (int y = 16; y < MAXDUNY - 16; y++) {
 		for (int x = 16; x < MAXDUNX - 16; x++) {
 			uint16_t objectId = 0;
-			//Object *object = FindObjectAtPosition({ x, y }, false);
-			//if (object != nullptr) {
+			// Object *object = FindObjectAtPosition({ x, y }, false);
+			// if (object != nullptr) {
 			//	for (int i = 0; i < 147; i++) {
 			//		if (ObjTypeConv[i] == object->_otype) {
 			//			objectId = i;
 			//			break;
 			//		}
 			//	}
-			//}
+			// }
 			WriteLE16(dunFile, objectId);
 		}
 	}
@@ -73,4 +73,3 @@ void ExportDun()
 	}
 	fclose(dunFile);
 }
-

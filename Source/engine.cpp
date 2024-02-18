@@ -63,16 +63,16 @@ int random_(BYTE idx, int v)
 	return GetRndSeed() % v;
 }
 
-BYTE* DiabloAllocPtr(DWORD dwBytes)
+BYTE *DiabloAllocPtr(DWORD dwBytes)
 {
-	return (BYTE*)malloc(dwBytes);
+	return (BYTE *)malloc(dwBytes);
 }
 
 /**
  * @brief Multithreaded safe memfree
  * @param p Memory pointer to free
  */
-void mem_free_dbg(void* p)
+void mem_free_dbg(void *p)
 {
 	free(p);
 }
@@ -83,23 +83,22 @@ void mem_free_dbg(void* p)
  * @param pdwFileLen Will be set to file size if non-NULL
  * @return Buffer with content of file
  */
-BYTE* LoadFileInMem(std::string pszName, DWORD* pdwFileLen)
+BYTE *LoadFileInMem(std::string pszName, DWORD *pdwFileLen)
 {
-	BYTE* buf;
+	BYTE *buf;
 	int fileLen;
 
 #ifndef WIN32
-    // Convert to lowercase
-    std::transform(pszName.begin(), pszName.end(), pszName.begin(), [](unsigned char c){ return std::tolower(c); });
+	// Convert to lowercase
+	std::transform(pszName.begin(), pszName.end(), pszName.begin(), [](unsigned char c) { return std::tolower(c); });
 
-    // Replace backslashes with forward slashes
-    std::replace(pszName.begin(), pszName.end(), '\\', '/');
+	// Replace backslashes with forward slashes
+	std::replace(pszName.begin(), pszName.end(), '\\', '/');
 #endif
 
-	FILE* filestream = fopen(pszName.c_str(), "r+b");
+	FILE *filestream = fopen(pszName.c_str(), "r+b");
 
-	if (!filestream)
-	{
+	if (!filestream) {
 		char cwd[MAX_PATH];
 		cwd[0] = '\0';
 #ifdef WIN32
@@ -111,7 +110,7 @@ BYTE* LoadFileInMem(std::string pszName, DWORD* pdwFileLen)
 		app_fatal("FILE NOT FOUND");
 	}
 	fseek(filestream, 0, SEEK_END); // seek to end of file
-	fileLen = ftell(filestream); // get current file pointer
+	fileLen = ftell(filestream);    // get current file pointer
 	fseek(filestream, 0, SEEK_SET); // seek back to beginning of file
 
 	if (pdwFileLen)
@@ -120,7 +119,7 @@ BYTE* LoadFileInMem(std::string pszName, DWORD* pdwFileLen)
 	if (!fileLen)
 		app_fatal("Zero length SFILE:\n%s");
 
-	buf = (BYTE*)DiabloAllocPtr(fileLen);
+	buf = (BYTE *)DiabloAllocPtr(fileLen);
 
 	int read = fread(buf, 1, fileLen, filestream);
 
@@ -131,30 +130,27 @@ BYTE* LoadFileInMem(std::string pszName, DWORD* pdwFileLen)
 
 void LoadLvlGFX()
 {
+	free(pMegaTiles);
+
 	switch (leveltype) {
 	case DTYPE_CATHEDRAL:
 		pMegaTiles = LoadFileInMem("Levels\\L1Data\\L1.TIL", NULL);
-		//pLevelPieces = LoadFileInMem("Levels\\L1Data\\L1.MIN", NULL);
-		break;
+		return;
 	case DTYPE_CATACOMBS:
 		pMegaTiles = LoadFileInMem("Levels\\L2Data\\L2.TIL", NULL);
-		//pLevelPieces = LoadFileInMem("Levels\\L2Data\\L2.MIN", NULL);
-		break;
+		return;
 	case DTYPE_CAVES:
 		pMegaTiles = LoadFileInMem("Levels\\L3Data\\L3.TIL", NULL);
-		//pLevelPieces = LoadFileInMem("Levels\\L3Data\\L3.MIN", NULL);
-		break;
+		return;
 	case DTYPE_HELL:
 		pMegaTiles = LoadFileInMem("Levels\\L4Data\\L4.TIL", NULL);
-		//pLevelPieces = LoadFileInMem("Levels\\L4Data\\L4.MIN", NULL);
-		break;
+		return;
 	default:
 		app_fatal("LoadLvlGFX");
-		break;
 	}
 }
 
-void app_fatal(const char* dummystring)
+void app_fatal(const char *dummystring)
 {
 	std::cout << dummystring << std::endl;
 	exit(1);
@@ -162,15 +158,12 @@ void app_fatal(const char* dummystring)
 
 void SetAutomapView(int nXPos, int nYPos)
 {
-
 }
 
 void SetMapMonsters(BYTE *pMap, int startx, int starty)
 {
-
 }
 
 void SetMapObjects(BYTE *pMap, int startx, int starty)
 {
-
 }
