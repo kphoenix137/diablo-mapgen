@@ -15,6 +15,21 @@
 #include "trigs.h"
 #include "path.h"
 
+typedef struct Point {
+	int x;
+	int y;
+
+	bool operator==(const Point &other) const
+	{
+		return x == other.x && y == other.y;
+	}
+
+	bool operator!=(const Point &other) const
+	{
+		return !(*this == other);
+	}
+} Point;
+
 static int InitLevelType(int l)
 {
 	if (l == 0)
@@ -51,129 +66,100 @@ void whatleveltype()
 	FillSolidBlockTbls();
 }
 
+Point StairsUp;
+Point StairsDown;
+
 void InitStairCordinates()
 {
-	int l = currlevel;
-	if (l == 0) { }
-	if (l >= 1 && l <= 4)
+	if (currlevel >= 1 && currlevel <= 4)
 		InitL1Triggers();
-	if (l >= 5 && l <= 8)
+	if (currlevel >= 5 && currlevel <= 8)
 		InitL2Triggers();
-	if (l >= 9 && l <= 12)
+	if (currlevel >= 9 && currlevel <= 12)
 		InitL3Triggers();
-	if (l >= 13 && l <= 16)
+	if (currlevel >= 13 && currlevel <= 16)
 		InitL4Triggers();
+
+	StairsUp = { -1, -1 };
+	StairsDown = { -1, -1 };
+
+	for (int i = 0; i < numtrigs; i++) {
+		if (trigs[i]._tmsg == WM_DIABNEXTLVL) {
+			StairsDown = { trigs[i]._tx, trigs[i]._ty };
+		} else if (trigs[i]._tmsg == WM_DIABPREVLVL) {
+			StairsUp = { trigs[i]._tx, trigs[i]._ty };
+		}
+	}
+}
+
+BOOL SolidLoc(int x, int y)
+{
+	if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY) {
+		return FALSE;
+	}
+
+	return nSolidTable[dPiece[x][y]];
+}
+
+BOOL PosOkPlayer(int pnum, int x, int y)
+{
+	if (SolidLoc(x, y) || dPiece[x][y] == 0) {
+		return FALSE;
+	}
+
+	// if (dObject[x][y] != 0) {
+	//  char bv;
+	//	if (dObject[x][y] > 0) {
+	//		bv = dObject[x][y] - 1;
+	//	} else {
+	//		bv = -(dObject[x][y] + 1);
+	//	}
+	//	if (object[bv]._oSolidFlag) {
+	//		return FALSE;
+	//	}
+	// }
+
+	return TRUE;
 }
 
 int PathLength()
 {
-	int l = currlevel;
-	int placeholderEntranceCoords[2];
-	int placeholderExitCoords[2];
-	int plength = -1;
+	char path[MAX_PATH_LENGTH];
 
-	if (l == 0) { }
-	if (l >= 1 && l <= 4)
-	{
-		//plength = FindPath(?????, 1, trigs[0]._tx, trigs[0]._ty, trigs[1]._tx, trigs[1]._ty, char *path);
-	}
-	if (l >= 5 && l <= 8)
-	{
-		// plength = FindPath(?????, 1, trigs[0]._tx, trigs[0]._ty, trigs[2]._tx, trigs[2]._ty, char *path);
-	}
-	if (l >= 9 && l <= 12)
-	{
-		// plength = FindPath(?????, 1, trigs[0]._tx, trigs[0]._ty, trigs[1]._tx, trigs[1]._ty, char *path);
-	}
-	if (l >= 13 && l <= 16)
-	{
-		// plength = FindPath(?????, 1, trigs[0]._tx, trigs[0]._ty, trigs[2]._tx, trigs[2]._ty, char *path);
-	}
-	return plength;
+	return FindPath(PosOkPlayer, 0, StairsUp.x, StairsUp.y, StairsDown.x, StairsDown.y, path);
 }
 
-int PathLengthSimple()
+int CalcStairsChebyshevDistance()
 {
-	int l = currlevel;
-	int plength = -1;
+	if (StairsUp == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
+		return -1;
+	}
 
-	if (l == 0)
-		plength = -1;
-	if (l >= 1 && l <= 4) {
-		int H = std::max(trigs[1]._tx, trigs[0]._tx) - std::min(trigs[1]._tx, trigs[0]._tx);
-		int V = std::max(trigs[1]._ty, trigs[0]._ty) - std::min(trigs[1]._ty, trigs[0]._ty);
-		return std::max(H, V);
-	}
-	if (l >= 5 && l <= 8) {
-		int H = std::max(trigs[2]._tx, trigs[0]._tx) - std::min(trigs[2]._tx, trigs[0]._tx);
-		int V = std::max(trigs[2]._ty, trigs[0]._ty) - std::min(trigs[2]._ty, trigs[0]._ty);
-		return std::max(H, V);
-	}
-	if (l >= 9 && l <= 12) {
-		int H = std::max(trigs[1]._tx, trigs[0]._tx) - std::min(trigs[1]._tx, trigs[0]._tx);
-		int V = std::max(trigs[1]._ty, trigs[0]._ty) - std::min(trigs[1]._ty, trigs[0]._ty);
-		return std::max(H, V);
-	}
-	if (l >= 13 && l <= 16) {
-		int H = std::max(trigs[2]._tx, trigs[0]._tx) - std::min(trigs[2]._tx, trigs[0]._tx);
-		int V = std::max(trigs[2]._ty, trigs[0]._ty) - std::min(trigs[2]._ty, trigs[0]._ty);
-		return std::max(H, V);
-	}
-	return plength;
+	int horizontal = std::max(StairsUp.x, StairsDown.x) - std::min(StairsUp.x, StairsDown.x);
+	int vertical = std::max(StairsUp.y, StairsDown.y) - std::min(StairsUp.y, StairsDown.y);
+
+	return std::max(horizontal, vertical);
 }
 
 void printAsciiCoords()
 {
-	int l = currlevel;
-
-	if (l == 0) { }
-	if (l >= 1 && l <= 4) {
-		std::cout << "Ent: (" << trigs[0]._tx << ", " << trigs[0]._ty << ") ";
-		std::cout << "Ext: (" << trigs[1]._tx << ", " << trigs[1]._ty << ") " << std::endl;
-	}
-	if (l >= 5 && l <= 8) {
-		std::cout << "Ent: (" << trigs[0]._tx << ", " << trigs[0]._ty << ") ";
-		std::cout << "Ext: (" << trigs[2]._tx << ", " << trigs[2]._ty << ") " << std::endl;
-	}
-	if (l >= 9 && l <= 12) {
-		std::cout << "Ent: (" << trigs[0]._tx << ", " << trigs[0]._ty << ") ";
-		std::cout << "Ext: (" << trigs[1]._tx << ", " << trigs[1]._ty << ") " << std::endl;
-	}
-	if (l >= 13 && l <= 16) {
-		std::cout << "Ent: (" << trigs[0]._tx << ", " << trigs[0]._ty << ") ";
-		std::cout << "Ext: (" << trigs[2]._tx << ", " << trigs[2]._ty << ") " << std::endl;
-	}
+	std::cout << "Ent: (" << StairsUp.x << ", " << StairsUp.y << ") ";
+	std::cout << "Ext: (" << StairsDown.x << ", " << StairsDown.y << ") " << std::endl;
 }
 
-bool isValidLevel(bool filterEnable, bool simplefilter)
+bool IsGoodLevel()
 {
-	bool isValidLevel = true;
-	if (!filterEnable)
-		return true;
-	if (simplefilter) {
-		int maxDistance = 9;
-		int stairsDistance = PathLengthSimple();
-		isValidLevel = stairsDistance != -1 && stairsDistance < maxDistance;                                                                      // Simple comparison
-		//std::cout << "gSeed: " << sgGameInitInfo.dwSeed; // PLACEHOLDER code, replace with seed disqualification filter code at later
-		//std::cout << ", dlvl: " << std::dec << currlevel;
-		//std::cout << ", dValid: " << isValidLevel;
-		//std::cout << ", dist: " << stairsDistance;
-		//std::cout << std::endl;
-		//printAsciiCoords();
-		//std::cout << "---------------------------" << std::endl;
+	const int maxDistance = 10;
 
-	} else {
-		int maxPath = 15;
-		int stairsPath = PathLength();
-		isValidLevel = stairsPath != -1 && stairsPath < maxPath;                                                                              // Simple comparison
-		std::cout << "gSeed: " << sgGameInitInfo.dwSeed;     // PLACEHOLDER code, replace with seed disqualification filter code at later
-		std::cout << " pValid: " << isValidLevel;
-		std::cout << ", dist: " << stairsPath;
-		std::cout << std::endl;
-		printAsciiCoords();
-	}
+	int cDistance = CalcStairsChebyshevDistance();
+	if (cDistance != -1 && cDistance > maxDistance)
+		return false;
 
-	return isValidLevel;
+	int stairsPath = PathLength();
+	if (stairsPath != 0 && stairsPath < maxDistance)
+		return false;
+
+	return true;
 }
 
 void createSpecificDungeon()
@@ -208,32 +194,6 @@ void seedSelection(int seed)
 	}
 }
 
-int getStairTeleportDistance()
-{
-	int upX = -1;
-	int upY = -1;
-	int downX = -1;
-	int downY = -1;
-
-	for (int i = 0; i < numtrigs; i++) {
-		if (trigs[i]._tmsg == WM_DIABNEXTLVL) {
-			downX = trigs[i]._tx;
-			downY = trigs[i]._ty;
-		} else if (trigs[i]._tmsg == WM_DIABPREVLVL) {
-			upX = trigs[i]._tx;
-			upY = trigs[i]._ty;
-		}
-	}
-
-	if (upX != -1 && upY != -1 && downX != -1 && downY != -1) {
-		int H = std::max(upX, downX) - std::min(upX, downX);
-		int V = std::max(upY, downY) - std::min(upY, downY);
-		return std::max(H, V);
-	}
-
-	return -1;
-}
-
 void printAsciiLevel()
 {
 	for (int boby = 16; boby < MAXDUNY - 17; boby++) {
@@ -245,12 +205,6 @@ void printAsciiLevel()
 		}
 		std::cout << std::endl;
 	}
-
-	int distance = getStairTeleportDistance();
-	if (distance != -1) {
-		std::cout << "Stair teleport distance: " << distance << std::endl;
-	}
-	std::cout << std::endl;
 }
 
 void printHelp()
@@ -260,8 +214,8 @@ void printHelp()
 	std::cout << "--export       Export levels as .dun files" << std::endl;
 	std::cout << "--start <#>    The seed to start from" << std::endl;
 	std::cout << "--count <#>    The number of seeds to process" << std::endl;
-	std::cout << "--filter       Filter levels seeds" << std::endl;
-	std::cout << "--simple       Filter levels with less precise quicker methods" << std::endl;
+	std::cout << "--quality <#>  Number of levels that must be good (default 4)" << std::endl;
+	std::cout << "--verbose      Print out details about rejected seeds" << std::endl;
 }
 
 int main(int argc, char **argv)
@@ -270,8 +224,8 @@ int main(int argc, char **argv)
 	int seedCount = 1;
 	bool quiet = false;
 	bool exportLevels = false;
-	bool filter = false;
-	bool simple = false;
+	int quality = 4;
+	bool verbose = false;
 
 	for (int i = 0; i < argc; i++) {
 		std::string arg = argv[i];
@@ -286,10 +240,10 @@ int main(int argc, char **argv)
 			startSeed = std::stoi(argv[i + 1]);
 		} else if (arg == "--count" && argc >= i + 1) {
 			seedCount = std::stoi(argv[i + 1]);
-		} else if (arg == "--filter") {
-			filter = true;
-		} else if (arg == "--simple") {
-			simple = true;
+		} else if (arg == "--quality" && argc >= i + 1) {
+			quality = std::stoi(argv[i + 1]);
+		} else if (arg == "--verbose") {
+			verbose = true;
 		}
 	}
 
@@ -300,13 +254,13 @@ int main(int argc, char **argv)
 		seedSelection(seed);
 		InitQuests();
 		if (quests[Q_LTBANNER]._qactive != QUEST_NOTAVAIL) {
-			//std::cout << "gSeed: " << sgGameInitInfo.dwSeed << " thrown out: Sign Quest" << std::endl;
-			//std::cout << "---------------------------" << std::endl;
+			if (verbose)
+				std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " thrown out: Sign Quest" << std::endl;
 			continue;
 		}
 		if (quests[Q_WARLORD]._qactive != QUEST_NOTAVAIL) {
-			//std::cout << "gSeed: " << sgGameInitInfo.dwSeed << " thrown out: Warlord" << std::endl;
-			//std::cout << "---------------------------" << std::endl;
+			if (verbose)
+				std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " thrown out: Warlord" << std::endl;
 			continue;
 		}
 		for (int level = 1; level < NUMLEVELS; level++) {
@@ -315,22 +269,23 @@ int main(int argc, char **argv)
 			createSpecificDungeon();
 			InitStairCordinates();
 
-			if (!isValidLevel(filter, simple))
+			if (!IsGoodLevel()) {
+				if (level > quality || verbose) {
+					std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " quality: ";
+					for (int p = 0; p < level - 1; p++) {
+						std::cout << "+";
+					}
+					std::cout << " (" << (level - 1) << ")" << std::endl;
+					break;
+				}
 				break;
-			if (level == 4) {
-				std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " dlvl: " << level << " " << std::endl;
-			}
-			if (level == 6) {
-				std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " dlvl: " << level << " +" << std::endl;
-			}
-			if (level == 8) {
-				std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " dlvl: " << level << " +++()" << std::endl;
-			}
-			if (level == 12) {
-				std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " dlvl: " << level << " +++++++++()" << std::endl;
 			}
 			if (!quiet)
 				printAsciiLevel();
+			if (!quiet || verbose) {
+				printAsciiCoords();
+				std::cout << std::endl;
+			}
 			if (exportLevels)
 				ExportDun();
 		}
