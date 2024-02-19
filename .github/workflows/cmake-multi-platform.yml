@@ -79,5 +79,5 @@ jobs:
       if: matrix.os != 'windows-latest'
       uses: actions/upload-artifact@v2
       with:
-        name: diablo-mapgen-artifact-${{c_compiler}}-${{ matrix.build_type }}
+        name: diablo-mapgen-artifact-${{ matrix.c_compiler }}-${{ matrix.build_type }}
         path: ${{ steps.strings.outputs.build-output-dir }}/diablo-mapgen
