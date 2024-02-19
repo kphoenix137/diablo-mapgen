@@ -56,6 +56,7 @@ comparer-config.toml
 [Rr]eleases/
 x64/
 x86/
+out/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -381,3 +382,5 @@ levels/
 
 # ddraw wrapper configuration file
 ddraw_settings.ini
+/build*
+.codelite

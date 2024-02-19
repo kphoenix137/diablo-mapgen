@@ -1,20 +1,19 @@
-//#include "types.h"
-//#include "enums.h"
-//#include "level.h"
-//#include "drlg_l1.h"
-//#include "drlg_l2.h"
-//#include "drlg_l3.h"
-//#include "drlg_l4.h"
-//
-//#include "engine.h"
-//#include "gendung.h"
 #include "all.h"
 #include "level.h"
-#include "trigs.h"
 #include <iostream>
 #include <iomanip>
 
+#include "../types.h"
 
+#include "drlg_l1.h"
+#include "drlg_l2.h"
+#include "drlg_l3.h"
+#include "drlg_l4.h"
+#include "engine.h"
+#include "gendung.h"
+#include "level.h"
+#include "quests.h"
+#include "trigs.h"
 
 static int InitLevelType(int l)
 {
@@ -29,42 +28,32 @@ static int InitLevelType(int l)
 	return DTYPE_HELL;
 }
 
-void whatleveltype(int l)
+void whatleveltype()
 {
-	if (l == 0)
-	{
-		leveltype = DTYPE_TOWN;
-		FillSolidBlockTbls();
-		LoadLvlGFX();
-	}
-	if (l == 1)
-	{
+	switch (currlevel) {
+	case 1:
 		leveltype = DTYPE_CATHEDRAL;
-		FillSolidBlockTbls();
-		LoadLvlGFX();
-	}
-	if (l == 5)
-	{
+		break;
+	case 5:
 		leveltype = DTYPE_CATACOMBS;
-		FillSolidBlockTbls();
-		LoadLvlGFX();
-	}
-	if (l == 9)
-	{
+		break;
+	case 9:
 		leveltype = DTYPE_CAVES;
-		FillSolidBlockTbls();
-		LoadLvlGFX();
-	}
-	if (l == 13)
-	{
+		break;
+	case 13:
 		leveltype = DTYPE_HELL;
-		FillSolidBlockTbls();
-		LoadLvlGFX();
+		break;
+	default:
+		return;
 	}
+
+	LoadLvlGFX();
+	FillSolidBlockTbls();
 }
 
-void InitStairCordinates(int l)
+void InitStairCordinates()
 {
+	int l = currlevel;
 	if (l == 0) { }
 	if (l >= 1 && l <= 4)
 		InitL1Triggers();
@@ -74,84 +63,100 @@ void InitStairCordinates(int l)
 		InitL3Triggers();
 	if (l >= 13 && l <= 16)
 		InitL4Triggers();
-	int wkz = 1;
 }
 
-void createSpecificDungeon(int i)
+void createSpecificDungeon()
 {
+	uint32_t lseed = glSeedTbl[currlevel];
 	if (leveltype == DTYPE_CATHEDRAL)
-		CreateL5Dungeon(glSeedTbl[i], 0);
+		CreateL5Dungeon(lseed, 0);
 	else if (leveltype == DTYPE_CATACOMBS)
-		CreateL2Dungeon(glSeedTbl[i], 0);
+		CreateL2Dungeon(lseed, 0);
 	else if (leveltype == DTYPE_CAVES)
-		CreateL3Dungeon(glSeedTbl[i], 0);
+		CreateL3Dungeon(lseed, 0);
 	else if (leveltype == DTYPE_HELL)
-		CreateL4Dungeon(glSeedTbl[i], 0);
+		CreateL4Dungeon(lseed, 0);
 }
 
 /**
  * @brief GET MAIN SEED, GET ALL MAP SEEDS
  * @return nothing, but updates RNG seeds list glSeedTbl[i]
  */
-void seedSelection(int s)
+void seedSelection(int seed)
 {
-	int i;
-
 	SetRndSeed(0);
-	sgGameInitInfo.dwSeed = s;
+	sgGameInitInfo.dwSeed = seed;
 	sgGameInitInfo.bDiff = gnDifficulty;
 
 	gnDifficulty = sgGameInitInfo.bDiff;
 	SetRndSeed(sgGameInitInfo.dwSeed);
 
-	for (i = 0; i < NUMLEVELS; i++) {
+	for (int i = 0; i < NUMLEVELS; i++) {
 		glSeedTbl[i] = GetRndSeed();
 		gnLevelTypeTbl[i] = InitLevelType(i);
 	}
 }
 
-int main()
+void printAsciiLevel()
 {
-	for (int q = 0; q < 1; q++)
-	{
-		seedSelection(q);
-		InitQuests();
-
-		int abc = 1;
-
-		for (int i = abc; i < NUMLEVELS; i++)
-		{
-			currlevel = i;
-			whatleveltype(i);
-
-			createSpecificDungeon(i);
-			InitStairCordinates(i);
-
-			for (int boby = 0; boby < MAXDUNY; boby++)
-			{
-				for (int bobx = 0; bobx < MAXDUNX; bobx++)
-				{
-					if (nSolidTable[dPiece[bobx][boby]])
-						std::cout << "#";
-					else
-						std::cout << " ";
-					//std::cout << (0 + (dPiece[bobx][boby] % 10));
-					dPiece[bobx][boby];
-					//std::cout << min(max(dPiece[bobx][boby]-8,0),9);
-				}
-				std::cout << std::endl;
-			}
-			
-			std::cout << std::hex << trigs[0]._tmsg << std::dec << " : (" << trigs[0]._tx << "," << trigs[0]._ty << ")" << std::endl;
-			std::cout << std::hex << trigs[1]._tmsg << std::dec << " : (" << trigs[1]._tx << "," << trigs[1]._ty << ")" << std::endl;
-			std::cout << std::hex << trigs[2]._tmsg << std::dec << " : (" << trigs[2]._tx << "," << trigs[2]._ty << ")" << std::endl;
-			std::cout << "--------------------------" << std::endl;
+	for (int boby = 16; boby < MAXDUNY - 17; boby++) {
+		for (int bobx = 16; bobx < MAXDUNX - 17; bobx++) {
+			if (nSolidTable[dPiece[bobx][boby]])
+				std::cout << "#";
+			else
+				std::cout << " ";
 		}
-		ExportDun();
+		std::cout << std::endl;
 	}
-	return 0;
+	std::cout << std::endl;
 }
 
+int main(int argc, char **argv)
+{
+	int startSeed = 0;
+	int seedCount = 1;
+	bool quiet = false;
+	bool exportLevels = false;
 
+	for (int i = 0; i < argc; i++) {
+		std::string arg = argv[i];
+		if (arg == "--help") {
+			std::cout << "--help         Print this message and exit" << std::endl;
+			std::cout << "--quiet        Do not print to console" << std::endl;
+			std::cout << "--export       Export levels as .dun files" << std::endl;
+			std::cout << "--start <#>    The seed to start from" << std::endl;
+			std::cout << "--count <#>    The number of seeds to process" << std::endl;
+			return 0;
+		} else if (arg == "--quiet") {
+			quiet = true;
+		} else if (arg == "--export") {
+			exportLevels = true;
+		} else if (arg == "--start" && argc >= i + 1) {
+			startSeed = std::stoi(argv[i + 1]);
+		} else if (arg == "--count" && argc >= i + 1) {
+			seedCount = std::stoi(argv[i + 1]);
+		}
+	}
 
-//if (dungeon[bobx][boby] == 6) //CATH:15, CATA:3, HELL:6
+	for (int seed = startSeed; seed < startSeed + seedCount; seed++) {
+		if (!quiet)
+			std::cout << "processing seed " << seed << std::endl;
+
+		seedSelection(seed);
+		InitQuests();
+
+		for (int level = 1; level < NUMLEVELS; level++) {
+			currlevel = level;
+			whatleveltype();
+			createSpecificDungeon();
+			InitStairCordinates();
+
+			if (!quiet)
+				printAsciiLevel();
+			if (exportLevels)
+				ExportDun();
+		}
+	}
+
+	return 0;
+}

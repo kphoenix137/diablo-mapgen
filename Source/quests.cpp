@@ -63,7 +63,6 @@ char questxoff[7] = { 0, -1, 0, -1, -2, -1, -2 };
  * which the hover text of the cursor will be visible.
  */
 char questyoff[7] = { 0, 0, -1, -1, -1, -2, -2 };
-
 /**
  * A quest group containing the three quests the Butcher,
  * Ogden's Sign and Gharbad the Weak, which ensures that exactly

@@ -5,7 +5,6 @@
  */
 #ifndef __ALL_H__
 #define __ALL_H__
-#undef _DEBUG
 
 #include "../types.h"
 
@@ -13,12 +12,11 @@
 #include "drlg_l2.h"
 #include "drlg_l3.h"
 #include "drlg_l4.h"
-#include "gendung.h"
 #include "engine.h"
-#include "quests.h"
+#include "gendung.h"
 #include "lighting.h"
 //#include "monster.h"
 //#include "objects.h"
-//#include "player.h"
+#include "quests.h"
 
 #endif /* __ALL_H__ */
