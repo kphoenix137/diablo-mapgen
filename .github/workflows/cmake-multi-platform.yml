@@ -68,8 +68,16 @@ jobs:
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
-    - name: Archive Artifact
+    - name: Archive Artifact (Windows)
+      if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v2
       with:
         name: diablo-mapgen-artifact-${{ matrix.build_type }}
-        path: ${{ steps.strings.outputs.build-output-dir }}/diablo-mapgen${{ matrix.os == 'windows-latest' ? '.exe' : '' }}
+        path: ${{ steps.strings.outputs.build-output-dir }}/diablo-mapgen.exe
+
+    - name: Archive Artifact (Linux)
+      if: matrix.os != 'windows-latest'
+      uses: actions/upload-artifact@v2
+      with:
+        name: diablo-mapgen-artifact-${{ matrix.build_type }}
+        path: ${{ steps.strings.outputs.build-output-dir }}/diablo-mapgen
