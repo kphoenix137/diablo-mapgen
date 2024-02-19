@@ -14,7 +14,6 @@
 #include "quests.h"
 #include "trigs.h"
 #include "path.h"
-#include <algorithm>
 
 static int InitLevelType(int l)
 {
@@ -101,24 +100,24 @@ int PathLengthSimple()
 	if (l == 0)
 		plength = -1;
 	if (l >= 1 && l <= 4) {
-		int H = max(trigs[1]._tx, trigs[0]._tx) - min(trigs[1]._tx, trigs[0]._tx);
-		int V = max(trigs[1]._ty, trigs[0]._ty) - min(trigs[1]._ty, trigs[0]._ty);
-		return max(H, V);
+		int H = std::max(trigs[1]._tx, trigs[0]._tx) - std::min(trigs[1]._tx, trigs[0]._tx);
+		int V = std::max(trigs[1]._ty, trigs[0]._ty) - std::min(trigs[1]._ty, trigs[0]._ty);
+		return std::max(H, V);
 	}
 	if (l >= 5 && l <= 8) {
-		int H = max(trigs[2]._tx, trigs[0]._tx) - min(trigs[2]._tx, trigs[0]._tx);
-		int V = max(trigs[2]._ty, trigs[0]._ty) - min(trigs[2]._ty, trigs[0]._ty);
-		return max(H, V);
+		int H = std::max(trigs[2]._tx, trigs[0]._tx) - std::min(trigs[2]._tx, trigs[0]._tx);
+		int V = std::max(trigs[2]._ty, trigs[0]._ty) - std::min(trigs[2]._ty, trigs[0]._ty);
+		return std::max(H, V);
 	}
 	if (l >= 9 && l <= 12) {
-		int H = max(trigs[1]._tx, trigs[0]._tx) - min(trigs[1]._tx, trigs[0]._tx);
-		int V = max(trigs[1]._ty, trigs[0]._ty) - min(trigs[1]._ty, trigs[0]._ty);
-		return max(H, V);
+		int H = std::max(trigs[1]._tx, trigs[0]._tx) - std::min(trigs[1]._tx, trigs[0]._tx);
+		int V = std::max(trigs[1]._ty, trigs[0]._ty) - std::min(trigs[1]._ty, trigs[0]._ty);
+		return std::max(H, V);
 	}
 	if (l >= 13 && l <= 16) {
-		int H = max(trigs[2]._tx, trigs[0]._tx) - min(trigs[2]._tx, trigs[0]._tx);
-		int V = max(trigs[2]._ty, trigs[0]._ty) - min(trigs[2]._ty, trigs[0]._ty);
-		return max(H, V);
+		int H = std::max(trigs[2]._tx, trigs[0]._tx) - std::min(trigs[2]._tx, trigs[0]._tx);
+		int V = std::max(trigs[2]._ty, trigs[0]._ty) - std::min(trigs[2]._ty, trigs[0]._ty);
+		return std::max(H, V);
 	}
 	return plength;
 }
@@ -162,7 +161,7 @@ bool isValidLevel(bool filterEnable, bool simplefilter)
 		//std::cout << std::endl;
 		//printAsciiCoords();
 		//std::cout << "---------------------------" << std::endl;
-		
+
 	} else {
 		int maxPath = 15;
 		int stairsPath = PathLength();

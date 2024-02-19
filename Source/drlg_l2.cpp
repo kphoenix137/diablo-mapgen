@@ -5,7 +5,9 @@
  */
 #ifndef SPAWN
 #include "all.h"
+
 #include <iostream>
+#include <ctime>
 
 int nSx1;
 int nSy1;
