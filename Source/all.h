@@ -18,5 +18,6 @@
 //#include "monster.h"
 //#include "objects.h"
 #include "quests.h"
+#include "path.h"
 
 #endif /* __ALL_H__ */
