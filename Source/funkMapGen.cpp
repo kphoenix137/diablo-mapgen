@@ -66,46 +66,48 @@ void whatleveltype()
 	FillSolidBlockTbls();
 }
 
-Point StairsUp;
+Point Spawn;
 Point StairsDown;
 
 void InitStairCordinates()
 {
 	if (currlevel >= 1 && currlevel <= 4)
 		InitL1Triggers();
-	if (currlevel >= 5 && currlevel <= 8)
+	else if (currlevel >= 5 && currlevel <= 8)
 		InitL2Triggers();
-	if (currlevel >= 9 && currlevel <= 12)
+	else if (currlevel >= 9 && currlevel <= 12)
 		InitL3Triggers();
-	if (currlevel >= 13 && currlevel <= 16)
+	else if (currlevel >= 13 && currlevel <= 16)
 		InitL4Triggers();
 
-	StairsUp = { -1, -1 };
+	Spawn = { -1, -1 };
 	StairsDown = { -1, -1 };
 
 	for (int i = 0; i < numtrigs; i++) {
 		if (trigs[i]._tmsg == WM_DIABNEXTLVL) {
 			StairsDown = { trigs[i]._tx, trigs[i]._ty };
 		} else if (trigs[i]._tmsg == WM_DIABPREVLVL) {
-			StairsUp = { trigs[i]._tx, trigs[i]._ty };
+			if (currlevel >= 1 && currlevel <= 4)
+				Spawn = { trigs[i]._tx + 1, trigs[i]._ty + 2 };
+			else if (currlevel >= 5 && currlevel <= 8)
+				Spawn = { trigs[i]._tx + 1, trigs[i]._ty + 1 };
+			else if (currlevel >= 9 && currlevel <= 12)
+				Spawn = { trigs[i]._tx, trigs[i]._ty + 1 };
+			else if (currlevel >= 13 && currlevel <= 16)
+				Spawn = { trigs[i]._tx + 1, trigs[i]._ty };
 		}
 	}
 }
 
-BOOL SolidLoc(int x, int y)
-{
-	if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY) {
-		return FALSE;
-	}
-
-	return nSolidTable[dPiece[x][y]];
-}
-
 BOOL PosOkPlayer(int pnum, int x, int y)
 {
-	if (SolidLoc(x, y) || dPiece[x][y] == 0) {
+	if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY)
 		return FALSE;
-	}
+	int tileId = dPiece[x][y];
+	if (tileId == 0)
+		return FALSE;
+	if (nSolidTable[tileId])
+		return FALSE;
 
 	// if (dObject[x][y] != 0) {
 	//  char bv;
@@ -122,41 +124,40 @@ BOOL PosOkPlayer(int pnum, int x, int y)
 	return TRUE;
 }
 
+char Path[MAX_PATH_LENGTH];
+
 int PathLength()
 {
-	char path[MAX_PATH_LENGTH];
+	std::memset(Path, 0, sizeof(Path));
 
-	return FindPath(PosOkPlayer, 0, StairsUp.x, StairsUp.y, StairsDown.x, StairsDown.y, path);
+	return FindPath(PosOkPlayer, 0, Spawn.x, Spawn.y, StairsDown.x, StairsDown.y, Path);
 }
 
 int CalcStairsChebyshevDistance()
 {
-	if (StairsUp == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
+	if (Spawn == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
 		return -1;
 	}
 
-	int horizontal = std::max(StairsUp.x, StairsDown.x) - std::min(StairsUp.x, StairsDown.x);
-	int vertical = std::max(StairsUp.y, StairsDown.y) - std::min(StairsUp.y, StairsDown.y);
+	int horizontal = std::max(Spawn.x, StairsDown.x) - std::min(Spawn.x, StairsDown.x);
+	int vertical = std::max(Spawn.y, StairsDown.y) - std::min(Spawn.y, StairsDown.y);
 
 	return std::max(horizontal, vertical);
 }
 
-void printAsciiCoords()
-{
-	std::cout << "Ent: (" << StairsUp.x << ", " << StairsUp.y << ") ";
-	std::cout << "Ext: (" << StairsDown.x << ", " << StairsDown.y << ") " << std::endl;
-}
-
 bool IsGoodLevel()
 {
-	const int maxDistance = 10;
+	int maxDistance = 10;
 
 	int cDistance = CalcStairsChebyshevDistance();
 	if (cDistance != -1 && cDistance > maxDistance)
 		return false;
 
+	if (currlevel >= 1 && currlevel <= 4)
+		maxDistance = 9;
+
 	int stairsPath = PathLength();
-	if (stairsPath != 0 && stairsPath < maxDistance)
+	if (stairsPath == 0 || stairsPath > maxDistance)
 		return false;
 
 	return true;
@@ -196,15 +197,44 @@ void seedSelection(int seed)
 
 void printAsciiLevel()
 {
+	bool steps[MAXDUNX][MAXDUNY];
+
+	for (int i = 0; i < MAXDUNY; ++i) {
+		for (int j = 0; j < MAXDUNX; ++j) {
+			steps[i][j] = false;
+		}
+	}
+
+	Point position = Spawn;
+	steps[position.x][position.y] = true;
+
+	const char pathxdir[9] = { 0, 0, -1, 1, 0, -1, 1, 1, -1 };
+	const char pathydir[9] = { 0, -1, 0, 0, 1, -1, -1, 1, 1 };
+
+	for (int i = 0; i < MAX_PATH_LENGTH; ++i) {
+		if (Path[i] == 0)
+			break;
+		position.x += pathxdir[Path[i]];
+		position.y += pathydir[Path[i]];
+		steps[position.x][position.y] = true;
+	}
+
 	for (int boby = 16; boby < MAXDUNY - 17; boby++) {
 		for (int bobx = 16; bobx < MAXDUNX - 17; bobx++) {
-			if (nSolidTable[dPiece[bobx][boby]])
+			if (Spawn.x == bobx && Spawn.y == boby)
+				std::cout << "▲";
+			else if (StairsDown.x == bobx && StairsDown.y == boby)
+				std::cout << "▼";
+			else if (steps[bobx][boby])
+				std::cout << "=";
+			else if (nSolidTable[dPiece[bobx][boby]])
 				std::cout << "#";
 			else
 				std::cout << " ";
 		}
 		std::cout << std::endl;
 	}
+	std::cout << std::endl;
 }
 
 void printHelp()
@@ -282,10 +312,6 @@ int main(int argc, char **argv)
 			}
 			if (!quiet)
 				printAsciiLevel();
-			if (!quiet || verbose) {
-				printAsciiCoords();
-				std::cout << std::endl;
-			}
 			if (exportLevels)
 				ExportDun();
 		}
