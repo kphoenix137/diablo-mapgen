@@ -32,14 +32,13 @@ typedef struct Point {
 
 static int InitLevelType(int l)
 {
-	if (l == 0)
-		return DTYPE_TOWN;
 	if (l >= 1 && l <= 4)
 		return DTYPE_CATHEDRAL;
 	if (l >= 5 && l <= 8)
 		return DTYPE_CATACOMBS;
 	if (l >= 9 && l <= 12)
 		return DTYPE_CAVES;
+
 	return DTYPE_HELL;
 }
 
@@ -71,13 +70,13 @@ Point StairsDown;
 
 void InitStairCordinates()
 {
-	if (currlevel >= 1 && currlevel <= 4)
+	if (leveltype == DTYPE_CATHEDRAL)
 		InitL1Triggers();
-	else if (currlevel >= 5 && currlevel <= 8)
+	else if (leveltype == DTYPE_CATACOMBS)
 		InitL2Triggers();
-	else if (currlevel >= 9 && currlevel <= 12)
+	else if (leveltype == DTYPE_CAVES)
 		InitL3Triggers();
-	else if (currlevel >= 13 && currlevel <= 16)
+	else if (leveltype == DTYPE_HELL)
 		InitL4Triggers();
 
 	Spawn = { -1, -1 };
@@ -87,13 +86,13 @@ void InitStairCordinates()
 		if (trigs[i]._tmsg == WM_DIABNEXTLVL) {
 			StairsDown = { trigs[i]._tx, trigs[i]._ty };
 		} else if (trigs[i]._tmsg == WM_DIABPREVLVL) {
-			if (currlevel >= 1 && currlevel <= 4)
+			if (leveltype == DTYPE_CATHEDRAL)
 				Spawn = { trigs[i]._tx + 1, trigs[i]._ty + 2 };
-			else if (currlevel >= 5 && currlevel <= 8)
+			else if (leveltype == DTYPE_CATACOMBS)
 				Spawn = { trigs[i]._tx + 1, trigs[i]._ty + 1 };
-			else if (currlevel >= 9 && currlevel <= 12)
+			else if (leveltype == DTYPE_CAVES)
 				Spawn = { trigs[i]._tx, trigs[i]._ty + 1 };
-			else if (currlevel >= 13 && currlevel <= 16)
+			else if (leveltype == DTYPE_HELL)
 				Spawn = { trigs[i]._tx + 1, trigs[i]._ty };
 		}
 	}
