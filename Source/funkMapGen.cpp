@@ -15,6 +15,32 @@
 #include "trigs.h"
 #include "path.h"
 
+#define MAXVIEWX 21
+#define MAXVIEWY 21
+bool isVisible[MAXVIEWY][MAXVIEWX] = {
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, //	-y
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
+	{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },// -x	origin(10,10)	+x
+	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+	{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+	{ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+	{ 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, //	+y
+};
+
 typedef struct Point {
 	int x;
 	int y;
@@ -145,16 +171,20 @@ int CalcStairsChebyshevDistance()
 	return std::max(horizontal, vertical);
 }
 
-int CalcStairsPreviousChebyshevDistance()
+bool IsVisiblePrevious()
 {
 	if (StairsDownPrevious == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
-		return -1;
+		return false;
 	}
 
-	int horizontal = std::max(StairsDownPrevious.x, StairsDown.x) - std::min(StairsDownPrevious.x, StairsDown.x);
-	int vertical = std::max(StairsDownPrevious.y, StairsDown.y) - std::min(StairsDownPrevious.y, StairsDown.y);
+	int horizontal = StairsDown.x - StairsDownPrevious.x + 10;
+	int vertical = StairsDown.y - StairsDownPrevious.y + 10;
 
-	return std::max(horizontal, vertical);
+	if (horizontal < 0 || horizontal > MAXVIEWX)
+		return false;
+	if (vertical < 0 || vertical > MAXVIEWY)
+		return false;
+	return isVisible[vertical][horizontal];
 }
 
 int lengthPathToDlvl9 = 0;
@@ -181,13 +211,12 @@ bool IsGoodLevel()
 	}else //(leveltype == DTYPE_CAVES || leveltype == DTYPE_HELL)
 	{
 		maxDistance = 15;
-		int maxDistanceLoadTele = 7;
 
 		int cDistance = CalcStairsChebyshevDistance();
-		int cDistanceLoadTele = CalcStairsPreviousChebyshevDistance();
+		bool isStairsVisibile = IsVisiblePrevious();
 		StairsDownPrevious = StairsDown;
-
-		if (cDistanceLoadTele != -1 && cDistanceLoadTele < maxDistanceLoadTele)
+		
+		if (currlevel != 9 && isStairsVisibile)
 			return true;
 		if (cDistance != -1 && cDistance > maxDistance)
 			return false;
