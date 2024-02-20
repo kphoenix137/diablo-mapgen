@@ -67,6 +67,7 @@ void whatleveltype()
 
 Point Spawn;
 Point StairsDown;
+Point StairsDownPrevious;
 
 void InitStairCordinates()
 {
@@ -144,26 +145,58 @@ int CalcStairsChebyshevDistance()
 	return std::max(horizontal, vertical);
 }
 
+int CalcStairsPreviousChebyshevDistance()
+{
+	if (StairsDownPrevious == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
+		return -1;
+	}
+
+	int horizontal = std::max(StairsDownPrevious.x, StairsDown.x) - std::min(StairsDownPrevious.x, StairsDown.x);
+	int vertical = std::max(StairsDownPrevious.y, StairsDown.y) - std::min(StairsDownPrevious.y, StairsDown.y);
+
+	return std::max(horizontal, vertical);
+}
+
 int lengthPathToDlvl9 = 0;
 
 bool IsGoodLevel()
 {
 	int maxDistance = 20;
-	int lengthMaxPathToDlvl8 = 120;
+	int lengthMaxPathToDlvl9 = 72;
 
-	int cDistance = CalcStairsChebyshevDistance();
-	if (cDistance != -1 && cDistance > maxDistance)
-		return false;
+	if (leveltype == DTYPE_CATACOMBS || leveltype == DTYPE_CATHEDRAL) {
+		int cDistance = CalcStairsChebyshevDistance();
+		StairsDownPrevious = StairsDown;
 
-	//if (currlevel >= 1 && currlevel <= 4)
-	//	maxDistance = 9;
+		if (cDistance != -1 && cDistance > maxDistance)
+			return false;
 
-	int stairsPath = PathLength();
-	lengthPathToDlvl9 = lengthPathToDlvl9 + stairsPath;
-	if ((leveltype == DTYPE_CATACOMBS || leveltype == DTYPE_CATHEDRAL) && lengthPathToDlvl9 > lengthMaxPathToDlvl8)
-		return false;
-	if (stairsPath == 0 || stairsPath > maxDistance)
-		return false;
+		int stairsPath = PathLength();
+		lengthPathToDlvl9 = lengthPathToDlvl9 + stairsPath;
+
+		if (lengthPathToDlvl9 > lengthMaxPathToDlvl9)
+			return false;
+		if (stairsPath == 0 || stairsPath > maxDistance)
+			return false;
+	}else //(leveltype == DTYPE_CAVES || leveltype == DTYPE_HELL)
+	{
+		maxDistance = 15;
+		int maxDistanceLoadTele = 7;
+
+		int cDistance = CalcStairsChebyshevDistance();
+		int cDistanceLoadTele = CalcStairsPreviousChebyshevDistance();
+		StairsDownPrevious = StairsDown;
+
+		if (cDistanceLoadTele != -1 && cDistanceLoadTele < maxDistanceLoadTele)
+			return true;
+		if (cDistance != -1 && cDistance > maxDistance)
+			return false;
+
+		int stairsPath = PathLength();
+
+		if (stairsPath == 0 || stairsPath > maxDistance)
+			return false;
+	}
 	return true;
 }
 
