@@ -144,21 +144,26 @@ int CalcStairsChebyshevDistance()
 	return std::max(horizontal, vertical);
 }
 
+int lengthPathToDlvl9 = 0;
+
 bool IsGoodLevel()
 {
-	int maxDistance = 10;
+	int maxDistance = 20;
+	int lengthMaxPathToDlvl8 = 120;
 
 	int cDistance = CalcStairsChebyshevDistance();
 	if (cDistance != -1 && cDistance > maxDistance)
 		return false;
 
-	if (currlevel >= 1 && currlevel <= 4)
-		maxDistance = 9;
+	//if (currlevel >= 1 && currlevel <= 4)
+	//	maxDistance = 9;
 
 	int stairsPath = PathLength();
+	lengthPathToDlvl9 = lengthPathToDlvl9 + stairsPath;
+	if ((leveltype == DTYPE_CATACOMBS || leveltype == DTYPE_CATHEDRAL) && lengthPathToDlvl9 > lengthMaxPathToDlvl8)
+		return false;
 	if (stairsPath == 0 || stairsPath > maxDistance)
 		return false;
-
 	return true;
 }
 
@@ -280,6 +285,7 @@ int main(int argc, char **argv)
 		if (!quiet)
 			std::cout << "processing seed " << seed << std::endl;
 
+		lengthPathToDlvl9 = 0;
 		seedSelection(seed);
 		InitQuests();
 		if (quests[Q_LTBANNER]._qactive != QUEST_NOTAVAIL) {
