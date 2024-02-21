@@ -5,6 +5,8 @@
 
 #include "../types.h"
 #include "gendung.h"
+#include "monstdat.h"
+#include "monster.h"
 
 inline void WriteLE16(FILE *out, uint16_t val)
 {
@@ -36,14 +38,14 @@ void ExportDun()
 	for (int y = 16; y < MAXDUNY - 16; y++) {
 		for (int x = 16; x < MAXDUNX - 16; x++) {
 			uint16_t monsterId = 0;
-			// if (dMonster[x][y] > 0) {
-			//	for (int i = 0; i < 157; i++) {
-			//		if (MonstConvTbl[i] == Monsters[std::abs(dMonster[x][y]) - 1].type().type) {
-			//			monsterId = i + 1;
-			//			break;
-			//		}
-			//	}
-			// }
+			if (dMonster[x][y] > 0) {
+				for (int i = 0; i < 128; i++) {
+					if (MonstConvTbl[i] == monster[dMonster[x][y] - 1].MType->mtype) {
+						monsterId = i + 1;
+						break;
+					}
+				}
+			}
 			WriteLE16(dunFile, monsterId);
 		}
 	}

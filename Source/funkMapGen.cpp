@@ -403,6 +403,8 @@ int main(int argc, char **argv)
 					std::cout << "Monster " << i << ": " << monster[monstactive[i]].mName << " (" << monster[monstactive[i]]._mRndSeed << ")" << std::endl;
 				}
 			}
+			if (exportLevels)
+				ExportDun();
 		}
 
 		for (int level = 9; level < NUMLEVELS; level++) {
