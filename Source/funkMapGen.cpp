@@ -171,6 +171,22 @@ int CalcStairsChebyshevDistance()
 	return std::max(horizontal, vertical);
 }
 
+bool IsVisibleSpawn()
+{
+	if (Spawn == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
+		return false;
+	}
+
+	int horizontal = StairsDown.x - Spawn.x + 10;
+	int vertical = StairsDown.y - Spawn.y + 10;
+
+	if (horizontal < 0 || horizontal > MAXVIEWX)
+		return false;
+	if (vertical < 0 || vertical > MAXVIEWY)
+		return false;
+	return isVisible[vertical][horizontal];
+}
+
 bool IsVisiblePrevious()
 {
 	if (StairsDownPrevious == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
@@ -212,16 +228,18 @@ bool IsGoodLevel()
 	{
 		maxDistance = 15;
 
-		int cDistance = CalcStairsChebyshevDistance();
-		bool isStairsVisibile = IsVisiblePrevious();
+		bool isStairsVisibile = IsVisibleSpawn() || IsVisiblePrevious();
 		StairsDownPrevious = StairsDown;
 		
 		if (currlevel != 9 && isStairsVisibile)
 			return true;
+
+		int cDistance = CalcStairsChebyshevDistance(); // CONDITIONALLY REWORK REQUIRED: WITH TELEPORT, DLVL 10+ DEPENDING ON DESTINATION VECTOR, MOVEMENT DISTANCE WILL BE SHORTER OR LONGER
+
 		if (cDistance != -1 && cDistance > maxDistance)
 			return false;
 
-		int stairsPath = PathLength();
+		int stairsPath = PathLength(); // CONDITIONALLY OBSOLETED: WITH TELEPORT, DLVL 10+ WILL NOT USE THIS PATHING. ONLY USED FOR PATHING ON DLVL9
 
 		if (stairsPath == 0 || stairsPath > maxDistance)
 			return false;
@@ -360,7 +378,7 @@ int main(int argc, char **argv)
 				std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " thrown out: Warlord" << std::endl;
 			continue;
 		}
-		for (int level = 1; level < NUMLEVELS; level++) {
+		for (int level = 9; level < NUMLEVELS; level++) {
 			currlevel = level;
 			whatleveltype();
 			createSpecificDungeon();
