@@ -168,10 +168,6 @@ void SetAutomapView(int nXPos, int nYPos)
 {
 }
 
-void SetMapMonsters(BYTE *pMap, int startx, int starty)
-{
-}
-
 void SetMapObjects(BYTE *pMap, int startx, int starty)
 {
 }

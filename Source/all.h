@@ -15,8 +15,11 @@
 #include "engine.h"
 #include "gendung.h"
 #include "lighting.h"
-//#include "monster.h"
+#include "monstdat.h"
+#include "monster.h"
 //#include "objects.h"
+#include "themes.h"
+#include "trigs.h"
 #include "quests.h"
 #include "path.h"
 

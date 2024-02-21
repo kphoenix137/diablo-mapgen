@@ -11,7 +11,9 @@
 #include "engine.h"
 #include "gendung.h"
 #include "level.h"
+#include "monster.h"
 #include "quests.h"
+#include "themes.h"
 #include "trigs.h"
 #include "path.h"
 
@@ -378,6 +380,31 @@ int main(int argc, char **argv)
 				std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " thrown out: Warlord" << std::endl;
 			continue;
 		}
+
+		{
+			currlevel = 9;
+			whatleveltype();
+			createSpecificDungeon();
+			InitStairCordinates();
+
+			InitLevelMonsters();
+			SetRndSeed(glSeedTbl[currlevel]);
+			GetLevelMTypes();
+			InitThemes();
+
+			SetRndSeed(glSeedTbl[currlevel]);
+			HoldThemeRooms();
+			GetRndSeed();
+			InitMonsters();
+
+			if (!quiet) {
+				std::cout << "Monster Count: " << nummonsters << std::endl;
+				for (int i = 0; i < nummonsters; i++) {
+					std::cout << "Monster " << i << ": " << monster[monstactive[i]].mName << " (" << monster[monstactive[i]]._mRndSeed << ")" << std::endl;
+				}
+			}
+		}
+
 		for (int level = 9; level < NUMLEVELS; level++) {
 			currlevel = level;
 			whatleveltype();

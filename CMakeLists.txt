@@ -33,14 +33,14 @@ add_executable(${BIN_TARGET}
   #Source/items.cpp
   Source/level.cpp
   Source/lighting.cpp
-  #Source/monstdat.cpp
-  #Source/monster.cpp
+  Source/monstdat.cpp
+  Source/monster.cpp
   #Source/objdat.cpp
   #Source/objects.cpp
   Source/path.cpp
   Source/quests.cpp
   #Source/stores.cpp
-  #Source/themes.cpp
+  Source/themes.cpp
   Source/trigs.cpp
   )
 
