@@ -1,4 +1,4 @@
-#include "puzzler.h"
+#include "item.h"
 
 #include <iostream>
 
@@ -6,7 +6,7 @@
 #include "../monster.h"
 #include "../objects.h"
 
-void CreateItemsFromObject(int oid)
+static void CreateItemsFromObject(int oid)
 {
 	switch (object[oid]._otype) {
 	case OBJ_CHEST1:
@@ -77,7 +77,7 @@ void CreateItemsFromObject(int oid)
 	case OBJ_WARWEAP:
 	case OBJ_WEAPONRACK: {
 		SetRndSeed(object[oid]._oRndSeed);
-		int weaponType;
+		int weaponType = ITYPE_MISC;
 
 		switch (random_(0, 4) + ITYPE_SWORD) {
 		case ITYPE_SWORD:
@@ -102,7 +102,7 @@ void CreateItemsFromObject(int oid)
 	}
 }
 
-void DropAllItems()
+static void DropAllItems()
 {
 	MonsterItems = numitems;
 	for (int i = 0; i < nummonsters; i++) {
@@ -120,29 +120,35 @@ void DropAllItems()
 	}
 }
 
-bool ScannerPuzzler::skipLevel(int level)
+bool ScannerItem::skipLevel(int level)
 {
+	if (*Config.target == 0)
+		return false;
 	return level != *Config.target;
 }
 
-void LocatePuzzler()
+bool LocateItem()
 {
 	DropAllItems();
 
 	POI = { -1, -1 };
+
 	for (int i = 0; i < numitems; i++) {
 		int ii = itemactive[i];
-		if (item[ii]._iMagical == ITEM_QUALITY_UNIQUE && item[ii]._iUid == 60) {
-			POI = { item[ii]._ix, item[ii]._iy };
-			break;
+		ItemStruct &searchItem = item[ii];
+
+		if (Config.targetStr.compare(searchItem._iIName) == 0) {
+			POI = { searchItem._ix, searchItem._iy };
+			return true;
 		}
 	}
+
+	return false;
 }
 
-bool ScannerPuzzler::levelMatches(std::optional<uint32_t> levelSeed)
+bool ScannerItem::levelMatches(std::optional<uint32_t> levelSeed)
 {
-	LocatePuzzler();
-	if (POI == Point { -1, -1 })
+	if (!LocateItem())
 		return false;
 
 	if (Config.verbose) {
