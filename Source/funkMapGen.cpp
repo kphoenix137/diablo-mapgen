@@ -266,7 +266,7 @@ void createSpecificDungeon()
  * @brief GET MAIN SEED, GET ALL MAP SEEDS
  * @return nothing, but updates RNG seeds list glSeedTbl[i]
  */
-void seedSelection(int seed)
+void seedSelection(uint32_t seed)
 {
 	SetRndSeed(0);
 	sgGameInitInfo.dwSeed = seed;
@@ -336,8 +336,8 @@ void printHelp()
 
 int main(int argc, char **argv)
 {
-	int startSeed = 0;
-	int seedCount = 1;
+	uint32_t startSeed = 0;
+	uint32_t seedCount = 1;
 	bool quiet = false;
 	bool exportLevels = false;
 	int quality = 4;
@@ -353,9 +353,9 @@ int main(int argc, char **argv)
 		} else if (arg == "--export") {
 			exportLevels = true;
 		} else if (arg == "--start" && argc >= i + 1) {
-			startSeed = std::stoi(argv[i + 1]);
+			startSeed = std::stoll(argv[i + 1]);
 		} else if (arg == "--count" && argc >= i + 1) {
-			seedCount = std::stoi(argv[i + 1]);
+			seedCount = std::stoll(argv[i + 1]);
 		} else if (arg == "--quality" && argc >= i + 1) {
 			quality = std::stoi(argv[i + 1]);
 		} else if (arg == "--verbose") {
@@ -363,7 +363,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	for (int seed = startSeed; seed < startSeed + seedCount; seed++) {
+	for (uint32_t seed = startSeed; seed < startSeed + seedCount; seed++) {
 		if (!quiet)
 			std::cout << "processing seed " << seed << std::endl;
 

@@ -1297,7 +1297,7 @@ typedef struct DeadStruct {
 // TPDEF PTR FCN VOID PLAYSND
 
 typedef struct _gamedata {
-	int dwSeed;
+	uint32_t dwSeed;
 	BYTE bDiff;
 } _gamedata;
 
