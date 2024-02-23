@@ -1443,30 +1443,30 @@ BOOL IsGoat(int mt)
 //	return TRUE;
 //}
 
-//int PreSpawnSkeleton()
-//{
-//	int i, j, skeltypes, skel;
-//
-//	j = 0;
-//
-//	for (i = 0; i < nummtypes; i++) {
-//		if (IsSkel(Monsters[i].mtype))
-//			j++;
-//	}
-//
-//	if (j) {
-//		skeltypes = random_(136, j);
-//		j = 0;
-//		for (i = 0; i < nummtypes && j <= skeltypes; i++) {
-//			if (IsSkel(Monsters[i].mtype))
-//				j++;
-//		}
-//		skel = AddMonster(0, 0, 0, i - 1, FALSE);
-//		if (skel != -1)
-//			M_StartStand(skel, 0);
-//
-//		return skel;
-//	}
-//
-//	return -1;
-//}
+int PreSpawnSkeleton()
+{
+	int i, j, skeltypes, skel;
+
+	j = 0;
+
+	for (i = 0; i < nummtypes; i++) {
+		if (IsSkel(Monsters[i].mtype))
+			j++;
+	}
+
+	if (j) {
+		skeltypes = random_(136, j);
+		j = 0;
+		for (i = 0; i < nummtypes && j <= skeltypes; i++) {
+			if (IsSkel(Monsters[i].mtype))
+				j++;
+		}
+		skel = AddMonster(0, 0, 0, i - 1, FALSE);
+		//if (skel != -1)
+		//	M_StartStand(skel, 0);
+
+		return skel;
+	}
+
+	return -1;
+}

@@ -12,6 +12,7 @@
 #include "gendung.h"
 #include "level.h"
 #include "monster.h"
+#include "objects.h"
 #include "quests.h"
 #include "themes.h"
 #include "trigs.h"
@@ -396,11 +397,21 @@ int main(int argc, char **argv)
 			HoldThemeRooms();
 			GetRndSeed();
 			InitMonsters();
+			GetRndSeed();
+			InitObjects();
 
 			if (!quiet) {
 				std::cout << "Monster Count: " << nummonsters << std::endl;
 				for (int i = 0; i < nummonsters; i++) {
 					std::cout << "Monster " << i << ": " << monster[monstactive[i]].mName << " (" << monster[monstactive[i]]._mRndSeed << ")" << std::endl;
+				}
+				std::cout << std::endl;
+				std::cout << "Object Count: " << nobjects << std::endl;
+				for (int i = 0; i < nobjects; i++) {
+					int oid = objectactive[i];
+					char objstr[50];
+					GetObjectStr(oid, objstr);
+					std::cout << "Object " << i << ": " << objstr << " (" << object[oid]._oRndSeed << ")" << std::endl;
 				}
 			}
 			if (exportLevels)

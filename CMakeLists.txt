@@ -35,10 +35,11 @@ add_executable(${BIN_TARGET}
   Source/lighting.cpp
   Source/monstdat.cpp
   Source/monster.cpp
-  #Source/objdat.cpp
-  #Source/objects.cpp
+  Source/objdat.cpp
+  Source/objects.cpp
   Source/path.cpp
   Source/quests.cpp
+  Source/setmaps.cpp
   #Source/stores.cpp
   Source/themes.cpp
   Source/trigs.cpp

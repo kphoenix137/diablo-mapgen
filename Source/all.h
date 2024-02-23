@@ -17,10 +17,14 @@
 #include "lighting.h"
 #include "monstdat.h"
 #include "monster.h"
-//#include "objects.h"
+#include "objdat.h"
+#include "objects.h"
+#include "setmaps.h"
 #include "themes.h"
 #include "trigs.h"
 #include "quests.h"
 #include "path.h"
+
+const int myplr = 0;
 
 #endif /* __ALL_H__ */

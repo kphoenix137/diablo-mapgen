@@ -143,15 +143,19 @@ void LoadLvlGFX()
 	switch (leveltype) {
 	case DTYPE_CATHEDRAL:
 		pMegaTiles = LoadFileInMem("Levels\\L1Data\\L1.TIL", NULL);
+		pLevelPieces = LoadFileInMem("Levels\\L1Data\\L1.MIN", NULL);
 		return;
 	case DTYPE_CATACOMBS:
 		pMegaTiles = LoadFileInMem("Levels\\L2Data\\L2.TIL", NULL);
+		pLevelPieces = LoadFileInMem("Levels\\L2Data\\L2.MIN", NULL);
 		return;
 	case DTYPE_CAVES:
 		pMegaTiles = LoadFileInMem("Levels\\L3Data\\L3.TIL", NULL);
+		pLevelPieces = LoadFileInMem("Levels\\L3Data\\L3.MIN", NULL);
 		return;
 	case DTYPE_HELL:
 		pMegaTiles = LoadFileInMem("Levels\\L4Data\\L4.TIL", NULL);
+		pLevelPieces = LoadFileInMem("Levels\\L4Data\\L4.MIN", NULL);
 		return;
 	default:
 		app_fatal("LoadLvlGFX");
@@ -165,9 +169,5 @@ void app_fatal(const char *dummystring)
 }
 
 void SetAutomapView(int nXPos, int nYPos)
-{
-}
-
-void SetMapObjects(BYTE *pMap, int startx, int starty)
 {
 }
