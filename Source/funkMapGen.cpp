@@ -10,6 +10,7 @@
 #include "drlg_l4.h"
 #include "engine.h"
 #include "gendung.h"
+#include "items.h"
 #include "level.h"
 #include "monster.h"
 #include "objects.h"
@@ -399,6 +400,8 @@ int main(int argc, char **argv)
 			InitMonsters();
 			GetRndSeed();
 			InitObjects();
+			InitItems();
+			CreateThemeRooms();
 
 			if (!quiet) {
 				std::cout << "Monster Count: " << nummonsters << std::endl;
@@ -412,6 +415,11 @@ int main(int argc, char **argv)
 					char objstr[50];
 					GetObjectStr(oid, objstr);
 					std::cout << "Object " << i << ": " << objstr << " (" << object[oid]._oRndSeed << ")" << std::endl;
+				}
+				std::cout << std::endl;
+				std::cout << "Item Count: " << numitems << std::endl;
+				for (int i = 0; i < numitems; i++) {
+					std::cout << "Item " << i << ": " << item[itemactive[i]]._iIName << " (" << item[itemactive[i]]._iSeed << ")" << std::endl;
 				}
 			}
 			if (exportLevels)

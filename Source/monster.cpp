@@ -1172,55 +1172,55 @@ int AddMonster(int x, int y, int dir, int mtype, BOOL InMap)
 	return -1;
 }
 
-//BOOL PosOkMonst(int i, int x, int y)
-//{
-//#ifdef HELLFIRE
-//	int oi;
-//	BOOL ret;
-//
-//	ret = !SolidLoc(x, y) && dPlayer[x][y] == 0 && dMonster[x][y] == 0;
-//	oi = dObject[x][y];
-//	if (ret && oi != 0) {
-//		oi = oi > 0 ? oi - 1 : -(oi + 1);
-//		if (object[oi]._oSolidFlag)
-//			ret = FALSE;
-//	}
-//
-//	if (ret)
-//		ret = monster_posok(i, x, y);
-//#else
-//	int oi, mi, j;
-//	BOOL ret, fire;
-//
-//	fire = FALSE;
-//	ret = !SolidLoc(x, y) && dPlayer[x][y] == 0 && dMonster[x][y] == 0;
-//	if (ret && dObject[x][y] != 0) {
-//		oi = dObject[x][y] > 0 ? dObject[x][y] - 1 : -(dObject[x][y] + 1);
-//		if (object[oi]._oSolidFlag)
-//			ret = FALSE;
-//	}
-//
-//	if (ret && dMissile[x][y] != 0 && i >= 0) {
-//		// BUGFIX: case with multiple missiles being present on (x, y)-coordinate not handled.
-//		mi = dMissile[x][y];
-//		if (mi > 0) {
-//			if (missile[mi]._mitype == MIS_FIREWALL) { // BUGFIX: Change 'mi' to 'mi - 1'
-//				fire = TRUE;
-//			} else {
-//				for (j = 0; j < nummissiles; j++) {
-//					if (missile[missileactive[j]]._mitype == MIS_FIREWALL) // BUGFIX: Check missile x/y
-//						fire = TRUE;
-//				}
-//			}
-//		}
-//		if (fire && (!(monster[i].mMagicRes & IMMUNE_FIRE) || monster[i].MType->mtype == MT_DIABLO))
-//			ret = FALSE;
-//	}
-//#endif
-//
-//	return ret;
-//}
-//
+BOOL PosOkMonst(int i, int x, int y)
+{
+#ifdef HELLFIRE
+	int oi;
+	BOOL ret;
+
+	ret = !SolidLoc(x, y) && dPlayer[x][y] == 0 && dMonster[x][y] == 0;
+	oi = dObject[x][y];
+	if (ret && oi != 0) {
+		oi = oi > 0 ? oi - 1 : -(oi + 1);
+		if (object[oi]._oSolidFlag)
+			ret = FALSE;
+	}
+
+	if (ret)
+		ret = monster_posok(i, x, y);
+#else
+	int oi, mi, j;
+	BOOL ret, fire;
+
+	fire = FALSE;
+	ret = !SolidLoc(x, y) && dPlayer[x][y] == 0 && dMonster[x][y] == 0;
+	if (ret && dObject[x][y] != 0) {
+		oi = dObject[x][y] > 0 ? dObject[x][y] - 1 : -(dObject[x][y] + 1);
+		if (object[oi]._oSolidFlag)
+			ret = FALSE;
+	}
+
+	//if (ret && dMissile[x][y] != 0 && i >= 0) {
+	//	// BUGFIX: case with multiple missiles being present on (x, y)-coordinate not handled.
+	//	mi = dMissile[x][y];
+	//	if (mi > 0) {
+	//		if (missile[mi]._mitype == MIS_FIREWALL) { // BUGFIX: Change 'mi' to 'mi - 1'
+	//			fire = TRUE;
+	//		} else {
+	//			for (j = 0; j < nummissiles; j++) {
+	//				if (missile[missileactive[j]]._mitype == MIS_FIREWALL) // BUGFIX: Check missile x/y
+	//					fire = TRUE;
+	//			}
+	//		}
+	//	}
+	//	if (fire && (!(monster[i].mMagicRes & IMMUNE_FIRE) || monster[i].MType->mtype == MT_DIABLO))
+	//		ret = FALSE;
+	//}
+#endif
+
+	return ret;
+}
+
 //BOOL PosOkMonst2(int i, int x, int y)
 //{
 //	int oi, mi, j;
@@ -1376,72 +1376,71 @@ BOOL IsGoat(int mt)
 //	return -1;
 //}
 
-//void ActivateSpawn(int i, int x, int y, int dir)
-//{
-//	dMonster[x][y] = i + 1;
-//	monster[i]._mx = x;
-//	monster[i]._my = y;
-//	monster[i]._mfutx = x;
-//	monster[i]._mfuty = y;
-//	monster[i]._moldx = x;
-//	monster[i]._moldy = y;
-//	M_StartSpStand(i, dir);
-//}
+void ActivateSpawn(int i, int x, int y, int dir)
+{
+	dMonster[x][y] = i + 1;
+	monster[i]._mx = x;
+	monster[i]._my = y;
+	monster[i]._mfutx = x;
+	monster[i]._mfuty = y;
+	monster[i]._moldx = x;
+	monster[i]._moldy = y;
+}
 
-//BOOL SpawnSkeleton(int ii, int x, int y)
-//{
-//	int dx, dy, xx, yy, dir, j, k, rs;
-//	BOOL savail;
-//	int monstok[3][3];
-//
-//	if (ii == -1)
-//		return FALSE;
-//
-//	if (PosOkMonst(-1, x, y)) {
-//		dir = GetDirection(x, y, x, y);
-//		ActivateSpawn(ii, x, y, dir);
-//		return TRUE;
-//	}
-//
-//	savail = FALSE;
-//	yy = 0;
-//	for (j = y - 1; j <= y + 1; j++) {
-//		xx = 0;
-//		for (k = x - 1; k <= x + 1; k++) {
-//			monstok[xx][yy] = PosOkMonst(-1, k, j);
-//			savail |= monstok[xx][yy];
-//			xx++;
-//		}
-//		yy++;
-//	}
-//	if (!savail) {
-//		return FALSE;
-//	}
-//
-//	rs = random_(137, 15) + 1;
-//	xx = 0;
-//	yy = 0;
-//	while (rs > 0) {
-//		if (monstok[xx][yy])
-//			rs--;
-//		if (rs > 0) {
-//			xx++;
-//			if (xx == 3) {
-//				xx = 0;
-//				yy++;
-//				if (yy == 3)
-//					yy = 0;
-//			}
-//		}
-//	}
-//
-//	dx = x - 1 + xx;
-//	dy = y - 1 + yy;
-//	dir = GetDirection(dx, dy, x, y);
-//	ActivateSpawn(ii, dx, dy, dir);
-//
-//	return TRUE;
-//}
+BOOL SpawnSkeleton(int ii, int x, int y)
+{
+	int dx, dy, xx, yy, dir, j, k, rs;
+	BOOL savail;
+	int monstok[3][3];
+
+	if (ii == -1)
+		return FALSE;
+
+	if (PosOkMonst(-1, x, y)) {
+		dir = DIR_S;
+		ActivateSpawn(ii, x, y, dir);
+		return TRUE;
+	}
+
+	savail = FALSE;
+	yy = 0;
+	for (j = y - 1; j <= y + 1; j++) {
+		xx = 0;
+		for (k = x - 1; k <= x + 1; k++) {
+			monstok[xx][yy] = PosOkMonst(-1, k, j);
+			savail |= monstok[xx][yy];
+			xx++;
+		}
+		yy++;
+	}
+	if (!savail) {
+		return FALSE;
+	}
+
+	rs = random_(137, 15) + 1;
+	xx = 0;
+	yy = 0;
+	while (rs > 0) {
+		if (monstok[xx][yy])
+			rs--;
+		if (rs > 0) {
+			xx++;
+			if (xx == 3) {
+				xx = 0;
+				yy++;
+				if (yy == 3)
+					yy = 0;
+			}
+		}
+	}
+
+	dx = x - 1 + xx;
+	dy = y - 1 + yy;
+	dir = DIR_S;
+	ActivateSpawn(ii, dx, dy, dir);
+
+	return TRUE;
+}
 
 int PreSpawnSkeleton()
 {

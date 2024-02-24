@@ -29,8 +29,8 @@ add_executable(${BIN_TARGET}
   Source/engine.cpp
   Source/funkMapGen.cpp
   Source/gendung.cpp
-  #Source/itemdat.cpp
-  #Source/items.cpp
+  Source/itemdat.cpp
+  Source/items.cpp
   Source/level.cpp
   Source/lighting.cpp
   Source/monstdat.cpp
@@ -40,6 +40,7 @@ add_executable(${BIN_TARGET}
   Source/path.cpp
   Source/quests.cpp
   Source/setmaps.cpp
+  Source/spelldat.cpp
   #Source/stores.cpp
   Source/themes.cpp
   Source/trigs.cpp

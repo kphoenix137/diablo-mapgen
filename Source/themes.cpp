@@ -518,562 +518,562 @@ void PlaceThemeMonsts(int t, int f)
 	}
 }
 
-///**
-// * Theme_Barrel initializes the barrel theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_Barrel(int t)
-//{
-//	int xp, yp, r;
-//	char barrnd[4] = { 2, 6, 4, 8 };
-//	char monstrnd[4] = { 5, 7, 3, 9 };
-//
-//	for (yp = 0; yp < MAXDUNY; yp++) {
-//		for (xp = 0; xp < MAXDUNX; xp++) {
-//			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
-//				if (random_(0, barrnd[leveltype - 1]) == 0) {
-//					if (random_(0, barrnd[leveltype - 1]) == 0) {
-//						r = OBJ_BARREL;
-//					} else {
-//						r = OBJ_BARRELEX;
-//					}
-//					AddObject(r, xp, yp);
-//				}
-//			}
-//		}
-//	}
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//}
-//
-///**
-// * Theme_Shrine initializes the shrine theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_Shrine(int t)
-//{
-//	char monstrnd[4] = { 6, 6, 3, 9 };
-//
-//	TFit_Shrine(t);
-//	if (themeVar1 == 1) {
-//		AddObject(OBJ_CANDLE2, themex - 1, themey);
-//		AddObject(OBJ_SHRINER, themex, themey);
-//		AddObject(OBJ_CANDLE2, themex + 1, themey);
-//	} else {
-//		AddObject(OBJ_CANDLE2, themex, themey - 1);
-//		AddObject(OBJ_SHRINEL, themex, themey);
-//		AddObject(OBJ_CANDLE2, themex, themey + 1);
-//	}
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//}
-//
-///**
-// * Theme_MonstPit initializes the monster pit theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_MonstPit(int t)
-//{
-//	int r;
-//	int ixp, iyp;
-//	char monstrnd[4] = { 6, 7, 3, 9 };
-//
-//	r = random_(0, 100) + 1;
-//	ixp = 0;
-//	iyp = 0;
-//	while (r > 0) {
-//		if (dTransVal[ixp][iyp] == themes[t].ttval && !nSolidTable[dPiece[ixp][iyp]]) {
-//			--r;
-//		}
-//		if (r <= 0)
-//			continue;
-//		ixp++;
-//		if (ixp == MAXDUNX) {
-//			ixp = 0;
-//			iyp++;
-//			if (iyp == MAXDUNY) {
-//				iyp = 0;
-//			}
-//		}
-//	}
-//	CreateRndItem(ixp, iyp, TRUE, FALSE, TRUE);
-//	ItemNoFlippy();
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//}
-//
-///**
-// * Theme_SkelRoom initializes the skeleton room theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_SkelRoom(int t)
-//{
-//	int xp, yp, i;
-//	char monstrnd[4] = { 6, 7, 3, 9 };
-//
-//	TFit_SkelRoom(t);
-//
-//	xp = themex;
-//	yp = themey;
-//
-//	AddObject(OBJ_SKFIRE, xp, yp);
-//
-//	if (random_(0, monstrnd[leveltype - 1]) != 0) {
-//		i = PreSpawnSkeleton();
-//		SpawnSkeleton(i, xp - 1, yp - 1);
-//	} else {
-//		AddObject(OBJ_BANNERL, xp - 1, yp - 1);
-//	}
-//
-//	i = PreSpawnSkeleton();
-//	SpawnSkeleton(i, xp, yp - 1);
-//
-//	if (random_(0, monstrnd[leveltype - 1]) != 0) {
-//		i = PreSpawnSkeleton();
-//		SpawnSkeleton(i, xp + 1, yp - 1);
-//	} else {
-//		AddObject(OBJ_BANNERR, xp + 1, yp - 1);
-//	}
-//	if (random_(0, monstrnd[leveltype - 1]) != 0) {
-//		i = PreSpawnSkeleton();
-//		SpawnSkeleton(i, xp - 1, yp);
-//	} else {
-//		AddObject(OBJ_BANNERM, xp - 1, yp);
-//	}
-//	if (random_(0, monstrnd[leveltype - 1]) != 0) {
-//		i = PreSpawnSkeleton();
-//		SpawnSkeleton(i, xp + 1, yp);
-//	} else {
-//		AddObject(OBJ_BANNERM, xp + 1, yp);
-//	}
-//	if (random_(0, monstrnd[leveltype - 1]) != 0) {
-//		i = PreSpawnSkeleton();
-//		SpawnSkeleton(i, xp - 1, yp + 1);
-//	} else {
-//		AddObject(OBJ_BANNERR, xp - 1, yp + 1);
-//	}
-//
-//	i = PreSpawnSkeleton();
-//	SpawnSkeleton(i, xp, yp + 1);
-//
-//	if (random_(0, monstrnd[leveltype - 1]) != 0) {
-//		i = PreSpawnSkeleton();
-//		SpawnSkeleton(i, xp + 1, yp + 1);
-//	} else {
-//		AddObject(OBJ_BANNERL, xp + 1, yp + 1);
-//	}
-//
-//	if (dObject[xp][yp - 3] == 0) {
-//		AddObject(OBJ_SKELBOOK, xp, yp - 2);
-//	}
-//	if (dObject[xp][yp + 3] == 0) {
-//		AddObject(OBJ_SKELBOOK, xp, yp + 2);
-//	}
-//}
-//
-///**
-// * Theme_Treasure initializes the treasure theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_Treasure(int t)
-//{
-//	int xp, yp;
-//	int i;
-//	char treasrnd[4] = { 4, 9, 7, 10 };
-//	char monstrnd[4] = { 6, 8, 3, 7 };
-//
-//	GetRndSeed();
-//	for (yp = 0; yp < MAXDUNY; yp++) {
-//		for (xp = 0; xp < MAXDUNX; xp++) {
-//			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
-//				int rv = random_(0, treasrnd[leveltype - 1]);
-//				// BUGFIX: the `2*` in `2*random_(0, treasrnd...) == 0` has no effect, should probably be `random_(0, 2*treasrnd...) == 0`
-//				if ((2 * random_(0, treasrnd[leveltype - 1])) == 0) {
-//					CreateTypeItem(xp, yp, FALSE, ITYPE_GOLD, IMISC_NONE, FALSE, TRUE);
-//					ItemNoFlippy();
-//				}
-//				if (rv == 0) {
-//					CreateRndItem(xp, yp, FALSE, FALSE, TRUE);
-//					ItemNoFlippy();
-//				}
-//				// BUGFIX: the following code is likely not working as intended.
-//				//
-//				//    `rv == 0` has no effect.
-//				//
-//				//    `rv >= treasrnd[leveltype - 1] - 2` is not connected to either
-//				//    of the item creation branches above, thus the last (unrelated)
-//				//    item spawned/dropped on ground would be halved in value.
-//				if (rv == 0 || rv >= treasrnd[leveltype - 1] - 2) {
-//					i = ItemNoFlippy();
-//					if (rv >= treasrnd[leveltype - 1] - 2 && leveltype != DTYPE_CATHEDRAL) {
-//						item[i]._ivalue >>= 1;
-//					}
-//				}
-//			}
-//		}
-//	}
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//}
-//
-///**
-// * Theme_Library initializes the library theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_Library(int t)
-//{
-//	int xp, yp, oi;
-//	char librnd[4] = { 1, 2, 2, 5 };
-//	char monstrnd[4] = { 5, 7, 3, 9 };
-//
-//	TFit_Shrine(t);
-//
-//	if (themeVar1 == 1) {
-//		AddObject(OBJ_BOOKCANDLE, themex - 1, themey);
-//		AddObject(OBJ_BOOKCASER, themex, themey);
-//		AddObject(OBJ_BOOKCANDLE, themex + 1, themey);
-//	} else {
-//		AddObject(OBJ_BOOKCANDLE, themex, themey - 1);
-//		AddObject(OBJ_BOOKCASEL, themex, themey);
-//		AddObject(OBJ_BOOKCANDLE, themex, themey + 1);
-//	}
-//
-//	for (yp = 1; yp < MAXDUNY - 1; yp++) {
-//		for (xp = 1; xp < MAXDUNX - 1; xp++) {
-//			if (CheckThemeObj3(xp, yp, t, -1) && dMonster[xp][yp] == 0 && random_(0, librnd[leveltype - 1]) == 0) {
-//				AddObject(OBJ_BOOKSTAND, xp, yp);
-//				if (random_(0, 2 * librnd[leveltype - 1]) != 0) { /// BUGFIX: check dObject[xp][yp] was populated by AddObject
-//					oi = dObject[xp][yp] - 1;
-//					object[oi]._oSelFlag = 0;
-//					object[oi]._oAnimFrame += 2;
-//				}
-//			}
-//		}
-//	}
-//
-//	if (QuestStatus(Q_ZHAR)) {
-//		if (t == zharlib) {
-//			return;
-//		}
-//		PlaceThemeMonsts(t, monstrnd[leveltype]); /// BUGFIX: `leveltype - 1`
-//	} else {
-//		PlaceThemeMonsts(t, monstrnd[leveltype]); /// BUGFIX: `leveltype - 1`
-//	}
-//}
-//
-///**
-// * Theme_Torture initializes the torture theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_Torture(int t)
-//{
-//	int xp, yp;
-//	char tortrnd[4] = { 6, 8, 3, 8 };
-//	char monstrnd[4] = { 6, 8, 3, 9 };
-//
-//	for (yp = 1; yp < MAXDUNY - 1; yp++) {
-//		for (xp = 1; xp < MAXDUNX - 1; xp++) {
-//			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
-//				if (CheckThemeObj3(xp, yp, t, -1)) {
-//					if (random_(0, tortrnd[leveltype - 1]) == 0) {
-//						AddObject(OBJ_TNUDEM2, xp, yp);
-//					}
-//				}
-//			}
-//		}
-//	}
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//}
-//
-///**
-// * Theme_BloodFountain initializes the blood fountain theme.
-// * @param t Theme number (index into themes array).
-// */
-//void Theme_BloodFountain(int t)
-//{
-//	char monstrnd[4] = { 6, 8, 3, 9 };
-//
-//	TFit_Obj5(t);
-//	AddObject(OBJ_BLOODFTN, themex, themey);
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//}
-//
-///**
-// * Theme_Decap initializes the decapitated theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_Decap(int t)
-//{
-//	int xp, yp;
-//	char decaprnd[4] = { 6, 8, 3, 8 };
-//	char monstrnd[4] = { 6, 8, 3, 9 };
-//
-//	for (yp = 1; yp < MAXDUNY - 1; yp++) {
-//		for (xp = 1; xp < MAXDUNX - 1; xp++) {
-//			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
-//				if (CheckThemeObj3(xp, yp, t, -1)) {
-//					if (random_(0, decaprnd[leveltype - 1]) == 0) {
-//						AddObject(OBJ_DECAP, xp, yp);
-//					}
-//				}
-//			}
-//		}
-//	}
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//}
-//
-///**
-// * Theme_PurifyingFountain initializes the purifying fountain theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_PurifyingFountain(int t)
-//{
-//	char monstrnd[4] = { 6, 7, 3, 9 };
-//
-//	TFit_Obj5(t);
-//	AddObject(OBJ_PURIFYINGFTN, themex, themey);
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//}
-//
-///**
-// * Theme_ArmorStand initializes the armor stand theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_ArmorStand(int t)
-//{
-//	int xp, yp;
-//	char armorrnd[4] = { 6, 8, 3, 8 };
-//	char monstrnd[4] = { 6, 7, 3, 9 };
-//
-//	if (armorFlag) {
-//		TFit_Obj3(t);
-//		AddObject(OBJ_ARMORSTAND, themex, themey);
-//	}
-//	for (yp = 0; yp < MAXDUNY; yp++) {
-//		for (xp = 0; xp < MAXDUNX; xp++) {
-//			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
-//				if (CheckThemeObj3(xp, yp, t, -1)) {
-//					if (random_(0, armorrnd[leveltype - 1]) == 0) {
-//						AddObject(OBJ_ARMORSTANDN, xp, yp);
-//					}
-//				}
-//			}
-//		}
-//	}
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//	armorFlag = FALSE;
-//}
-//
-///**
-// * Theme_GoatShrine initializes the goat shrine theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_GoatShrine(int t)
-//{
-//	int xx, yy;
-//
-//	TFit_GoatShrine(t);
-//	AddObject(OBJ_GOATSHRINE, themex, themey);
-//	for (yy = themey - 1; yy <= themey + 1; yy++) {
-//		for (xx = themex - 1; xx <= themex + 1; xx++) {
-//			if (dTransVal[xx][yy] == themes[t].ttval && !nSolidTable[dPiece[xx][yy]] && (xx != themex || yy != themey)) {
-//				AddMonster(xx, yy, DIR_SW, themeVar1, TRUE);
-//			}
-//		}
-//	}
-//}
-//
-///**
-// * Theme_Cauldron initializes the cauldron theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_Cauldron(int t)
-//{
-//	char monstrnd[4] = { 6, 7, 3, 9 };
-//
-//	TFit_Obj5(t);
-//	AddObject(OBJ_CAULDRON, themex, themey);
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//}
-//
-///**
-// * Theme_MurkyFountain initializes the murky fountain theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_MurkyFountain(int t)
-//{
-//	char monstrnd[4] = { 6, 7, 3, 9 };
-//
-//	TFit_Obj5(t);
-//	AddObject(OBJ_MURKYFTN, themex, themey);
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//}
-//
-///**
-// * Theme_TearFountain initializes the tear fountain theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_TearFountain(int t)
-//{
-//	char monstrnd[4] = { 6, 7, 3, 9 };
-//
-//	TFit_Obj5(t);
-//	AddObject(OBJ_TEARFTN, themex, themey);
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//}
-//
-///**
-// * Theme_BrnCross initializes the burning cross theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_BrnCross(int t)
-//{
-//	int xp, yp;
-//	char monstrnd[4] = { 6, 8, 3, 9 };
-//	char bcrossrnd[4] = { 5, 7, 3, 8 };
-//
-//	for (yp = 0; yp < MAXDUNY; yp++) {
-//		for (xp = 0; xp < MAXDUNX; xp++) {
-//			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
-//				if (CheckThemeObj3(xp, yp, t, -1)) {
-//					if (random_(0, bcrossrnd[leveltype - 1]) == 0) {
-//						AddObject(OBJ_TBCROSS, xp, yp);
-//					}
-//				}
-//			}
-//		}
-//	}
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//	bCrossFlag = TRUE;
-//}
-//
-///**
-// * Theme_WeaponRack initializes the weapon rack theme.
-// *
-// * @param t theme number (index into themes array).
-// */
-//void Theme_WeaponRack(int t)
-//{
-//	int xp, yp;
-//	char weaponrnd[4] = { 6, 8, 5, 8 };
-//	char monstrnd[4] = { 6, 7, 3, 9 };
-//
-//	if (weaponFlag) {
-//		TFit_Obj3(t);
-//		AddObject(OBJ_WEAPONRACK, themex, themey);
-//	}
-//	for (yp = 0; yp < MAXDUNY; yp++) {
-//		for (xp = 0; xp < MAXDUNX; xp++) {
-//			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
-//				if (CheckThemeObj3(xp, yp, t, -1)) {
-//					if (random_(0, weaponrnd[leveltype - 1]) == 0) {
-//						AddObject(OBJ_WEAPONRACKN, xp, yp);
-//					}
-//				}
-//			}
-//		}
-//	}
-//	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
-//	weaponFlag = FALSE;
-//}
-//
-///**
-// * UpdateL4Trans sets each value of the transparency map to 1.
-// */
-//void UpdateL4Trans()
-//{
-//	int i, j;
-//
-//	for (j = 0; j < MAXDUNY; j++) {
-//		for (i = 0; i < MAXDUNX; i++) {
-//			if (dTransVal[i][j] != 0) {
-//				dTransVal[i][j] = 1;
-//			}
-//		}
-//	}
-//}
-//
-///**
-// * CreateThemeRooms adds thematic elements to rooms.
-// */
-//void CreateThemeRooms()
-//{
-//	int i;
-//
-//	if (currlevel == 16) {
-//		return;
-//	}
-//	InitObjFlag = TRUE;
-//	for (i = 0; i < numthemes; i++) {
-//		themex = 0;
-//		themey = 0;
-//		switch (themes[i].ttype) {
-//		case THEME_BARREL:
-//			Theme_Barrel(i);
-//			break;
-//		case THEME_SHRINE:
-//			Theme_Shrine(i);
-//			break;
-//		case THEME_MONSTPIT:
-//			Theme_MonstPit(i);
-//			break;
-//		case THEME_SKELROOM:
-//			Theme_SkelRoom(i);
-//			break;
-//		case THEME_TREASURE:
-//			Theme_Treasure(i);
-//			break;
-//		case THEME_LIBRARY:
-//			Theme_Library(i);
-//			break;
-//		case THEME_TORTURE:
-//			Theme_Torture(i);
-//			break;
-//		case THEME_BLOODFOUNTAIN:
-//			Theme_BloodFountain(i);
-//			break;
-//		case THEME_DECAPITATED:
-//			Theme_Decap(i);
-//			break;
-//		case THEME_PURIFYINGFOUNTAIN:
-//			Theme_PurifyingFountain(i);
-//			break;
-//		case THEME_ARMORSTAND:
-//			Theme_ArmorStand(i);
-//			break;
-//		case THEME_GOATSHRINE:
-//			Theme_GoatShrine(i);
-//			break;
-//		case THEME_CAULDRON:
-//			Theme_Cauldron(i);
-//			break;
-//		case THEME_MURKYFOUNTAIN:
-//			Theme_MurkyFountain(i);
-//			break;
-//		case THEME_TEARFOUNTAIN:
-//			Theme_TearFountain(i);
-//			break;
-//		case THEME_BRNCROSS:
-//			Theme_BrnCross(i);
-//			break;
-//		case THEME_WEAPONRACK:
-//			Theme_WeaponRack(i);
-//			break;
-//		}
-//	}
-//	InitObjFlag = FALSE;
-//	if (leveltype == DTYPE_HELL && themeCount > 0) {
-//		UpdateL4Trans();
-//	}
-//}
+/**
+ * Theme_Barrel initializes the barrel theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_Barrel(int t)
+{
+	int xp, yp, r;
+	char barrnd[4] = { 2, 6, 4, 8 };
+	char monstrnd[4] = { 5, 7, 3, 9 };
+
+	for (yp = 0; yp < MAXDUNY; yp++) {
+		for (xp = 0; xp < MAXDUNX; xp++) {
+			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
+				if (random_(0, barrnd[leveltype - 1]) == 0) {
+					if (random_(0, barrnd[leveltype - 1]) == 0) {
+						r = OBJ_BARREL;
+					} else {
+						r = OBJ_BARRELEX;
+					}
+					AddObject(r, xp, yp);
+				}
+			}
+		}
+	}
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+}
+
+/**
+ * Theme_Shrine initializes the shrine theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_Shrine(int t)
+{
+	char monstrnd[4] = { 6, 6, 3, 9 };
+
+	TFit_Shrine(t);
+	if (themeVar1 == 1) {
+		AddObject(OBJ_CANDLE2, themex - 1, themey);
+		AddObject(OBJ_SHRINER, themex, themey);
+		AddObject(OBJ_CANDLE2, themex + 1, themey);
+	} else {
+		AddObject(OBJ_CANDLE2, themex, themey - 1);
+		AddObject(OBJ_SHRINEL, themex, themey);
+		AddObject(OBJ_CANDLE2, themex, themey + 1);
+	}
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+}
+
+/**
+ * Theme_MonstPit initializes the monster pit theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_MonstPit(int t)
+{
+	int r;
+	int ixp, iyp;
+	char monstrnd[4] = { 6, 7, 3, 9 };
+
+	r = random_(0, 100) + 1;
+	ixp = 0;
+	iyp = 0;
+	while (r > 0) {
+		if (dTransVal[ixp][iyp] == themes[t].ttval && !nSolidTable[dPiece[ixp][iyp]]) {
+			--r;
+		}
+		if (r <= 0)
+			continue;
+		ixp++;
+		if (ixp == MAXDUNX) {
+			ixp = 0;
+			iyp++;
+			if (iyp == MAXDUNY) {
+				iyp = 0;
+			}
+		}
+	}
+	CreateRndItem(ixp, iyp, TRUE, FALSE, TRUE);
+	ItemNoFlippy();
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+}
+
+/**
+ * Theme_SkelRoom initializes the skeleton room theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_SkelRoom(int t)
+{
+	int xp, yp, i;
+	char monstrnd[4] = { 6, 7, 3, 9 };
+
+	TFit_SkelRoom(t);
+
+	xp = themex;
+	yp = themey;
+
+	AddObject(OBJ_SKFIRE, xp, yp);
+
+	if (random_(0, monstrnd[leveltype - 1]) != 0) {
+		i = PreSpawnSkeleton();
+		SpawnSkeleton(i, xp - 1, yp - 1);
+	} else {
+		AddObject(OBJ_BANNERL, xp - 1, yp - 1);
+	}
+
+	i = PreSpawnSkeleton();
+	SpawnSkeleton(i, xp, yp - 1);
+
+	if (random_(0, monstrnd[leveltype - 1]) != 0) {
+		i = PreSpawnSkeleton();
+		SpawnSkeleton(i, xp + 1, yp - 1);
+	} else {
+		AddObject(OBJ_BANNERR, xp + 1, yp - 1);
+	}
+	if (random_(0, monstrnd[leveltype - 1]) != 0) {
+		i = PreSpawnSkeleton();
+		SpawnSkeleton(i, xp - 1, yp);
+	} else {
+		AddObject(OBJ_BANNERM, xp - 1, yp);
+	}
+	if (random_(0, monstrnd[leveltype - 1]) != 0) {
+		i = PreSpawnSkeleton();
+		SpawnSkeleton(i, xp + 1, yp);
+	} else {
+		AddObject(OBJ_BANNERM, xp + 1, yp);
+	}
+	if (random_(0, monstrnd[leveltype - 1]) != 0) {
+		i = PreSpawnSkeleton();
+		SpawnSkeleton(i, xp - 1, yp + 1);
+	} else {
+		AddObject(OBJ_BANNERR, xp - 1, yp + 1);
+	}
+
+	i = PreSpawnSkeleton();
+	SpawnSkeleton(i, xp, yp + 1);
+
+	if (random_(0, monstrnd[leveltype - 1]) != 0) {
+		i = PreSpawnSkeleton();
+		SpawnSkeleton(i, xp + 1, yp + 1);
+	} else {
+		AddObject(OBJ_BANNERL, xp + 1, yp + 1);
+	}
+
+	if (dObject[xp][yp - 3] == 0) {
+		AddObject(OBJ_SKELBOOK, xp, yp - 2);
+	}
+	if (dObject[xp][yp + 3] == 0) {
+		AddObject(OBJ_SKELBOOK, xp, yp + 2);
+	}
+}
+
+/**
+ * Theme_Treasure initializes the treasure theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_Treasure(int t)
+{
+	int xp, yp;
+	int i;
+	char treasrnd[4] = { 4, 9, 7, 10 };
+	char monstrnd[4] = { 6, 8, 3, 7 };
+
+	GetRndSeed();
+	for (yp = 0; yp < MAXDUNY; yp++) {
+		for (xp = 0; xp < MAXDUNX; xp++) {
+			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
+				int rv = random_(0, treasrnd[leveltype - 1]);
+				// BUGFIX: the `2*` in `2*random_(0, treasrnd...) == 0` has no effect, should probably be `random_(0, 2*treasrnd...) == 0`
+				if ((2 * random_(0, treasrnd[leveltype - 1])) == 0) {
+					CreateTypeItem(xp, yp, FALSE, ITYPE_GOLD, IMISC_NONE, FALSE, TRUE);
+					ItemNoFlippy();
+				}
+				if (rv == 0) {
+					CreateRndItem(xp, yp, FALSE, FALSE, TRUE);
+					ItemNoFlippy();
+				}
+				// BUGFIX: the following code is likely not working as intended.
+				//
+				//    `rv == 0` has no effect.
+				//
+				//    `rv >= treasrnd[leveltype - 1] - 2` is not connected to either
+				//    of the item creation branches above, thus the last (unrelated)
+				//    item spawned/dropped on ground would be halved in value.
+				if (rv == 0 || rv >= treasrnd[leveltype - 1] - 2) {
+					i = ItemNoFlippy();
+					if (rv >= treasrnd[leveltype - 1] - 2 && leveltype != DTYPE_CATHEDRAL) {
+						item[i]._ivalue >>= 1;
+					}
+				}
+			}
+		}
+	}
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+}
+
+/**
+ * Theme_Library initializes the library theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_Library(int t)
+{
+	int xp, yp, oi;
+	char librnd[4] = { 1, 2, 2, 5 };
+	char monstrnd[4] = { 5, 7, 3, 9 };
+
+	TFit_Shrine(t);
+
+	if (themeVar1 == 1) {
+		AddObject(OBJ_BOOKCANDLE, themex - 1, themey);
+		AddObject(OBJ_BOOKCASER, themex, themey);
+		AddObject(OBJ_BOOKCANDLE, themex + 1, themey);
+	} else {
+		AddObject(OBJ_BOOKCANDLE, themex, themey - 1);
+		AddObject(OBJ_BOOKCASEL, themex, themey);
+		AddObject(OBJ_BOOKCANDLE, themex, themey + 1);
+	}
+
+	for (yp = 1; yp < MAXDUNY - 1; yp++) {
+		for (xp = 1; xp < MAXDUNX - 1; xp++) {
+			if (CheckThemeObj3(xp, yp, t, -1) && dMonster[xp][yp] == 0 && random_(0, librnd[leveltype - 1]) == 0) {
+				AddObject(OBJ_BOOKSTAND, xp, yp);
+				if (random_(0, 2 * librnd[leveltype - 1]) != 0) { /// BUGFIX: check dObject[xp][yp] was populated by AddObject
+					oi = dObject[xp][yp] - 1;
+					object[oi]._oSelFlag = 0;
+					object[oi]._oAnimFrame += 2;
+				}
+			}
+		}
+	}
+
+	if (QuestStatus(Q_ZHAR)) {
+		if (t == zharlib) {
+			return;
+		}
+		PlaceThemeMonsts(t, monstrnd[leveltype]); /// BUGFIX: `leveltype - 1`
+	} else {
+		PlaceThemeMonsts(t, monstrnd[leveltype]); /// BUGFIX: `leveltype - 1`
+	}
+}
+
+/**
+ * Theme_Torture initializes the torture theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_Torture(int t)
+{
+	int xp, yp;
+	char tortrnd[4] = { 6, 8, 3, 8 };
+	char monstrnd[4] = { 6, 8, 3, 9 };
+
+	for (yp = 1; yp < MAXDUNY - 1; yp++) {
+		for (xp = 1; xp < MAXDUNX - 1; xp++) {
+			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
+				if (CheckThemeObj3(xp, yp, t, -1)) {
+					if (random_(0, tortrnd[leveltype - 1]) == 0) {
+						AddObject(OBJ_TNUDEM2, xp, yp);
+					}
+				}
+			}
+		}
+	}
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+}
+
+/**
+ * Theme_BloodFountain initializes the blood fountain theme.
+ * @param t Theme number (index into themes array).
+ */
+void Theme_BloodFountain(int t)
+{
+	char monstrnd[4] = { 6, 8, 3, 9 };
+
+	TFit_Obj5(t);
+	AddObject(OBJ_BLOODFTN, themex, themey);
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+}
+
+/**
+ * Theme_Decap initializes the decapitated theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_Decap(int t)
+{
+	int xp, yp;
+	char decaprnd[4] = { 6, 8, 3, 8 };
+	char monstrnd[4] = { 6, 8, 3, 9 };
+
+	for (yp = 1; yp < MAXDUNY - 1; yp++) {
+		for (xp = 1; xp < MAXDUNX - 1; xp++) {
+			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
+				if (CheckThemeObj3(xp, yp, t, -1)) {
+					if (random_(0, decaprnd[leveltype - 1]) == 0) {
+						AddObject(OBJ_DECAP, xp, yp);
+					}
+				}
+			}
+		}
+	}
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+}
+
+/**
+ * Theme_PurifyingFountain initializes the purifying fountain theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_PurifyingFountain(int t)
+{
+	char monstrnd[4] = { 6, 7, 3, 9 };
+
+	TFit_Obj5(t);
+	AddObject(OBJ_PURIFYINGFTN, themex, themey);
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+}
+
+/**
+ * Theme_ArmorStand initializes the armor stand theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_ArmorStand(int t)
+{
+	int xp, yp;
+	char armorrnd[4] = { 6, 8, 3, 8 };
+	char monstrnd[4] = { 6, 7, 3, 9 };
+
+	if (armorFlag) {
+		TFit_Obj3(t);
+		AddObject(OBJ_ARMORSTAND, themex, themey);
+	}
+	for (yp = 0; yp < MAXDUNY; yp++) {
+		for (xp = 0; xp < MAXDUNX; xp++) {
+			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
+				if (CheckThemeObj3(xp, yp, t, -1)) {
+					if (random_(0, armorrnd[leveltype - 1]) == 0) {
+						AddObject(OBJ_ARMORSTANDN, xp, yp);
+					}
+				}
+			}
+		}
+	}
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+	armorFlag = FALSE;
+}
+
+/**
+ * Theme_GoatShrine initializes the goat shrine theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_GoatShrine(int t)
+{
+	int xx, yy;
+
+	TFit_GoatShrine(t);
+	AddObject(OBJ_GOATSHRINE, themex, themey);
+	for (yy = themey - 1; yy <= themey + 1; yy++) {
+		for (xx = themex - 1; xx <= themex + 1; xx++) {
+			if (dTransVal[xx][yy] == themes[t].ttval && !nSolidTable[dPiece[xx][yy]] && (xx != themex || yy != themey)) {
+				AddMonster(xx, yy, DIR_SW, themeVar1, TRUE);
+			}
+		}
+	}
+}
+
+/**
+ * Theme_Cauldron initializes the cauldron theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_Cauldron(int t)
+{
+	char monstrnd[4] = { 6, 7, 3, 9 };
+
+	TFit_Obj5(t);
+	AddObject(OBJ_CAULDRON, themex, themey);
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+}
+
+/**
+ * Theme_MurkyFountain initializes the murky fountain theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_MurkyFountain(int t)
+{
+	char monstrnd[4] = { 6, 7, 3, 9 };
+
+	TFit_Obj5(t);
+	AddObject(OBJ_MURKYFTN, themex, themey);
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+}
+
+/**
+ * Theme_TearFountain initializes the tear fountain theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_TearFountain(int t)
+{
+	char monstrnd[4] = { 6, 7, 3, 9 };
+
+	TFit_Obj5(t);
+	AddObject(OBJ_TEARFTN, themex, themey);
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+}
+
+/**
+ * Theme_BrnCross initializes the burning cross theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_BrnCross(int t)
+{
+	int xp, yp;
+	char monstrnd[4] = { 6, 8, 3, 9 };
+	char bcrossrnd[4] = { 5, 7, 3, 8 };
+
+	for (yp = 0; yp < MAXDUNY; yp++) {
+		for (xp = 0; xp < MAXDUNX; xp++) {
+			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
+				if (CheckThemeObj3(xp, yp, t, -1)) {
+					if (random_(0, bcrossrnd[leveltype - 1]) == 0) {
+						AddObject(OBJ_TBCROSS, xp, yp);
+					}
+				}
+			}
+		}
+	}
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+	bCrossFlag = TRUE;
+}
+
+/**
+ * Theme_WeaponRack initializes the weapon rack theme.
+ *
+ * @param t theme number (index into themes array).
+ */
+void Theme_WeaponRack(int t)
+{
+	int xp, yp;
+	char weaponrnd[4] = { 6, 8, 5, 8 };
+	char monstrnd[4] = { 6, 7, 3, 9 };
+
+	if (weaponFlag) {
+		TFit_Obj3(t);
+		AddObject(OBJ_WEAPONRACK, themex, themey);
+	}
+	for (yp = 0; yp < MAXDUNY; yp++) {
+		for (xp = 0; xp < MAXDUNX; xp++) {
+			if (dTransVal[xp][yp] == themes[t].ttval && !nSolidTable[dPiece[xp][yp]]) {
+				if (CheckThemeObj3(xp, yp, t, -1)) {
+					if (random_(0, weaponrnd[leveltype - 1]) == 0) {
+						AddObject(OBJ_WEAPONRACKN, xp, yp);
+					}
+				}
+			}
+		}
+	}
+	PlaceThemeMonsts(t, monstrnd[leveltype - 1]);
+	weaponFlag = FALSE;
+}
+
+/**
+ * UpdateL4Trans sets each value of the transparency map to 1.
+ */
+void UpdateL4Trans()
+{
+	int i, j;
+
+	for (j = 0; j < MAXDUNY; j++) {
+		for (i = 0; i < MAXDUNX; i++) {
+			if (dTransVal[i][j] != 0) {
+				dTransVal[i][j] = 1;
+			}
+		}
+	}
+}
+
+/**
+ * CreateThemeRooms adds thematic elements to rooms.
+ */
+void CreateThemeRooms()
+{
+	int i;
+
+	if (currlevel == 16) {
+		return;
+	}
+	InitObjFlag = TRUE;
+	for (i = 0; i < numthemes; i++) {
+		themex = 0;
+		themey = 0;
+		switch (themes[i].ttype) {
+		case THEME_BARREL:
+			Theme_Barrel(i);
+			break;
+		case THEME_SHRINE:
+			Theme_Shrine(i);
+			break;
+		case THEME_MONSTPIT:
+			Theme_MonstPit(i);
+			break;
+		case THEME_SKELROOM:
+			Theme_SkelRoom(i);
+			break;
+		case THEME_TREASURE:
+			Theme_Treasure(i);
+			break;
+		case THEME_LIBRARY:
+			Theme_Library(i);
+			break;
+		case THEME_TORTURE:
+			Theme_Torture(i);
+			break;
+		case THEME_BLOODFOUNTAIN:
+			Theme_BloodFountain(i);
+			break;
+		case THEME_DECAPITATED:
+			Theme_Decap(i);
+			break;
+		case THEME_PURIFYINGFOUNTAIN:
+			Theme_PurifyingFountain(i);
+			break;
+		case THEME_ARMORSTAND:
+			Theme_ArmorStand(i);
+			break;
+		case THEME_GOATSHRINE:
+			Theme_GoatShrine(i);
+			break;
+		case THEME_CAULDRON:
+			Theme_Cauldron(i);
+			break;
+		case THEME_MURKYFOUNTAIN:
+			Theme_MurkyFountain(i);
+			break;
+		case THEME_TEARFOUNTAIN:
+			Theme_TearFountain(i);
+			break;
+		case THEME_BRNCROSS:
+			Theme_BrnCross(i);
+			break;
+		case THEME_WEAPONRACK:
+			Theme_WeaponRack(i);
+			break;
+		}
+	}
+	InitObjFlag = FALSE;
+	if (leveltype == DTYPE_HELL && themeCount > 0) {
+		UpdateL4Trans();
+	}
+}
