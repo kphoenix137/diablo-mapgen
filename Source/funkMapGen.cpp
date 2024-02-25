@@ -499,6 +499,27 @@ int main(int argc, char **argv)
 			InitItems();
 			CreateThemeRooms();
 
+			int monsterItems = numitems;
+			for (int i = 0; i < nummonsters; i++) {
+				int mid = monstactive[i];
+				SetRndSeed(monster[mid]._mRndSeed);
+				SpawnItem(mid, monster[mid]._mx, monster[mid]._my, TRUE);
+			}
+
+			int objectItems = numitems;
+			for (int i = 0; i < nobjects; i++) {
+				int oid = objectactive[i];
+				createItemsFromObject(oid);
+			}
+
+			bool foundPuzzler = false;
+			for (int i = 0; i < numitems; i++) {
+				int ii = itemactive[i];
+				foundPuzzler |= item[ii]._iMagical == ITEM_QUALITY_UNIQUE && item[ii]._iUid == 60;
+			}
+			if (!foundPuzzler)
+				continue;
+
 			if (!quiet) {
 				std::cout << "Monster Count: " << nummonsters << std::endl;
 				for (int i = 0; i < nummonsters; i++) {
@@ -515,25 +536,12 @@ int main(int argc, char **argv)
 				std::cout << std::endl;
 				std::cout << "Item Count: " << numitems << std::endl;
 				for (int i = 0; i < numitems; i++) {
-					std::cout << "Item " << i << ": " << item[itemactive[i]]._iIName << " (" << item[itemactive[i]]._iSeed << ")" << std::endl;
-				}
-
-				std::cout << std::endl;
-				for (int i = MAX_PLRS; i < nummonsters; i++) {
-					int ii = numitems;
-					int mid = monstactive[i];
-					SetRndSeed(monster[mid]._mRndSeed);
-					SpawnItem(mid, monster[mid]._mx, monster[mid]._my, TRUE);
-					if (numitems > ii)
-						std::cout << "Monster Item " << ii << ": " << item[itemactive[ii]]._iIName << " (" << item[itemactive[ii]]._iSeed << ")" << std::endl;
-				}
-				std::cout << std::endl;
-				for (int i = 0; i < nobjects; i++) {
-					int ii = numitems;
-					int oid = objectactive[i];
-					createItemsFromObject(oid);
-					for (int j = ii; j < numitems; j++)
-						std::cout << "Object Item " << j << ": " << item[itemactive[j]]._iIName << " (" << item[itemactive[j]]._iSeed << ")" << std::endl;
+					std::string prefix = "";
+					if (i >= objectItems)
+						prefix = "Object ";
+					else if (i >= monsterItems)
+						prefix = "Monster ";
+					std::cout << prefix << "Item " << i << ": " << item[itemactive[i]]._iIName << " (" << item[itemactive[i]]._iSeed << ")" << std::endl;
 				}
 			}
 			if (exportLevels)
