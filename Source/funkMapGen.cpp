@@ -502,6 +502,8 @@ int main(int argc, char **argv)
 			int monsterItems = numitems;
 			for (int i = 0; i < nummonsters; i++) {
 				int mid = monstactive[i];
+				if (monster[mid].MType->mtype == MT_GOLEM)
+					continue;
 				SetRndSeed(monster[mid]._mRndSeed);
 				SpawnItem(mid, monster[mid]._mx, monster[mid]._my, TRUE);
 			}
