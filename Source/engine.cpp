@@ -139,6 +139,7 @@ BYTE *LoadFileInMem(std::string pszName, DWORD *pdwFileLen)
 void LoadLvlGFX()
 {
 	free(pMegaTiles);
+	free(pLevelPieces);
 
 	switch (leveltype) {
 	case DTYPE_CATHEDRAL:
