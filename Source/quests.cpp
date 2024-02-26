@@ -217,7 +217,7 @@ void DrawWarLord(int x, int y)
 			} else {
 				v = 6;
 			}
-			dungeon[i][j] = v;
+			SetDungeon(i, j, v);
 			sp += 2;
 		}
 	}
@@ -248,7 +248,7 @@ void DrawSChamber(int q, int x, int y)
 			} else {
 				v = 3;
 			}
-			dungeon[i][j] = v;
+			SetDungeon(i, j, v);
 			sp += 2;
 		}
 	}
@@ -329,7 +329,7 @@ void DrawBlood(int x, int y)
 	for (j = 0; j < rh; j++) {
 		for (i = 0; i < rw; i++) {
 			if (*sp != 0) {
-				dungeon[x + i][y + j] = *sp;
+				SetDungeon(x + i, y + j, *sp);
 			}
 			sp += 2;
 		}

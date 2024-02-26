@@ -29,5 +29,7 @@
 #include "path.h"
 
 const int myplr = 0;
+BYTE GetDungeon(int x, int y);
+void SetDungeon(int x, int y, BYTE value);
 
 #endif /* __ALL_H__ */

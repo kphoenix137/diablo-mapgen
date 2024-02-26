@@ -60,6 +60,27 @@ typedef struct Point {
 	}
 } Point;
 
+bool oobread = false;
+bool oobwrite = false;
+
+BYTE GetDungeon(int x, int y)
+{
+	if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY) {
+		oobread = true;
+		return 0;
+	}
+	return dungeon[x][y];
+}
+
+void SetDungeon(int x, int y, BYTE value)
+{
+	if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY) {
+		oobwrite = true;
+		return;
+	}
+	dungeon[x][y] = value;
+}
+
 static int InitLevelType(int l)
 {
 	if (l >= 1 && l <= 4)
@@ -253,6 +274,8 @@ bool IsGoodLevel()
 
 void createSpecificDungeon()
 {
+	oobread = false;
+	oobwrite = false;
 	uint32_t lseed = glSeedTbl[currlevel];
 	if (leveltype == DTYPE_CATHEDRAL)
 		CreateL5Dungeon(lseed, 0);
@@ -262,6 +285,8 @@ void createSpecificDungeon()
 		CreateL3Dungeon(lseed, 0);
 	else if (leveltype == DTYPE_HELL)
 		CreateL4Dungeon(lseed, 0);
+	if (oobwrite)
+		std::cout << "Game seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
 }
 
 /**

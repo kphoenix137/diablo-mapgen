@@ -856,13 +856,13 @@ void AddHookedBodies(int freq)
 		jj = 16 + j * 2;
 		for (i = 0; i < DMAXX; i++) {
 			ii = 16 + i * 2;
-			if (dungeon[i][j] != 1 && dungeon[i][j] != 2)
+			if (GetDungeon(i, j) != 1 && GetDungeon(i, j) != 2)
 				continue;
 			if (random_(0, freq) != 0)
 				continue;
 			if (!SkipThemeRoom(i, j))
 				continue;
-			if (dungeon[i][j] == 1 && dungeon[i + 1][j] == 6) {
+			if (GetDungeon(i, j) == 1 && GetDungeon(i + 1, j) == 6) {
 				switch (random_(0, 3)) {
 				case 0:
 					AddObject(OBJ_TORTURE1, ii + 1, jj);
@@ -876,7 +876,7 @@ void AddHookedBodies(int freq)
 				}
 				continue;
 			}
-			if (dungeon[i][j] == 2 && dungeon[i][j + 1] == 6) {
+			if (GetDungeon(i, j) == 2 && GetDungeon(i, j + 1) == 6) {
 				switch (random_(0, 2)) {
 				case 0:
 					AddObject(OBJ_TORTURE3, ii, jj);
@@ -2084,7 +2084,7 @@ void ObjChangeMap(int x1, int y1, int x2, int y2)
 	for (j = y1; j <= y2; j++) {
 		for (i = x1; i <= x2; i++) {
 			ObjSetMini(i, j, pdungeon[i][j]);
-			dungeon[i][j] = pdungeon[i][j];
+			SetDungeon(i, j, pdungeon[i][j]);
 		}
 	}
 #ifdef HELLFIRE
@@ -2108,7 +2108,7 @@ void ObjChangeMapResync(int x1, int y1, int x2, int y2)
 	for (j = y1; j <= y2; j++) {
 		for (i = x1; i <= x2; i++) {
 			ObjSetMini(i, j, pdungeon[i][j]);
-			dungeon[i][j] = pdungeon[i][j];
+			SetDungeon(i, j, pdungeon[i][j]);
 		}
 	}
 #ifdef HELLFIRE
