@@ -22,7 +22,7 @@
 #define MAXVIEWX 21
 #define MAXVIEWY 21
 bool isVisible[MAXVIEWY][MAXVIEWX] = {
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, //	-y
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, //	-y
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
@@ -32,7 +32,7 @@ bool isVisible[MAXVIEWY][MAXVIEWX] = {
 	{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
 	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
 	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
-	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },// -x	origin(10,10)	+x
+	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, // -x	origin(10,10)	+x
 	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 	{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
 	{ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
@@ -228,13 +228,13 @@ bool IsGoodLevel()
 			return false;
 		if (stairsPath == 0 || stairsPath > maxDistance)
 			return false;
-	}else //(leveltype == DTYPE_CAVES || leveltype == DTYPE_HELL)
+	} else //(leveltype == DTYPE_CAVES || leveltype == DTYPE_HELL)
 	{
 		maxDistance = 15;
 
 		bool isStairsVisibile = IsVisibleSpawn() || IsVisiblePrevious();
 		StairsDownPrevious = StairsDown;
-		
+
 		if (currlevel != 9 && isStairsVisibile)
 			return true;
 
@@ -461,9 +461,18 @@ int main(int argc, char **argv)
 		}
 	}
 
+	int seconds = time(NULL);
+	uint32_t prevseed = startSeed;
 	for (uint32_t seed = startSeed; seed < startSeed + seedCount; seed++) {
-		if (!quiet)
-			std::cout << "processing seed " << seed << std::endl;
+		int elapsed = time(NULL) - seconds;
+		if (!quiet && elapsed >= 10) {
+			int pct = 100 * (seed - startSeed) / seedCount;
+			int speed = ((seed - prevseed) / 10);
+			int eta = (seedCount - (seed - startSeed)) / speed;
+			std::cerr << "Progress: " << pct << "% eta: " << eta << "s (" << speed << "seed/s)" << std::endl;
+			seconds += elapsed;
+			prevseed = seed;
+		}
 
 		lengthPathToDlvl9 = 0;
 		seedSelection(seed);
@@ -547,7 +556,7 @@ int main(int argc, char **argv)
 				}
 			}
 			if (exportLevels)
-				ExportDun();
+				ExportDun(seed);
 		}
 
 		for (int level = 9; level < NUMLEVELS; level++) {
@@ -570,7 +579,7 @@ int main(int argc, char **argv)
 			if (!quiet)
 				printAsciiLevel();
 			if (exportLevels)
-				ExportDun();
+				ExportDun(seed);
 		}
 	}
 
