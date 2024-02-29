@@ -406,9 +406,9 @@ void printAsciiLevel()
 	for (int boby = 16; boby < MAXDUNY - 17; boby++) {
 		for (int bobx = 16; bobx < MAXDUNX - 17; bobx++) {
 			if (Spawn.x == bobx && Spawn.y == boby)
-				std::cout << "▲";
+				std::cout << "^";
 			else if (StairsDown.x == bobx && StairsDown.y == boby)
-				std::cout << "▼";
+				std::cout << "v";
 			else if (steps[bobx][boby])
 				std::cout << "=";
 			else if (nSolidTable[dPiece[bobx][boby]])
