@@ -1,5 +1,6 @@
 #pragma once
 #include "../types.h"
+#include "gendung.h"
 
 #include <string>
 #define assert_fail(exp) ((void)(exp))
@@ -25,9 +26,33 @@ void SetAutomapView(int nXPos, int nYPos);
 void SetRndSeed(int s);
 int GetRndSeed();
 int GetRndState();
-int GetdPiece(int x, int y);
-BYTE GetDungeon(int x, int y);
-void SetDungeon(int x, int y, BYTE value);
+
+inline int GetdPiece(int x, int y)
+{
+	if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY) {
+		oobread = true;
+		return 0;
+	}
+	return dPiece[x][y];
+}
+
+inline BYTE GetDungeon(int x, int y)
+{
+	if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXY) {
+		oobread = true;
+		return 0;
+	}
+	return dungeon[x][y];
+}
+
+inline void SetDungeon(int x, int y, BYTE value)
+{
+	if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXY) {
+		oobwrite = true;
+		return;
+	}
+	dungeon[x][y] = value;
+}
 
 BYTE *DiabloAllocPtr(DWORD dwBytes);
 void mem_free_dbg(void *p);
