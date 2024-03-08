@@ -508,133 +508,6 @@ void RotateRadius(int *x, int *y, int *dx, int *dy, int *lx, int *ly, int *bx, i
 
 void DoLighting(int nXPos, int nYPos, int nRadius, int Lnum)
 {
-	int x, y, v, xoff, yoff, mult, radius_block;
-	int min_x, max_x, min_y, max_y;
-	int dist_x, dist_y, light_x, light_y, block_x, block_y, temp_x, temp_y;
-
-	xoff = 0;
-	yoff = 0;
-	light_x = 0;
-	light_y = 0;
-	block_x = 0;
-	block_y = 0;
-
-	if (Lnum >= 0) {
-		xoff = LightList[Lnum]._xoff;
-		yoff = LightList[Lnum]._yoff;
-		if (xoff < 0) {
-			xoff += 8;
-			nXPos--;
-		}
-		if (yoff < 0) {
-			yoff += 8;
-			nYPos--;
-		}
-	}
-
-	dist_x = xoff;
-	dist_y = yoff;
-
-	if (nXPos - 15 < 0) {
-		min_x = nXPos + 1;
-	} else {
-		min_x = 15;
-	}
-	if (nXPos + 15 > MAXDUNX) {
-		max_x = MAXDUNX - nXPos;
-	} else {
-		max_x = 15;
-	}
-	if (nYPos - 15 < 0) {
-		min_y = nYPos + 1;
-	} else {
-		min_y = 15;
-	}
-	if (nYPos + 15 > MAXDUNY) {
-		max_y = MAXDUNY - nYPos;
-	} else {
-		max_y = 15;
-	}
-
-#ifdef HELLFIRE
-	if (currlevel < 17) {
-#else
-	if (nXPos >= 0 && nXPos < MAXDUNX && nYPos >= 0 && nYPos < MAXDUNY) {
-#endif
-		dLight[nXPos][nYPos] = 0;
-#ifdef HELLFIRE
-	} else if (dLight[nXPos][nYPos] > lightradius[nRadius][0]) {
-		dLight[nXPos][nYPos] = lightradius[nRadius][0];
-#endif
-	}
-
-	mult = xoff + 8 * yoff;
-	for (y = 0; y < min_y; y++) {
-		for (x = 1; x < max_x; x++) {
-			radius_block = lightblock[mult][y][x];
-			if (radius_block < 128) {
-				temp_x = nXPos + x;
-				temp_y = nYPos + y;
-				v = lightradius[nRadius][radius_block];
-#ifndef HELLFIRE
-				if (temp_x >= 0 && temp_x < MAXDUNX && temp_y >= 0 && temp_y < MAXDUNY)
-#endif
-					if (v < dLight[temp_x][temp_y])
-						dLight[temp_x][temp_y] = v;
-			}
-		}
-	}
-	RotateRadius(&xoff, &yoff, &dist_x, &dist_y, &light_x, &light_y, &block_x, &block_y);
-	mult = xoff + 8 * yoff;
-	for (y = 0; y < max_y; y++) {
-		for (x = 1; x < max_x; x++) {
-			radius_block = lightblock[mult][y + block_y][x + block_x];
-			if (radius_block < 128) {
-				temp_x = nXPos + y;
-				temp_y = nYPos - x;
-				v = lightradius[nRadius][radius_block];
-#ifndef HELLFIRE
-				if (temp_x >= 0 && temp_x < MAXDUNX && temp_y >= 0 && temp_y < MAXDUNY)
-#endif
-					if (v < dLight[temp_x][temp_y])
-						dLight[temp_x][temp_y] = v;
-			}
-		}
-	}
-	RotateRadius(&xoff, &yoff, &dist_x, &dist_y, &light_x, &light_y, &block_x, &block_y);
-	mult = xoff + 8 * yoff;
-	for (y = 0; y < max_y; y++) {
-		for (x = 1; x < min_x; x++) {
-			radius_block = lightblock[mult][y + block_y][x + block_x];
-			if (radius_block < 128) {
-				temp_x = nXPos - x;
-				temp_y = nYPos - y;
-				v = lightradius[nRadius][radius_block];
-#ifndef HELLFIRE
-				if (temp_x >= 0 && temp_x < MAXDUNX && temp_y >= 0 && temp_y < MAXDUNY)
-#endif
-					if (v < dLight[temp_x][temp_y])
-						dLight[temp_x][temp_y] = v;
-			}
-		}
-	}
-	RotateRadius(&xoff, &yoff, &dist_x, &dist_y, &light_x, &light_y, &block_x, &block_y);
-	mult = xoff + 8 * yoff;
-	for (y = 0; y < min_y; y++) {
-		for (x = 1; x < min_x; x++) {
-			radius_block = lightblock[mult][y + block_y][x + block_x];
-			if (radius_block < 128) {
-				temp_x = nXPos - y;
-				temp_y = nYPos + x;
-				v = lightradius[nRadius][radius_block];
-#ifndef HELLFIRE
-				if (temp_x >= 0 && temp_x < MAXDUNX && temp_y >= 0 && temp_y < MAXDUNY)
-#endif
-					if (v < dLight[temp_x][temp_y])
-						dLight[temp_x][temp_y] = v;
-			}
-		}
-	}
 }
 
 void DoUnLight(int nXPos, int nYPos, int nRadius)
@@ -1070,27 +943,7 @@ void InitLighting()
 
 int AddLight(int x, int y, int r)
 {
-	int lid;
-
-	if (lightflag) {
-		return -1;
-	}
-
-	lid = -1;
-
-	if (numlights < MAXLIGHTS) {
-		lid = lightactive[numlights++];
-		LightList[lid]._lx = x;
-		LightList[lid]._ly = y;
-		LightList[lid]._lradius = r;
-		LightList[lid]._xoff = 0;
-		LightList[lid]._yoff = 0;
-		LightList[lid]._ldel = FALSE;
-		LightList[lid]._lunflag = FALSE;
-		dolighting = TRUE;
-	}
-
-	return lid;
+	return -1;
 }
 
 void AddUnLight(int i)
@@ -1212,15 +1065,8 @@ void SavePreLighting()
 
 void InitVision()
 {
-	int i;
+	memset(TransList, 0, sizeof(TransList));
 
-	numvision = 0;
-	dovision = FALSE;
-	visionid = 1;
-
-	for (i = 0; i < TransVal; i++) {
-		TransList[i] = FALSE;
-	}
 }
 
 int AddVision(int x, int y, int r, BOOL mine)
@@ -1261,19 +1107,6 @@ void ChangeVisionRadius(int id, int r)
 
 void ChangeVisionXY(int id, int x, int y)
 {
-	int i;
-
-	for (i = 0; i < numvision; i++) {
-		if (VisionList[i]._lid == id) {
-			VisionList[i]._lunflag = TRUE;
-			VisionList[i]._lunx = VisionList[i]._lx;
-			VisionList[i]._luny = VisionList[i]._ly;
-			VisionList[i]._lunr = VisionList[i]._lradius;
-			VisionList[i]._lx = x;
-			VisionList[i]._ly = y;
-			dovision = TRUE;
-		}
-	}
 }
 
 void ProcessVisionList()

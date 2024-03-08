@@ -12,12 +12,13 @@
 #include "gendung.h"
 #include "items.h"
 #include "level.h"
+#include "lighting.h"
 #include "monster.h"
 #include "objects.h"
+#include "path.h"
 #include "quests.h"
 #include "themes.h"
 #include "trigs.h"
-#include "path.h"
 
 #define MAXVIEWX 21
 #define MAXVIEWY 21
@@ -592,6 +593,7 @@ int main(int argc, char **argv)
 		}
 
 		for (int level = 9; level < NUMLEVELS; level++) {
+			InitVision();
 			currlevel = level;
 			whatleveltype();
 			createSpecificDungeon(false);
