@@ -60,27 +60,6 @@ typedef struct Point {
 	}
 } Point;
 
-bool oobread = false;
-bool oobwrite = false;
-
-BYTE GetDungeon(int x, int y)
-{
-	if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY) {
-		oobread = true;
-		return 0;
-	}
-	return dungeon[x][y];
-}
-
-void SetDungeon(int x, int y, BYTE value)
-{
-	if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY) {
-		oobwrite = true;
-		return;
-	}
-	dungeon[x][y] = value;
-}
-
 static int InitLevelType(int l)
 {
 	if (l >= 1 && l <= 4)

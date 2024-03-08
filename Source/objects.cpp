@@ -607,7 +607,7 @@ void AddObjTraps()
 
 			if (random_(144, 2) == 0) {
 				xp = i - 1;
-				while (!nSolidTable[dPiece[xp][j]])
+				while (!nSolidTable[GetdPiece(xp, j)])
 					xp--;
 
 				if (!WallTrapLocOkK(xp, j) || i - xp <= 1)

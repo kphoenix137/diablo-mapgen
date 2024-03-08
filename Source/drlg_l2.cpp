@@ -1625,6 +1625,15 @@ int Patterns[100][10] = {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
+static BYTE GetPreDungeon(int x, int y)
+{
+	if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXY) {
+		oobread = true;
+		return 0;
+	}
+	return predungeon[x][y];
+}
+
 static BOOL DRLG_L2PlaceMiniSet(BYTE *miniset, int tmin, int tmax, int cx, int cy, BOOL setview, int ldir)
 {
 	int sx, sy, sw, sh, xx, yy, i, ii, numt, bailcnt;
@@ -2808,19 +2817,19 @@ static BOOL CreateDungeon()
 
 	for (j = 0; j <= DMAXY; j++) {     /// BUGFIX: change '<=' to '<'
 		for (i = 0; i <= DMAXX; i++) { /// BUGFIX: change '<=' to '<'
-			if (predungeon[i][j] == 67) {
+			if (GetPreDungeon(i, j) == 67) {
 				predungeon[i][j] = 35;
 			}
-			if (predungeon[i][j] == 66) {
+			if (GetPreDungeon(i, j) == 66) {
 				predungeon[i][j] = 35;
 			}
-			if (predungeon[i][j] == 69) {
+			if (GetPreDungeon(i, j) == 69) {
 				predungeon[i][j] = 35;
 			}
-			if (predungeon[i][j] == 65) {
+			if (GetPreDungeon(i, j) == 65) {
 				predungeon[i][j] = 35;
 			}
-			if (predungeon[i][j] == 44) {
+			if (GetPreDungeon(i, j) == 44) {
 				predungeon[i][j] = 46;
 				if (predungeon[i - 1][j - 1] == 32) {
 					predungeon[i - 1][j - 1] = 35;

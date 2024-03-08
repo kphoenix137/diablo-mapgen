@@ -4,6 +4,7 @@
 #include <string>
 #define assert_fail(exp) ((void)(exp))
 
+const int myplr = 0;
 extern BYTE gbMaxPlayers;
 extern BOOL leveldebug;
 extern BOOL light4flag;
@@ -14,6 +15,8 @@ extern int gnDifficulty;
 extern PlayerStruct plr[MAX_PLRS];
 extern bool zoomflag;
 extern int questdebug;
+extern bool oobread;
+extern bool oobwrite;
 
 BOOL delta_quest_inited(int i);
 int random_(BYTE idx, int v);
@@ -21,6 +24,9 @@ int random_(BYTE idx, int v);
 void SetAutomapView(int nXPos, int nYPos);
 void SetRndSeed(int s);
 int GetRndSeed();
+int GetdPiece(int x, int y);
+BYTE GetDungeon(int x, int y);
+void SetDungeon(int x, int y, BYTE value);
 
 BYTE *DiabloAllocPtr(DWORD dwBytes);
 void mem_free_dbg(void *p);

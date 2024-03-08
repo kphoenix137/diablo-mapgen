@@ -140,6 +140,15 @@ const BYTE L4BTYPES[140] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
+static BYTE GetDung(int x, int y)
+{
+	if (x < 0 || y < 0 || x >= 20 || y >= 20) {
+		oobread = true;
+		return 0;
+	}
+	return dung[x][y];
+}
+
 static void DRLG_L4Shadows()
 {
 	int x, y;
@@ -1030,7 +1039,7 @@ static void uShape()
 			}
 			if (dung[i][j] == 1) {
 				// BUGFIX: check that i + 1 < 20 and j + 1 < 20
-				if (dung[i + 1][j] == 1 && dung[i + 1][j + 1] == 0) {
+				if (GetDung(i + 1, j) == 1 && GetDung(i + 1, j + 1) == 0) {
 					hallok[i] = TRUE;
 				} else {
 					hallok[i] = FALSE;

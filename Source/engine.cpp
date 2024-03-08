@@ -172,3 +172,33 @@ void app_fatal(const char *dummystring)
 void SetAutomapView(int nXPos, int nYPos)
 {
 }
+
+bool oobread = false;
+bool oobwrite = false;
+
+int GetdPiece(int x, int y)
+{
+	if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY) {
+		oobread = true;
+		return 0;
+	}
+	return dPiece[x][y];
+}
+
+BYTE GetDungeon(int x, int y)
+{
+	if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXY) {
+		oobread = true;
+		return 0;
+	}
+	return dungeon[x][y];
+}
+
+void SetDungeon(int x, int y, BYTE value)
+{
+	if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXY) {
+		oobwrite = true;
+		return;
+	}
+	dungeon[x][y] = value;
+}

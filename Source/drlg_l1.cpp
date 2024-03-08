@@ -81,7 +81,7 @@ const ShadowStruct SPATS[37] = {
 
 // BUGFIX: This array should contain an additional 0 (207 elements).
 /** Maps tile IDs to their corresponding base tile ID. */
-const BYTE BSTYPES[206] = {
+const BYTE BSTYPES[207] = {
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 	10, 11, 12, 13, 14, 15, 16, 17, 0, 0,
 	0, 0, 0, 0, 0, 1, 2, 10, 4, 5,
@@ -102,12 +102,12 @@ const BYTE BSTYPES[206] = {
 	2, 13, 13, 13, 13, 25, 26, 28, 30, 31,
 	41, 43, 40, 41, 42, 43, 25, 41, 43, 28,
 	28, 1, 2, 25, 26, 22, 22, 25, 26, 0,
-	0, 0, 0, 0, 0, 0
+	0, 0, 0, 0, 0, 0, 0
 };
 
 // BUGFIX: This array should contain an additional 0 (207 elements).
 /** Maps tile IDs to their corresponding undecorated tile ID. */
-const BYTE L5BTYPES[206] = {
+const BYTE L5BTYPES[207] = {
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 	10, 11, 12, 13, 14, 15, 16, 17, 0, 0,
 	0, 0, 0, 0, 0, 25, 26, 0, 28, 0,
@@ -128,7 +128,7 @@ const BYTE L5BTYPES[206] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0
+	0, 0, 0, 0, 0, 0, 4
 };
 /** Miniset: stairs up on a corner wall. */
 const BYTE STAIRSUP[] = {
