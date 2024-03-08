@@ -8,6 +8,6 @@
 
 void LoadL2Dungeon(const char *sFileName, int vx, int vy);
 void LoadPreL2Dungeon(const char *sFileName, int vx, int vy);
-void CreateL2Dungeon(DWORD rseed, int entry);
+int CreateL2Dungeon(DWORD rseed, int entry, bool breakOnSuccess);
 
 #endif /* __DRLG_L2_H__ */

@@ -3168,13 +3168,15 @@ void L2DoorFix()
 	}
 }
 
-static void DRLG_L2(int entry)
+static int DRLG_L2(int entry, bool breakOnSuccess)
 {
 	int i, j;
 	BOOL doneflag;
 
 	doneflag = FALSE;
+	int levelSeed = -1;
 	while (!doneflag) {
+		levelSeed = GetRndState();
 		nRoomCnt = 0;
 		InitDungeon();
 		DRLG_InitTrans();
@@ -3216,6 +3218,8 @@ static void DRLG_L2(int entry)
 			ViewY -= 2;
 		}
 	}
+	if (breakOnSuccess)
+		return levelSeed;
 
 	L2LockoutFix();
 	L2DoorFix();
@@ -3341,6 +3345,8 @@ static void DRLG_L2(int entry)
 
 	DRLG_Init_Globals();
 	DRLG_CheckQuests(nSx1, nSy1);
+
+	return levelSeed;
 }
 
 static void DRLG_InitL2Vals()
@@ -3521,22 +3527,22 @@ void LoadPreL2Dungeon(const char *sFileName, int vx, int vy)
 	mem_free_dbg(pLevelMap);
 }
 
-void CreateL2Dungeon(DWORD rseed, int entry)
+int CreateL2Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
 {
 	if (gbMaxPlayers == 1) {
 		if (currlevel == 7 && quests[Q_BLIND]._qactive == QUEST_NOTAVAIL) {
 			currlevel = 6;
-			CreateL2Dungeon(glSeedTbl[6], 4);
+			CreateL2Dungeon(glSeedTbl[6], 4, breakOnSuccess);
 			currlevel = 7;
 		}
 		if (currlevel == 8) {
 			if (quests[Q_BLIND]._qactive == QUEST_NOTAVAIL) {
 				currlevel = 6;
-				CreateL2Dungeon(glSeedTbl[6], 4);
+				CreateL2Dungeon(glSeedTbl[6], 4, breakOnSuccess);
 				currlevel = 8;
 			} else {
 				currlevel = 7;
-				CreateL2Dungeon(glSeedTbl[7], 4);
+				CreateL2Dungeon(glSeedTbl[7], 4, breakOnSuccess);
 				currlevel = 8;
 			}
 		}
@@ -3552,10 +3558,15 @@ void CreateL2Dungeon(DWORD rseed, int entry)
 	DRLG_InitTrans();
 	DRLG_InitSetPC();
 	DRLG_LoadL2SP();
-	DRLG_L2(entry);
+	int levelSeed = DRLG_L2(entry, breakOnSuccess);
+	if (breakOnSuccess)
+		return levelSeed;
+
 	DRLG_L2Pass3();
 	DRLG_FreeL2SP();
 	DRLG_InitL2Vals();
 	DRLG_SetPC();
+
+	return levelSeed;
 }
 #endif

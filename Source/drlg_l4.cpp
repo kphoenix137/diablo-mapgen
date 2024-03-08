@@ -1585,14 +1585,17 @@ void DRLG_L4GeneralFix()
 	}
 }
 
-static void DRLG_L4(int entry)
+int DRLG_L4(int entry, bool breakOnSuccess)
 {
 	int i, j, spi, spj, ar;
 	BOOL doneflag;
 
+	int levelSeed = -1;
+
 	do {
 		DRLG_InitTrans();
 		do {
+			levelSeed = GetRndState();
 			InitL4Dungeon();
 			L4firstRoom();
 			L4FixRim();
@@ -1698,6 +1701,9 @@ static void DRLG_L4(int entry)
 		}
 	} while (!doneflag);
 
+	if (breakOnSuccess)
+		return levelSeed;
+
 	DRLG_L4GeneralFix();
 
 	if (currlevel != 16) {
@@ -1739,6 +1745,8 @@ static void DRLG_L4(int entry)
 		}
 		DRLG_LoadDiabQuads(FALSE);
 	}
+
+	return levelSeed;
 }
 
 static void DRLG_L4Pass3()
@@ -1840,7 +1848,7 @@ static void DRLG_L4Pass3()
 	}
 }
 
-void CreateL4Dungeon(DWORD rseed, int entry)
+int CreateL4Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
 {
 	SetRndSeed(rseed);
 
@@ -1854,9 +1862,14 @@ void CreateL4Dungeon(DWORD rseed, int entry)
 
 	DRLG_InitSetPC();
 	DRLG_LoadL4SP();
-	DRLG_L4(entry);
+	int levelSeed = DRLG_L4(entry, breakOnSuccess);
+	if (breakOnSuccess)
+		return levelSeed;
+
 	DRLG_L4Pass3();
 	DRLG_FreeL4SP();
 	DRLG_SetPC();
+
+	return levelSeed;
 }
 #endif

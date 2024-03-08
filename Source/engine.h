@@ -24,6 +24,7 @@ int random_(BYTE idx, int v);
 void SetAutomapView(int nXPos, int nYPos);
 void SetRndSeed(int s);
 int GetRndSeed();
+int GetRndState();
 int GetdPiece(int x, int y);
 BYTE GetDungeon(int x, int y);
 void SetDungeon(int x, int y, BYTE value);

@@ -62,6 +62,11 @@ int GetRndSeed()
 	return abs(sglGameSeed);
 }
 
+int GetRndState()
+{
+	return sglGameSeed;
+}
+
 int random_(BYTE idx, int v)
 {
 	if (v <= 0)

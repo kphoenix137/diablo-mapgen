@@ -14,6 +14,6 @@ extern int diabquad3x;
 extern int diabquad3y;
 extern int diabquad4x;
 extern int diabquad4y;
-void CreateL4Dungeon(DWORD rseed, int entry);
+int CreateL4Dungeon(DWORD rseed, int entry, bool breakOnSuccess);
 
 #endif /* __DRLG_L4_H__ */

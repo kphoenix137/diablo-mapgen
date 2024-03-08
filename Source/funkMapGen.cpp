@@ -251,21 +251,23 @@ bool IsGoodLevel()
 	return true;
 }
 
-void createSpecificDungeon()
+int createSpecificDungeon(bool breakOnSuccess)
 {
+	int levelSeed = -1;
 	oobread = false;
 	oobwrite = false;
 	uint32_t lseed = glSeedTbl[currlevel];
 	if (leveltype == DTYPE_CATHEDRAL)
-		CreateL5Dungeon(lseed, 0);
+		levelSeed = CreateL5Dungeon(lseed, 0, breakOnSuccess);
 	else if (leveltype == DTYPE_CATACOMBS)
-		CreateL2Dungeon(lseed, 0);
+		levelSeed = CreateL2Dungeon(lseed, 0, breakOnSuccess);
 	else if (leveltype == DTYPE_CAVES)
-		CreateL3Dungeon(lseed, 0);
+		levelSeed = CreateL3Dungeon(lseed, 0, breakOnSuccess);
 	else if (leveltype == DTYPE_HELL)
-		CreateL4Dungeon(lseed, 0);
+		levelSeed = CreateL4Dungeon(lseed, 0, breakOnSuccess);
 	if (oobwrite)
 		std::cout << "Game seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
+	return levelSeed;
 }
 
 /**
@@ -519,7 +521,7 @@ int main(int argc, char **argv)
 		{
 			currlevel = 9;
 			whatleveltype();
-			createSpecificDungeon();
+			createSpecificDungeon(false);
 			InitStairCordinates();
 
 			InitLevelMonsters();
@@ -590,7 +592,7 @@ int main(int argc, char **argv)
 		for (int level = 9; level < NUMLEVELS; level++) {
 			currlevel = level;
 			whatleveltype();
-			createSpecificDungeon();
+			createSpecificDungeon(false);
 			InitStairCordinates();
 
 			if (!IsGoodLevel()) {

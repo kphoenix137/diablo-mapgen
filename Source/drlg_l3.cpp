@@ -2315,16 +2315,18 @@ BOOL DRLG_L3Lockout()
 	return t == lockoutcnt;
 }
 
-static void DRLG_L3(int entry)
+static int DRLG_L3(int entry, bool breakOnSuccess)
 {
 	int x1, y1, x2, y2, i, j;
 	BOOL found, genok;
 
 	lavapool = FALSE;
 
+	int levelSeed = -1;
 	do {
 		do {
 			do {
+				levelSeed = GetRndState();
 				InitL3Dungeon();
 				x1 = random_(0, 20) + 10;
 				y1 = random_(0, 20) + 10;
@@ -2463,6 +2465,9 @@ static void DRLG_L3(int entry)
 		}
 #endif
 	} while (!lavapool);
+
+	if (breakOnSuccess)
+		return levelSeed;
 
 #ifdef HELLFIRE
 	if (currlevel < 17)
@@ -2609,6 +2614,8 @@ static void DRLG_L3(int entry)
 	}
 
 	DRLG_Init_Globals();
+
+	return levelSeed;
 }
 
 static void DRLG_L3Pass3()
@@ -2710,7 +2717,7 @@ static void DRLG_L3Pass3()
 	}
 }
 
-void CreateL3Dungeon(DWORD rseed, int entry)
+int CreateL3Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
 {
 	int i, j;
 
@@ -2721,7 +2728,9 @@ void CreateL3Dungeon(DWORD rseed, int entry)
 	dmaxy = 96;
 	DRLG_InitTrans();
 	DRLG_InitSetPC();
-	DRLG_L3(entry);
+	int levelSeed = DRLG_L3(entry, breakOnSuccess);
+	if (breakOnSuccess)
+		return levelSeed;
 	DRLG_L3Pass3();
 
 #ifdef HELLFIRE
@@ -2753,6 +2762,8 @@ void CreateL3Dungeon(DWORD rseed, int entry)
 #endif
 
 	DRLG_SetPC();
+
+	return levelSeed;
 }
 
 void LoadL3Dungeon(const char *sFileName, int vx, int vy)
