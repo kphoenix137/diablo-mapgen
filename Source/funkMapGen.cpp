@@ -429,6 +429,7 @@ void printHelp()
 {
 	std::cout << "--help         Print this message and exit" << std::endl;
 	std::cout << "--quiet        Do not print to console" << std::endl;
+	std::cout << "--ascii        Print ASCII version of levels" << std::endl;
 	std::cout << "--export       Export levels as .dun files" << std::endl;
 	std::cout << "--start <#>    The seed to start from" << std::endl;
 	std::cout << "--count <#>    The number of seeds to process" << std::endl;
@@ -441,27 +442,50 @@ int main(int argc, char **argv)
 	uint32_t startSeed = 0;
 	uint32_t seedCount = 1;
 	bool quiet = false;
+	bool asciiLevels = false;
 	bool exportLevels = false;
 	int quality = 4;
 	bool verbose = false;
 
-	for (int i = 0; i < argc; i++) {
+	for (int i = 1; i < argc; i++) {
 		std::string arg = argv[i];
 		if (arg == "--help") {
 			printHelp();
 			return 0;
 		} else if (arg == "--quiet") {
 			quiet = true;
+		} else if (arg == "--ascii") {
+			asciiLevels = true;
 		} else if (arg == "--export") {
 			exportLevels = true;
-		} else if (arg == "--start" && argc >= i + 1) {
-			startSeed = std::stoll(argv[i + 1]);
-		} else if (arg == "--count" && argc >= i + 1) {
-			seedCount = std::stoll(argv[i + 1]);
-		} else if (arg == "--quality" && argc >= i + 1) {
-			quality = std::stoi(argv[i + 1]);
+		} else if (arg == "--start") {
+			i++;
+			if (argc <= i) {
+				std::cerr << "Missing value for --start" << std::endl;
+				return 255;
+			}
+			startSeed = std::stoll(argv[i]);
+		} else if (arg == "--count") {
+			i++;
+			if (argc <= i) {
+				std::cerr << "Missing value for --count" << std::endl;
+				return 255;
+			}
+			seedCount = std::stoll(argv[i]);
+		} else if (arg == "--quality") {
+			i++;
+			if (argc <= i) {
+				std::cerr << "Missing value for --quality" << std::endl;
+				return 255;
+			}
+			quality = std::stoi(argv[i]);
 		} else if (arg == "--verbose") {
 			verbose = true;
+		} else if (arg == "--verbose") {
+			verbose = true;
+		} else {
+			std::cerr << "Unknown argument: " << arg << std::endl;
+			return 255;
 		}
 	}
 
@@ -580,7 +604,7 @@ int main(int argc, char **argv)
 				}
 				break;
 			}
-			if (!quiet)
+			if (asciiLevels)
 				printAsciiLevel();
 			if (exportLevels)
 				ExportDun(seed);
