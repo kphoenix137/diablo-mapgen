@@ -564,342 +564,342 @@ static void L4tileFix()
 
 	for (j = 0; j < DMAXY; j++) {
 		for (i = 0; i < DMAXX; i++) {
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 6)
-				SetDungeon(i + 1, j, 5);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 13);
-			if (GetDungeon(i, j) == 1 && GetDungeon(i, j + 1) == 2)
-				SetDungeon(i, j + 1, 14);
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 6)
+				dungeon[i + 1][j] = 5;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 13;
+			if (dungeon[i][j] == 1 && dungeon[i][j + 1] == 2)
+				dungeon[i][j + 1] = 14;
 		}
 	}
 	for (j = 0; j < DMAXY; j++) {
 		for (i = 0; i < DMAXX; i++) {
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 6)
-				SetDungeon(i + 1, j, 2);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 9)
-				SetDungeon(i + 1, j, 11);
-			if (GetDungeon(i, j) == 9 && GetDungeon(i + 1, j) == 6)
-				SetDungeon(i + 1, j, 12);
-			if (GetDungeon(i, j) == 14 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 13);
-			if (GetDungeon(i, j) == 6 && GetDungeon(i + 1, j) == 14)
-				SetDungeon(i + 1, j, 15);
-			if (GetDungeon(i, j) == 6 && GetDungeon(i, j + 1) == 13)
-				SetDungeon(i, j + 1, 16);
-			if (GetDungeon(i, j) == 1 && GetDungeon(i, j + 1) == 9)
-				SetDungeon(i, j + 1, 10);
-			if (GetDungeon(i, j) == 6 && GetDungeon(i, j - 1) == 1)
-				SetDungeon(i, j - 1, 1);
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 6)
+				dungeon[i + 1][j] = 2;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 9)
+				dungeon[i + 1][j] = 11;
+			if (dungeon[i][j] == 9 && dungeon[i + 1][j] == 6)
+				dungeon[i + 1][j] = 12;
+			if (dungeon[i][j] == 14 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 13;
+			if (dungeon[i][j] == 6 && dungeon[i + 1][j] == 14)
+				dungeon[i + 1][j] = 15;
+			if (dungeon[i][j] == 6 && dungeon[i][j + 1] == 13)
+				dungeon[i][j + 1] = 16;
+			if (dungeon[i][j] == 1 && dungeon[i][j + 1] == 9)
+				dungeon[i][j + 1] = 10;
+			if (dungeon[i][j] == 6 && dungeon[i][j - 1] == 1)
+				dungeon[i][j - 1] = 1;
 		}
 	}
 	for (j = 0; j < DMAXY; j++) {
 		for (i = 0; i < DMAXX; i++) {
-			if (GetDungeon(i, j) == 13 && GetDungeon(i, j + 1) == 30)
-				SetDungeon(i, j + 1, 27);
-			if (GetDungeon(i, j) == 27 && GetDungeon(i + 1, j) == 30)
-				SetDungeon(i + 1, j, 19);
-			if (GetDungeon(i, j) == 1 && GetDungeon(i, j + 1) == 30)
-				SetDungeon(i, j + 1, 27);
-			if (GetDungeon(i, j) == 27 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 16);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 1, j) == 27)
-				SetDungeon(i + 1, j, 26);
-			if (GetDungeon(i, j) == 27 && GetDungeon(i + 1, j) == 30)
-				SetDungeon(i + 1, j, 19);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 15)
-				SetDungeon(i + 1, j, 14);
-			if (GetDungeon(i, j) == 14 && GetDungeon(i + 1, j) == 15)
-				SetDungeon(i + 1, j, 14);
-			if (GetDungeon(i, j) == 22 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 16);
-			if (GetDungeon(i, j) == 27 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 16);
-			if (GetDungeon(i, j) == 6 && GetDungeon(i + 1, j) == 27 && GetDungeon(i + 1, j + 1) != 0) /* check */
-				SetDungeon(i + 1, j, 22);
-			if (GetDungeon(i, j) == 22 && GetDungeon(i + 1, j) == 30)
-				SetDungeon(i + 1, j, 19);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j) == 1 && GetDungeon(i + 1, j - 1) == 1)
-				SetDungeon(i + 1, j, 13);
-			if (GetDungeon(i, j) == 14 && GetDungeon(i + 1, j) == 30 && GetDungeon(i, j + 1) == 6)
-				SetDungeon(i + 1, j, 28);
-			if (GetDungeon(i, j) == 16 && GetDungeon(i + 1, j) == 6 && GetDungeon(i, j + 1) == 30)
-				SetDungeon(i, j + 1, 27);
-			if (GetDungeon(i, j) == 16 && GetDungeon(i, j + 1) == 30 && GetDungeon(i + 1, j + 1) == 30)
-				SetDungeon(i, j + 1, 27);
-			if (GetDungeon(i, j) == 6 && GetDungeon(i + 1, j) == 30 && GetDungeon(i + 1, j - 1) == 6)
-				SetDungeon(i + 1, j, 21);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 27 && GetDungeon(i + 1, j + 1) == 9)
-				SetDungeon(i + 1, j, 29);
-			if (GetDungeon(i, j) == 9 && GetDungeon(i + 1, j) == 15)
-				SetDungeon(i + 1, j, 14);
-			if (GetDungeon(i, j) == 15 && GetDungeon(i + 1, j) == 27 && GetDungeon(i + 1, j + 1) == 2)
-				SetDungeon(i + 1, j, 29);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 1, j) == 18)
-				SetDungeon(i + 1, j, 24);
-			if (GetDungeon(i, j) == 9 && GetDungeon(i + 1, j) == 15)
-				SetDungeon(i + 1, j, 14);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 1, j) == 19 && GetDungeon(i + 1, j - 1) == 30)
-				SetDungeon(i + 1, j, 24);
-			if (GetDungeon(i, j) == 24 && GetDungeon(i, j - 1) == 30 && GetDungeon(i, j - 2) == 6)
-				SetDungeon(i, j - 1, 21);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 30)
-				SetDungeon(i + 1, j, 28);
-			if (GetDungeon(i, j) == 15 && GetDungeon(i + 1, j) == 30)
-				SetDungeon(i + 1, j, 28);
-			if (GetDungeon(i, j) == 28 && GetDungeon(i, j + 1) == 30)
-				SetDungeon(i, j + 1, 18);
-			if (GetDungeon(i, j) == 28 && GetDungeon(i, j + 1) == 2)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 2, j) == 2 && GetDungeon(i + 1, j - 1) == 18 && GetDungeon(i + 1, j + 1) == 1)
-				SetDungeon(i + 1, j, 17);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 2, j) == 2 && GetDungeon(i + 1, j - 1) == 22 && GetDungeon(i + 1, j + 1) == 1)
-				SetDungeon(i + 1, j, 17);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 2, j) == 2 && GetDungeon(i + 1, j - 1) == 18 && GetDungeon(i + 1, j + 1) == 13)
-				SetDungeon(i + 1, j, 17);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 2, j) == 2 && GetDungeon(i + 1, j - 1) == 18 && GetDungeon(i + 1, j + 1) == 1)
-				SetDungeon(i + 1, j, 17);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j + 1) == 1 && GetDungeon(i + 1, j - 1) == 22 && GetDungeon(i + 2, j) == 3)
-				SetDungeon(i + 1, j, 17);
-			if (GetDungeon(i, j) == 15 && GetDungeon(i + 1, j) == 28 && GetDungeon(i + 2, j) == 30 && GetDungeon(i + 1, j - 1) == 6)
-				SetDungeon(i + 1, j, 23);
-			if (GetDungeon(i, j) == 14 && GetDungeon(i + 1, j) == 28 && GetDungeon(i + 2, j) == 1)
-				SetDungeon(i + 1, j, 23);
-			if (GetDungeon(i, j) == 15 && GetDungeon(i + 1, j) == 27 && GetDungeon(i + 1, j + 1) == 30)
-				SetDungeon(i + 1, j, 29);
-			if (GetDungeon(i, j) == 28 && GetDungeon(i, j + 1) == 9)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j - 1) == 21)
-				SetDungeon(i + 1, j, 24);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 27 && GetDungeon(i + 1, j + 1) == 30)
-				SetDungeon(i + 1, j, 29);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 18)
-				SetDungeon(i + 1, j, 25);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j) == 9 && GetDungeon(i + 2, j) == 2)
-				SetDungeon(i + 1, j, 11);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 1, j) == 10)
-				SetDungeon(i + 1, j, 17);
-			if (GetDungeon(i, j) == 15 && GetDungeon(i, j + 1) == 3)
-				SetDungeon(i, j + 1, 4);
-			if (GetDungeon(i, j) == 22 && GetDungeon(i, j + 1) == 9)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 18 && GetDungeon(i, j + 1) == 30)
-				SetDungeon(i, j + 1, 18);
-			if (GetDungeon(i, j) == 24 && GetDungeon(i - 1, j) == 30)
-				SetDungeon(i - 1, j, 19);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i, j + 1) == 2)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i, j + 1) == 9)
-				SetDungeon(i, j + 1, 10);
-			if (GetDungeon(i, j) == 22 && GetDungeon(i, j + 1) == 30)
-				SetDungeon(i, j + 1, 18);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i, j + 1) == 30)
-				SetDungeon(i, j + 1, 18);
-			if (GetDungeon(i, j) == 16 && GetDungeon(i, j + 1) == 2)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 13 && GetDungeon(i, j + 1) == 2)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 22 && GetDungeon(i, j + 1) == 2)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j) == 18 && GetDungeon(i + 2, j) == 30)
-				SetDungeon(i + 1, j, 24);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j) == 9 && GetDungeon(i + 1, j + 1) == 1)
-				SetDungeon(i + 1, j, 16);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 27 && GetDungeon(i + 1, j + 1) == 2)
-				SetDungeon(i + 1, j, 29);
-			if (GetDungeon(i, j) == 23 && GetDungeon(i, j + 1) == 2)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 23 && GetDungeon(i, j + 1) == 9)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 25 && GetDungeon(i, j + 1) == 2)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 22 && GetDungeon(i + 1, j) == 9)
-				SetDungeon(i + 1, j, 11);
-			if (GetDungeon(i, j) == 23 && GetDungeon(i + 1, j) == 9)
-				SetDungeon(i + 1, j, 11);
-			if (GetDungeon(i, j) == 15 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 16);
-			if (GetDungeon(i, j) == 11 && GetDungeon(i + 1, j) == 15)
-				SetDungeon(i + 1, j, 14);
-			if (GetDungeon(i, j) == 23 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 16);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j) == 27)
-				SetDungeon(i + 1, j, 26);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j) == 18)
-				SetDungeon(i + 1, j, 24);
-			if (GetDungeon(i, j) == 26 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 16);
-			if (GetDungeon(i, j) == 29 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 16);
-			if (GetDungeon(i, j) == 29 && GetDungeon(i, j + 1) == 2)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 1 && GetDungeon(i, j - 1) == 15)
-				SetDungeon(i, j - 1, 10);
-			if (GetDungeon(i, j) == 18 && GetDungeon(i, j + 1) == 2)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 23 && GetDungeon(i, j + 1) == 30)
-				SetDungeon(i, j + 1, 18);
-			if (GetDungeon(i, j) == 18 && GetDungeon(i, j + 1) == 9)
-				SetDungeon(i, j + 1, 10);
-			if (GetDungeon(i, j) == 14 && GetDungeon(i + 1, j) == 30 && GetDungeon(i + 1, j + 1) == 30)
-				SetDungeon(i + 1, j, 23);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 28 && GetDungeon(i + 1, j - 1) == 6)
-				SetDungeon(i + 1, j, 23);
-			if (GetDungeon(i, j) == 23 && GetDungeon(i + 1, j) == 18 && GetDungeon(i, j - 1) == 6)
-				SetDungeon(i + 1, j, 24);
-			if (GetDungeon(i, j) == 14 && GetDungeon(i + 1, j) == 23 && GetDungeon(i + 2, j) == 30)
-				SetDungeon(i + 1, j, 28);
-			if (GetDungeon(i, j) == 14 && GetDungeon(i + 1, j) == 28 && GetDungeon(i + 2, j) == 30 && GetDungeon(i + 1, j - 1) == 6)
-				SetDungeon(i + 1, j, 23);
-			if (GetDungeon(i, j) == 23 && GetDungeon(i + 1, j) == 30)
-				SetDungeon(i + 1, j, 19);
-			if (GetDungeon(i, j) == 29 && GetDungeon(i + 1, j) == 30)
-				SetDungeon(i + 1, j, 19);
-			if (GetDungeon(i, j) == 29 && GetDungeon(i, j + 1) == 30)
-				SetDungeon(i, j + 1, 18);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 1, j) == 30)
-				SetDungeon(i + 1, j, 19);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j) == 30)
-				SetDungeon(i + 1, j, 19);
-			if (GetDungeon(i, j) == 26 && GetDungeon(i + 1, j) == 30)
-				SetDungeon(i + 1, j, 19);
-			if (GetDungeon(i, j) == 16 && GetDungeon(i, j + 1) == 30)
-				SetDungeon(i, j + 1, 18);
-			if (GetDungeon(i, j) == 13 && GetDungeon(i, j + 1) == 9)
-				SetDungeon(i, j + 1, 10);
-			if (GetDungeon(i, j) == 25 && GetDungeon(i, j + 1) == 30)
-				SetDungeon(i, j + 1, 18);
-			if (GetDungeon(i, j) == 18 && GetDungeon(i, j + 1) == 2)
-				SetDungeon(i, j + 1, 15);
-			if (GetDungeon(i, j) == 11 && GetDungeon(i + 1, j) == 3)
-				SetDungeon(i + 1, j, 5);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 1, j) == 9)
-				SetDungeon(i + 1, j, 11);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 13);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 1, j) == 13 && GetDungeon(i + 1, j - 1) == 6)
-				SetDungeon(i + 1, j, 16);
+			if (dungeon[i][j] == 13 && dungeon[i][j + 1] == 30)
+				dungeon[i][j + 1] = 27;
+			if (dungeon[i][j] == 27 && dungeon[i + 1][j] == 30)
+				dungeon[i + 1][j] = 19;
+			if (dungeon[i][j] == 1 && dungeon[i][j + 1] == 30)
+				dungeon[i][j + 1] = 27;
+			if (dungeon[i][j] == 27 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 16;
+			if (dungeon[i][j] == 19 && dungeon[i + 1][j] == 27)
+				dungeon[i + 1][j] = 26;
+			if (dungeon[i][j] == 27 && dungeon[i + 1][j] == 30)
+				dungeon[i + 1][j] = 19;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 15)
+				dungeon[i + 1][j] = 14;
+			if (dungeon[i][j] == 14 && dungeon[i + 1][j] == 15)
+				dungeon[i + 1][j] = 14;
+			if (dungeon[i][j] == 22 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 16;
+			if (dungeon[i][j] == 27 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 16;
+			if (dungeon[i][j] == 6 && dungeon[i + 1][j] == 27 && dungeon[i + 1][j + 1] != 0) /* check */
+				dungeon[i + 1][j] = 22;
+			if (dungeon[i][j] == 22 && dungeon[i + 1][j] == 30)
+				dungeon[i + 1][j] = 19;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j] == 1 && dungeon[i + 1][j - 1] == 1)
+				dungeon[i + 1][j] = 13;
+			if (dungeon[i][j] == 14 && dungeon[i + 1][j] == 30 && dungeon[i][j + 1] == 6)
+				dungeon[i + 1][j] = 28;
+			if (dungeon[i][j] == 16 && dungeon[i + 1][j] == 6 && dungeon[i][j + 1] == 30)
+				dungeon[i][j + 1] = 27;
+			if (dungeon[i][j] == 16 && dungeon[i][j + 1] == 30 && dungeon[i + 1][j + 1] == 30)
+				dungeon[i][j + 1] = 27;
+			if (dungeon[i][j] == 6 && dungeon[i + 1][j] == 30 && dungeon[i + 1][j - 1] == 6)
+				dungeon[i + 1][j] = 21;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 27 && dungeon[i + 1][j + 1] == 9)
+				dungeon[i + 1][j] = 29;
+			if (dungeon[i][j] == 9 && dungeon[i + 1][j] == 15)
+				dungeon[i + 1][j] = 14;
+			if (dungeon[i][j] == 15 && dungeon[i + 1][j] == 27 && dungeon[i + 1][j + 1] == 2)
+				dungeon[i + 1][j] = 29;
+			if (dungeon[i][j] == 19 && dungeon[i + 1][j] == 18)
+				dungeon[i + 1][j] = 24;
+			if (dungeon[i][j] == 9 && dungeon[i + 1][j] == 15)
+				dungeon[i + 1][j] = 14;
+			if (dungeon[i][j] == 19 && dungeon[i + 1][j] == 19 && dungeon[i + 1][j - 1] == 30)
+				dungeon[i + 1][j] = 24;
+			if (dungeon[i][j] == 24 && dungeon[i][j - 1] == 30 && dungeon[i][j - 2] == 6)
+				dungeon[i][j - 1] = 21;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 30)
+				dungeon[i + 1][j] = 28;
+			if (dungeon[i][j] == 15 && dungeon[i + 1][j] == 30)
+				dungeon[i + 1][j] = 28;
+			if (dungeon[i][j] == 28 && dungeon[i][j + 1] == 30)
+				dungeon[i][j + 1] = 18;
+			if (dungeon[i][j] == 28 && dungeon[i][j + 1] == 2)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 19 && dungeon[i + 2][j] == 2 && dungeon[i + 1][j - 1] == 18 && dungeon[i + 1][j + 1] == 1)
+				dungeon[i + 1][j] = 17;
+			if (dungeon[i][j] == 19 && dungeon[i + 2][j] == 2 && dungeon[i + 1][j - 1] == 22 && dungeon[i + 1][j + 1] == 1)
+				dungeon[i + 1][j] = 17;
+			if (dungeon[i][j] == 19 && dungeon[i + 2][j] == 2 && dungeon[i + 1][j - 1] == 18 && dungeon[i + 1][j + 1] == 13)
+				dungeon[i + 1][j] = 17;
+			if (dungeon[i][j] == 21 && dungeon[i + 2][j] == 2 && dungeon[i + 1][j - 1] == 18 && dungeon[i + 1][j + 1] == 1)
+				dungeon[i + 1][j] = 17;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j + 1] == 1 && dungeon[i + 1][j - 1] == 22 && dungeon[i + 2][j] == 3)
+				dungeon[i + 1][j] = 17;
+			if (dungeon[i][j] == 15 && dungeon[i + 1][j] == 28 && dungeon[i + 2][j] == 30 && dungeon[i + 1][j - 1] == 6)
+				dungeon[i + 1][j] = 23;
+			if (dungeon[i][j] == 14 && dungeon[i + 1][j] == 28 && dungeon[i + 2][j] == 1)
+				dungeon[i + 1][j] = 23;
+			if (dungeon[i][j] == 15 && dungeon[i + 1][j] == 27 && dungeon[i + 1][j + 1] == 30)
+				dungeon[i + 1][j] = 29;
+			if (dungeon[i][j] == 28 && dungeon[i][j + 1] == 9)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j - 1] == 21)
+				dungeon[i + 1][j] = 24;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 27 && dungeon[i + 1][j + 1] == 30)
+				dungeon[i + 1][j] = 29;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 18)
+				dungeon[i + 1][j] = 25;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j] == 9 && dungeon[i + 2][j] == 2)
+				dungeon[i + 1][j] = 11;
+			if (dungeon[i][j] == 19 && dungeon[i + 1][j] == 10)
+				dungeon[i + 1][j] = 17;
+			if (dungeon[i][j] == 15 && dungeon[i][j + 1] == 3)
+				dungeon[i][j + 1] = 4;
+			if (dungeon[i][j] == 22 && dungeon[i][j + 1] == 9)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 18 && dungeon[i][j + 1] == 30)
+				dungeon[i][j + 1] = 18;
+			if (dungeon[i][j] == 24 && dungeon[i - 1][j] == 30)
+				dungeon[i - 1][j] = 19;
+			if (dungeon[i][j] == 21 && dungeon[i][j + 1] == 2)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 21 && dungeon[i][j + 1] == 9)
+				dungeon[i][j + 1] = 10;
+			if (dungeon[i][j] == 22 && dungeon[i][j + 1] == 30)
+				dungeon[i][j + 1] = 18;
+			if (dungeon[i][j] == 21 && dungeon[i][j + 1] == 30)
+				dungeon[i][j + 1] = 18;
+			if (dungeon[i][j] == 16 && dungeon[i][j + 1] == 2)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 13 && dungeon[i][j + 1] == 2)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 22 && dungeon[i][j + 1] == 2)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j] == 18 && dungeon[i + 2][j] == 30)
+				dungeon[i + 1][j] = 24;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j] == 9 && dungeon[i + 1][j + 1] == 1)
+				dungeon[i + 1][j] = 16;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 27 && dungeon[i + 1][j + 1] == 2)
+				dungeon[i + 1][j] = 29;
+			if (dungeon[i][j] == 23 && dungeon[i][j + 1] == 2)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 23 && dungeon[i][j + 1] == 9)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 25 && dungeon[i][j + 1] == 2)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 22 && dungeon[i + 1][j] == 9)
+				dungeon[i + 1][j] = 11;
+			if (dungeon[i][j] == 23 && dungeon[i + 1][j] == 9)
+				dungeon[i + 1][j] = 11;
+			if (dungeon[i][j] == 15 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 16;
+			if (dungeon[i][j] == 11 && dungeon[i + 1][j] == 15)
+				dungeon[i + 1][j] = 14;
+			if (dungeon[i][j] == 23 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 16;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j] == 27)
+				dungeon[i + 1][j] = 26;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j] == 18)
+				dungeon[i + 1][j] = 24;
+			if (dungeon[i][j] == 26 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 16;
+			if (dungeon[i][j] == 29 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 16;
+			if (dungeon[i][j] == 29 && dungeon[i][j + 1] == 2)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 1 && dungeon[i][j - 1] == 15)
+				dungeon[i][j - 1] = 10;
+			if (dungeon[i][j] == 18 && dungeon[i][j + 1] == 2)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 23 && dungeon[i][j + 1] == 30)
+				dungeon[i][j + 1] = 18;
+			if (dungeon[i][j] == 18 && dungeon[i][j + 1] == 9)
+				dungeon[i][j + 1] = 10;
+			if (dungeon[i][j] == 14 && dungeon[i + 1][j] == 30 && dungeon[i + 1][j + 1] == 30)
+				dungeon[i + 1][j] = 23;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 28 && dungeon[i + 1][j - 1] == 6)
+				dungeon[i + 1][j] = 23;
+			if (dungeon[i][j] == 23 && dungeon[i + 1][j] == 18 && dungeon[i][j - 1] == 6)
+				dungeon[i + 1][j] = 24;
+			if (dungeon[i][j] == 14 && dungeon[i + 1][j] == 23 && dungeon[i + 2][j] == 30)
+				dungeon[i + 1][j] = 28;
+			if (dungeon[i][j] == 14 && dungeon[i + 1][j] == 28 && dungeon[i + 2][j] == 30 && dungeon[i + 1][j - 1] == 6)
+				dungeon[i + 1][j] = 23;
+			if (dungeon[i][j] == 23 && dungeon[i + 1][j] == 30)
+				dungeon[i + 1][j] = 19;
+			if (dungeon[i][j] == 29 && dungeon[i + 1][j] == 30)
+				dungeon[i + 1][j] = 19;
+			if (dungeon[i][j] == 29 && dungeon[i][j + 1] == 30)
+				dungeon[i][j + 1] = 18;
+			if (dungeon[i][j] == 19 && dungeon[i + 1][j] == 30)
+				dungeon[i + 1][j] = 19;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j] == 30)
+				dungeon[i + 1][j] = 19;
+			if (dungeon[i][j] == 26 && dungeon[i + 1][j] == 30)
+				dungeon[i + 1][j] = 19;
+			if (dungeon[i][j] == 16 && dungeon[i][j + 1] == 30)
+				dungeon[i][j + 1] = 18;
+			if (dungeon[i][j] == 13 && dungeon[i][j + 1] == 9)
+				dungeon[i][j + 1] = 10;
+			if (dungeon[i][j] == 25 && dungeon[i][j + 1] == 30)
+				dungeon[i][j + 1] = 18;
+			if (dungeon[i][j] == 18 && dungeon[i][j + 1] == 2)
+				dungeon[i][j + 1] = 15;
+			if (dungeon[i][j] == 11 && dungeon[i + 1][j] == 3)
+				dungeon[i + 1][j] = 5;
+			if (dungeon[i][j] == 19 && dungeon[i + 1][j] == 9)
+				dungeon[i + 1][j] = 11;
+			if (dungeon[i][j] == 19 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 13;
+			if (dungeon[i][j] == 19 && dungeon[i + 1][j] == 13 && dungeon[i + 1][j - 1] == 6)
+				dungeon[i + 1][j] = 16;
 		}
 	}
 	for (j = 0; j < DMAXY; j++) {
 		for (i = 0; i < DMAXX; i++) {
-			if (GetDungeon(i, j) == 21 && GetDungeon(i, j + 1) == 24 && GetDungeon(i, j + 2) == 1)
-				SetDungeon(i, j + 1, 17);
-			if (GetDungeon(i, j) == 15 && GetDungeon(i + 1, j + 1) == 9 && GetDungeon(i + 1, j - 1) == 1 && GetDungeon(i + 2, j) == 16)
-				SetDungeon(i + 1, j, 29);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i - 1, j) == 6)
-				SetDungeon(i - 1, j, 8);
-			if (GetDungeon(i, j) == 1 && GetDungeon(i, j - 1) == 6)
-				SetDungeon(i, j - 1, 7);
-			if (GetDungeon(i, j) == 6 && GetDungeon(i + 1, j) == 15 && GetDungeon(i + 1, j + 1) == 4)
-				SetDungeon(i + 1, j, 10);
-			if (GetDungeon(i, j) == 1 && GetDungeon(i, j + 1) == 3)
-				SetDungeon(i, j + 1, 4);
-			if (GetDungeon(i, j) == 1 && GetDungeon(i, j + 1) == 6)
-				SetDungeon(i, j + 1, 4);
-			if (GetDungeon(i, j) == 9 && GetDungeon(i, j + 1) == 3)
-				SetDungeon(i, j + 1, 4);
-			if (GetDungeon(i, j) == 10 && GetDungeon(i, j + 1) == 3)
-				SetDungeon(i, j + 1, 4);
-			if (GetDungeon(i, j) == 13 && GetDungeon(i, j + 1) == 3)
-				SetDungeon(i, j + 1, 4);
-			if (GetDungeon(i, j) == 1 && GetDungeon(i, j + 1) == 5)
-				SetDungeon(i, j + 1, 12);
-			if (GetDungeon(i, j) == 1 && GetDungeon(i, j + 1) == 16)
-				SetDungeon(i, j + 1, 13);
-			if (GetDungeon(i, j) == 6 && GetDungeon(i, j + 1) == 13)
-				SetDungeon(i, j + 1, 16);
-			if (GetDungeon(i, j) == 25 && GetDungeon(i, j + 1) == 9)
-				SetDungeon(i, j + 1, 10);
-			if (GetDungeon(i, j) == 13 && GetDungeon(i, j + 1) == 5)
-				SetDungeon(i, j + 1, 12);
-			if (GetDungeon(i, j) == 28 && GetDungeon(i, j - 1) == 6 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 23);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 1, j) == 10)
-				SetDungeon(i + 1, j, 17);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j) == 9)
-				SetDungeon(i + 1, j, 11);
-			if (GetDungeon(i, j) == 11 && GetDungeon(i + 1, j) == 3)
-				SetDungeon(i + 1, j, 5);
-			if (GetDungeon(i, j) == 10 && GetDungeon(i + 1, j) == 4)
-				SetDungeon(i + 1, j, 12);
-			if (GetDungeon(i, j) == 14 && GetDungeon(i + 1, j) == 4)
-				SetDungeon(i + 1, j, 12);
-			if (GetDungeon(i, j) == 27 && GetDungeon(i + 1, j) == 9)
-				SetDungeon(i + 1, j, 11);
-			if (GetDungeon(i, j) == 15 && GetDungeon(i + 1, j) == 4)
-				SetDungeon(i + 1, j, 12);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j) == 1)
-				SetDungeon(i + 1, j, 16);
-			if (GetDungeon(i, j) == 11 && GetDungeon(i + 1, j) == 4)
-				SetDungeon(i + 1, j, 12);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 3)
-				SetDungeon(i + 1, j, 5);
-			if (GetDungeon(i, j) == 9 && GetDungeon(i + 1, j) == 3)
-				SetDungeon(i + 1, j, 5);
-			if (GetDungeon(i, j) == 14 && GetDungeon(i + 1, j) == 3)
-				SetDungeon(i + 1, j, 5);
-			if (GetDungeon(i, j) == 15 && GetDungeon(i + 1, j) == 3)
-				SetDungeon(i + 1, j, 5);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 5 && GetDungeon(i + 1, j - 1) == 16)
-				SetDungeon(i + 1, j, 12);
-			if (GetDungeon(i, j) == 2 && GetDungeon(i + 1, j) == 4)
-				SetDungeon(i + 1, j, 12);
-			if (GetDungeon(i, j) == 9 && GetDungeon(i + 1, j) == 4)
-				SetDungeon(i + 1, j, 12);
-			if (GetDungeon(i, j) == 1 && GetDungeon(i, j - 1) == 8)
-				SetDungeon(i, j - 1, 9);
-			if (GetDungeon(i, j) == 28 && GetDungeon(i + 1, j) == 23 && GetDungeon(i + 1, j + 1) == 3)
-				SetDungeon(i + 1, j, 16);
+			if (dungeon[i][j] == 21 && dungeon[i][j + 1] == 24 && dungeon[i][j + 2] == 1)
+				dungeon[i][j + 1] = 17;
+			if (dungeon[i][j] == 15 && dungeon[i + 1][j + 1] == 9 && dungeon[i + 1][j - 1] == 1 && dungeon[i + 2][j] == 16)
+				dungeon[i + 1][j] = 29;
+			if (dungeon[i][j] == 2 && dungeon[i - 1][j] == 6)
+				dungeon[i - 1][j] = 8;
+			if (dungeon[i][j] == 1 && dungeon[i][j - 1] == 6)
+				dungeon[i][j - 1] = 7;
+			if (dungeon[i][j] == 6 && dungeon[i + 1][j] == 15 && dungeon[i + 1][j + 1] == 4)
+				dungeon[i + 1][j] = 10;
+			if (dungeon[i][j] == 1 && dungeon[i][j + 1] == 3)
+				dungeon[i][j + 1] = 4;
+			if (dungeon[i][j] == 1 && dungeon[i][j + 1] == 6)
+				dungeon[i][j + 1] = 4;
+			if (dungeon[i][j] == 9 && dungeon[i][j + 1] == 3)
+				dungeon[i][j + 1] = 4;
+			if (dungeon[i][j] == 10 && dungeon[i][j + 1] == 3)
+				dungeon[i][j + 1] = 4;
+			if (dungeon[i][j] == 13 && dungeon[i][j + 1] == 3)
+				dungeon[i][j + 1] = 4;
+			if (dungeon[i][j] == 1 && dungeon[i][j + 1] == 5)
+				dungeon[i][j + 1] = 12;
+			if (dungeon[i][j] == 1 && dungeon[i][j + 1] == 16)
+				dungeon[i][j + 1] = 13;
+			if (dungeon[i][j] == 6 && dungeon[i][j + 1] == 13)
+				dungeon[i][j + 1] = 16;
+			if (dungeon[i][j] == 25 && dungeon[i][j + 1] == 9)
+				dungeon[i][j + 1] = 10;
+			if (dungeon[i][j] == 13 && dungeon[i][j + 1] == 5)
+				dungeon[i][j + 1] = 12;
+			if (dungeon[i][j] == 28 && dungeon[i][j - 1] == 6 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 23;
+			if (dungeon[i][j] == 19 && dungeon[i + 1][j] == 10)
+				dungeon[i + 1][j] = 17;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j] == 9)
+				dungeon[i + 1][j] = 11;
+			if (dungeon[i][j] == 11 && dungeon[i + 1][j] == 3)
+				dungeon[i + 1][j] = 5;
+			if (dungeon[i][j] == 10 && dungeon[i + 1][j] == 4)
+				dungeon[i + 1][j] = 12;
+			if (dungeon[i][j] == 14 && dungeon[i + 1][j] == 4)
+				dungeon[i + 1][j] = 12;
+			if (dungeon[i][j] == 27 && dungeon[i + 1][j] == 9)
+				dungeon[i + 1][j] = 11;
+			if (dungeon[i][j] == 15 && dungeon[i + 1][j] == 4)
+				dungeon[i + 1][j] = 12;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j] == 1)
+				dungeon[i + 1][j] = 16;
+			if (dungeon[i][j] == 11 && dungeon[i + 1][j] == 4)
+				dungeon[i + 1][j] = 12;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 3)
+				dungeon[i + 1][j] = 5;
+			if (dungeon[i][j] == 9 && dungeon[i + 1][j] == 3)
+				dungeon[i + 1][j] = 5;
+			if (dungeon[i][j] == 14 && dungeon[i + 1][j] == 3)
+				dungeon[i + 1][j] = 5;
+			if (dungeon[i][j] == 15 && dungeon[i + 1][j] == 3)
+				dungeon[i + 1][j] = 5;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 5 && dungeon[i + 1][j - 1] == 16)
+				dungeon[i + 1][j] = 12;
+			if (dungeon[i][j] == 2 && dungeon[i + 1][j] == 4)
+				dungeon[i + 1][j] = 12;
+			if (dungeon[i][j] == 9 && dungeon[i + 1][j] == 4)
+				dungeon[i + 1][j] = 12;
+			if (dungeon[i][j] == 1 && dungeon[i][j - 1] == 8)
+				dungeon[i][j - 1] = 9;
+			if (dungeon[i][j] == 28 && dungeon[i + 1][j] == 23 && dungeon[i + 1][j + 1] == 3)
+				dungeon[i + 1][j] = 16;
 		}
 	}
 	for (j = 0; j < DMAXY; j++) {
 		for (i = 0; i < DMAXX; i++) {
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j) == 10)
-				SetDungeon(i + 1, j, 17);
-			if (GetDungeon(i, j) == 17 && GetDungeon(i + 1, j) == 4)
-				SetDungeon(i + 1, j, 12);
-			if (GetDungeon(i, j) == 10 && GetDungeon(i + 1, j) == 4)
-				SetDungeon(i + 1, j, 12);
-			if (GetDungeon(i, j) == 17 && GetDungeon(i, j + 1) == 5)
-				SetDungeon(i, j + 1, 12);
-			if (GetDungeon(i, j) == 29 && GetDungeon(i, j + 1) == 9)
-				SetDungeon(i, j + 1, 10);
-			if (GetDungeon(i, j) == 13 && GetDungeon(i, j + 1) == 5)
-				SetDungeon(i, j + 1, 12);
-			if (GetDungeon(i, j) == 9 && GetDungeon(i, j + 1) == 16)
-				SetDungeon(i, j + 1, 13);
-			if (GetDungeon(i, j) == 10 && GetDungeon(i, j + 1) == 16)
-				SetDungeon(i, j + 1, 13);
-			if (GetDungeon(i, j) == 16 && GetDungeon(i, j + 1) == 3)
-				SetDungeon(i, j + 1, 4);
-			if (GetDungeon(i, j) == 11 && GetDungeon(i, j + 1) == 5)
-				SetDungeon(i, j + 1, 12);
-			if (GetDungeon(i, j) == 10 && GetDungeon(i + 1, j) == 3 && GetDungeon(i + 1, j - 1) == 16)
-				SetDungeon(i + 1, j, 12);
-			if (GetDungeon(i, j) == 16 && GetDungeon(i, j + 1) == 5)
-				SetDungeon(i, j + 1, 12);
-			if (GetDungeon(i, j) == 1 && GetDungeon(i, j + 1) == 6)
-				SetDungeon(i, j + 1, 4);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j) == 13 && GetDungeon(i, j + 1) == 10)
-				SetDungeon(i + 1, j + 1, 12);
-			if (GetDungeon(i, j) == 15 && GetDungeon(i + 1, j) == 10)
-				SetDungeon(i + 1, j, 17);
-			if (GetDungeon(i, j) == 22 && GetDungeon(i, j + 1) == 11)
-				SetDungeon(i, j + 1, 17);
-			if (GetDungeon(i, j) == 15 && GetDungeon(i + 1, j) == 28 && GetDungeon(i + 2, j) == 16)
-				SetDungeon(i + 1, j, 23);
-			if (GetDungeon(i, j) == 28 && GetDungeon(i + 1, j) == 23 && GetDungeon(i + 1, j + 1) == 1 && GetDungeon(i + 2, j) == 6)
-				SetDungeon(i + 1, j, 16);
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j] == 10)
+				dungeon[i + 1][j] = 17;
+			if (dungeon[i][j] == 17 && dungeon[i + 1][j] == 4)
+				dungeon[i + 1][j] = 12;
+			if (dungeon[i][j] == 10 && dungeon[i + 1][j] == 4)
+				dungeon[i + 1][j] = 12;
+			if (dungeon[i][j] == 17 && dungeon[i][j + 1] == 5)
+				dungeon[i][j + 1] = 12;
+			if (dungeon[i][j] == 29 && dungeon[i][j + 1] == 9)
+				dungeon[i][j + 1] = 10;
+			if (dungeon[i][j] == 13 && dungeon[i][j + 1] == 5)
+				dungeon[i][j + 1] = 12;
+			if (dungeon[i][j] == 9 && dungeon[i][j + 1] == 16)
+				dungeon[i][j + 1] = 13;
+			if (dungeon[i][j] == 10 && dungeon[i][j + 1] == 16)
+				dungeon[i][j + 1] = 13;
+			if (dungeon[i][j] == 16 && dungeon[i][j + 1] == 3)
+				dungeon[i][j + 1] = 4;
+			if (dungeon[i][j] == 11 && dungeon[i][j + 1] == 5)
+				dungeon[i][j + 1] = 12;
+			if (dungeon[i][j] == 10 && dungeon[i + 1][j] == 3 && dungeon[i + 1][j - 1] == 16)
+				dungeon[i + 1][j] = 12;
+			if (dungeon[i][j] == 16 && dungeon[i][j + 1] == 5)
+				dungeon[i][j + 1] = 12;
+			if (dungeon[i][j] == 1 && dungeon[i][j + 1] == 6)
+				dungeon[i][j + 1] = 4;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j] == 13 && dungeon[i][j + 1] == 10)
+				dungeon[i + 1][j + 1] = 12;
+			if (dungeon[i][j] == 15 && dungeon[i + 1][j] == 10)
+				dungeon[i + 1][j] = 17;
+			if (dungeon[i][j] == 22 && dungeon[i][j + 1] == 11)
+				dungeon[i][j + 1] = 17;
+			if (dungeon[i][j] == 15 && dungeon[i + 1][j] == 28 && dungeon[i + 2][j] == 16)
+				dungeon[i + 1][j] = 23;
+			if (dungeon[i][j] == 28 && dungeon[i + 1][j] == 23 && dungeon[i + 1][j + 1] == 1 && dungeon[i + 2][j] == 6)
+				dungeon[i + 1][j] = 16;
 		}
 	}
 	for (j = 0; j < DMAXY; j++) {
 		for (i = 0; i < DMAXX; i++) {
-			if (GetDungeon(i, j) == 15 && GetDungeon(i + 1, j) == 28 && GetDungeon(i + 2, j) == 16)
-				SetDungeon(i + 1, j, 23);
-			if (GetDungeon(i, j) == 21 && GetDungeon(i + 1, j - 1) == 21 && GetDungeon(i + 1, j + 1) == 13 && GetDungeon(i + 2, j) == 2)
-				SetDungeon(i + 1, j, 17);
-			if (GetDungeon(i, j) == 19 && GetDungeon(i + 1, j) == 15 && GetDungeon(i + 1, j + 1) == 12)
-				SetDungeon(i + 1, j, 17);
+			if (dungeon[i][j] == 15 && dungeon[i + 1][j] == 28 && dungeon[i + 2][j] == 16)
+				dungeon[i + 1][j] = 23;
+			if (dungeon[i][j] == 21 && dungeon[i + 1][j - 1] == 21 && dungeon[i + 1][j + 1] == 13 && dungeon[i + 2][j] == 2)
+				dungeon[i + 1][j] = 17;
+			if (dungeon[i][j] == 19 && dungeon[i + 1][j] == 15 && dungeon[i + 1][j + 1] == 12)
+				dungeon[i + 1][j] = 17;
 		}
 	}
 }
