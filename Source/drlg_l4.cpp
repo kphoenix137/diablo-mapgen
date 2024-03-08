@@ -1277,45 +1277,44 @@ void DRLG_L4SetRoom(BYTE *pSetPiece, int rx1, int ry1)
 	}
 }
 
+BYTE *lpSetPiece1;
+BYTE *lpSetPiece2;
+BYTE *lpSetPiece3;
+BYTE *lpSetPiece4;
+
+void DRLG_PreLoadDiabQuads()
+{
+	lpSetPiece1 = LoadFileInMem("Levels\\L4Data\\diab1.DUN", NULL);
+	lpSetPiece2 = LoadFileInMem("Levels\\L4Data\\diab2b.DUN", NULL);
+	lpSetPiece3 = LoadFileInMem("Levels\\L4Data\\diab3b.DUN", NULL);
+	lpSetPiece4 = LoadFileInMem("Levels\\L4Data\\diab4b.DUN", NULL);
+}
+
+void DRLG_FreeDiabQuads()
+{
+	mem_free_dbg(lpSetPiece1);
+	mem_free_dbg(lpSetPiece2);
+	mem_free_dbg(lpSetPiece3);
+	mem_free_dbg(lpSetPiece4);
+}
+
 void DRLG_LoadDiabQuads(BOOL preflag)
 {
-	BYTE *lpSetPiece;
-
-	lpSetPiece = LoadFileInMem("Levels\\L4Data\\diab1.DUN", NULL);
 	diabquad1x = 4 + l4holdx;
 	diabquad1y = 4 + l4holdy;
-	DRLG_L4SetRoom(lpSetPiece, diabquad1x, diabquad1y);
-	mem_free_dbg(lpSetPiece);
+	DRLG_L4SetRoom(lpSetPiece1, diabquad1x, diabquad1y);
 
-	if (preflag) {
-		lpSetPiece = LoadFileInMem("Levels\\L4Data\\diab2b.DUN", NULL);
-	} else {
-		lpSetPiece = LoadFileInMem("Levels\\L4Data\\diab2a.DUN", NULL);
-	}
 	diabquad2x = 27 - l4holdx;
 	diabquad2y = 1 + l4holdy;
-	DRLG_L4SetRoom(lpSetPiece, diabquad2x, diabquad2y);
-	mem_free_dbg(lpSetPiece);
+	DRLG_L4SetRoom(lpSetPiece2, diabquad2x, diabquad2y);
 
-	if (preflag) {
-		lpSetPiece = LoadFileInMem("Levels\\L4Data\\diab3b.DUN", NULL);
-	} else {
-		lpSetPiece = LoadFileInMem("Levels\\L4Data\\diab3a.DUN", NULL);
-	}
 	diabquad3x = 1 + l4holdx;
 	diabquad3y = 27 - l4holdy;
-	DRLG_L4SetRoom(lpSetPiece, diabquad3x, diabquad3y);
-	mem_free_dbg(lpSetPiece);
+	DRLG_L4SetRoom(lpSetPiece3, diabquad3x, diabquad3y);
 
-	if (preflag) {
-		lpSetPiece = LoadFileInMem("Levels\\L4Data\\diab4b.DUN", NULL);
-	} else {
-		lpSetPiece = LoadFileInMem("Levels\\L4Data\\diab4a.DUN", NULL);
-	}
 	diabquad4x = 28 - l4holdx;
 	diabquad4y = 28 - l4holdy;
-	DRLG_L4SetRoom(lpSetPiece, diabquad4x, diabquad4y);
-	mem_free_dbg(lpSetPiece);
+	DRLG_L4SetRoom(lpSetPiece4, diabquad4x, diabquad4y);
 }
 
 static BOOL DRLG_L4PlaceMiniSet(const BYTE *miniset, int tmin, int tmax, int cx, int cy, BOOL setview, int ldir)

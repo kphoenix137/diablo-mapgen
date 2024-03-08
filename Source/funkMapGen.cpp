@@ -491,6 +491,8 @@ int main(int argc, char **argv)
 		}
 	}
 
+	DRLG_PreLoadDiabQuads();
+
 	int seconds = time(NULL);
 	uint32_t prevseed = startSeed;
 	for (uint32_t seed = startSeed; seed < startSeed + seedCount; seed++) {
@@ -612,6 +614,8 @@ int main(int argc, char **argv)
 				ExportDun(seed);
 		}
 	}
+
+	DRLG_FreeDiabQuads();
 
 	return 0;
 }
