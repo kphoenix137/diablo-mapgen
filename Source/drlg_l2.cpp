@@ -1862,25 +1862,42 @@ void InitDungeon()
 	}
 }
 
+BYTE *pSetPiece1;
+BYTE *pSetPiece2;
+BYTE *pSetPiece3;
+
+void DRLG_PreLoadL2SP()
+{
+	pSetPiece1 = LoadFileInMem("Levels\\L2Data\\Blind2.DUN", NULL);
+	pSetPiece2 = LoadFileInMem("Levels\\L2Data\\Blood1.DUN", NULL);
+	pSetPiece3 = LoadFileInMem("Levels\\L2Data\\Bonestr2.DUN", NULL);
+}
+
+void DRLG_UnloadL2SP()
+{
+	MemFreeDbg(pSetPiece1);
+	MemFreeDbg(pSetPiece2);
+	MemFreeDbg(pSetPiece3);
+}
+
 static void DRLG_LoadL2SP()
 {
-	setloadflag = FALSE;
-
 	if (QuestStatus(Q_BLIND)) {
-		pSetPiece = LoadFileInMem("Levels\\L2Data\\Blind2.DUN", NULL);
+		pSetPiece = pSetPiece1;
 		setloadflag = TRUE;
 	} else if (QuestStatus(Q_BLOOD)) {
-		pSetPiece = LoadFileInMem("Levels\\L2Data\\Blood1.DUN", NULL);
+		pSetPiece = pSetPiece2;
 		setloadflag = TRUE;
 	} else if (QuestStatus(Q_SCHAMB)) {
-		pSetPiece = LoadFileInMem("Levels\\L2Data\\Bonestr2.DUN", NULL);
+		pSetPiece = pSetPiece3;
 		setloadflag = TRUE;
-	}
+	} else
+		setloadflag = FALSE;
 }
 
 static void DRLG_FreeL2SP()
 {
-	MemFreeDbg(pSetPiece);
+	pSetPiece = nullptr;
 }
 
 static void DRLG_L2SetRoom(int rx1, int ry1)

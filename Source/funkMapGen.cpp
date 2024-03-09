@@ -492,6 +492,7 @@ int main(int argc, char **argv)
 		}
 	}
 
+	DRLG_PreLoadL2SP();
 	DRLG_PreLoadDiabQuads();
 
 	int seconds = time(NULL);
@@ -617,6 +618,7 @@ int main(int argc, char **argv)
 		}
 	}
 
+	DRLG_FreeL2SP();
 	DRLG_FreeDiabQuads();
 
 	return 0;
