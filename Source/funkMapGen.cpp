@@ -107,7 +107,7 @@ Point Spawn;
 Point StairsDown;
 Point StairsDownPrevious;
 
-void InitStairCordinates()
+void FindStairCordinates()
 {
 	if (leveltype == DTYPE_CATHEDRAL)
 		InitL1Triggers();
@@ -275,6 +275,23 @@ int CreateDungeon(bool breakOnSuccess = false)
 	return levelSeed;
 }
 
+void CreateDungeonContent()
+{
+	InitLevelMonsters();
+	SetRndSeed(glSeedTbl[currlevel]);
+	GetLevelMTypes();
+	InitThemes();
+
+	SetRndSeed(glSeedTbl[currlevel]);
+	HoldThemeRooms();
+	GetRndSeed();
+	InitMonsters();
+	GetRndSeed();
+	InitObjects();
+	InitItems();
+	CreateThemeRooms();
+}
+
 /**
  * @brief GET MAIN SEED, GET ALL MAP SEEDS
  * @return nothing, but updates RNG seeds list glSeedTbl[i]
@@ -389,6 +406,27 @@ void createItemsFromObject(int oid)
 	}
 }
 
+int MonsterItems;
+int ObjectItems;
+
+void DropAllItems()
+{
+	MonsterItems = numitems;
+	for (int i = 0; i < nummonsters; i++) {
+		int mid = monstactive[i];
+		if (monster[mid].MType->mtype == MT_GOLEM)
+			continue;
+		SetRndSeed(monster[mid]._mRndSeed);
+		SpawnItem(mid, monster[mid]._mx, monster[mid]._my, TRUE);
+	}
+
+	ObjectItems = numitems;
+	for (int i = 0; i < nobjects; i++) {
+		int oid = objectactive[i];
+		createItemsFromObject(oid);
+	}
+}
+
 struct Configuration {
 	uint32_t startSeed = 0;
 	uint32_t seedCount = 1;
@@ -490,44 +528,17 @@ int main(int argc, char **argv)
 			continue;
 		}
 
-		{
+		if (0) {
 			glSeedTbl[currlevel] = seed;
 			InitiateLevel(9);
 			CreateDungeon();
-			InitStairCordinates();
+			FindStairCordinates();
+			CreateDungeonContent();
+			DropAllItems();
 
 			std::cerr << "Game Seed: " << seed << std::endl;
 			if (Config.verbose && oobwrite)
 				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
-
-			InitLevelMonsters();
-			SetRndSeed(glSeedTbl[currlevel]);
-			GetLevelMTypes();
-			InitThemes();
-
-			SetRndSeed(glSeedTbl[currlevel]);
-			HoldThemeRooms();
-			GetRndSeed();
-			InitMonsters();
-			GetRndSeed();
-			InitObjects();
-			InitItems();
-			CreateThemeRooms();
-
-			int monsterItems = numitems;
-			for (int i = 0; i < nummonsters; i++) {
-				int mid = monstactive[i];
-				if (monster[mid].MType->mtype == MT_GOLEM)
-					continue;
-				SetRndSeed(monster[mid]._mRndSeed);
-				SpawnItem(mid, monster[mid]._mx, monster[mid]._my, TRUE);
-			}
-
-			int objectItems = numitems;
-			for (int i = 0; i < nobjects; i++) {
-				int oid = objectactive[i];
-				createItemsFromObject(oid);
-			}
 
 			bool foundPuzzler = false;
 			for (int i = 0; i < numitems; i++) {
@@ -554,9 +565,9 @@ int main(int argc, char **argv)
 				std::cout << "Item Count: " << numitems << std::endl;
 				for (int i = 0; i < numitems; i++) {
 					std::string prefix = "";
-					if (i >= objectItems)
+					if (i >= ObjectItems)
 						prefix = "Object ";
-					else if (i >= monsterItems)
+					else if (i >= MonsterItems)
 						prefix = "Monster ";
 					std::cout << prefix << "Item " << i << ": " << item[itemactive[i]]._iIName << " (" << item[itemactive[i]]._iSeed << ")" << std::endl;
 				}
@@ -574,7 +585,7 @@ int main(int argc, char **argv)
 		for (int level = 1; level < NUMLEVELS; level++) {
 			InitiateLevel(level);
 			CreateDungeon();
-			InitStairCordinates();
+			FindStairCordinates();
 
 			if (Config.verbose && oobwrite)
 				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
