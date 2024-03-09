@@ -147,17 +147,17 @@ BOOL PosOkPlayer(int pnum, int x, int y)
 	if (nSolidTable[tileId])
 		return FALSE;
 
-	// if (dObject[x][y] != 0) {
-	//  char bv;
-	//	if (dObject[x][y] > 0) {
-	//		bv = dObject[x][y] - 1;
-	//	} else {
-	//		bv = -(dObject[x][y] + 1);
-	//	}
-	//	if (object[bv]._oSolidFlag) {
-	//		return FALSE;
-	//	}
-	// }
+	if (dObject[x][y] != 0) {
+		char bv;
+		if (dObject[x][y] > 0) {
+			bv = dObject[x][y] - 1;
+		} else {
+			bv = -(dObject[x][y] + 1);
+		}
+		if (object[bv]._oSolidFlag) {
+			return FALSE;
+		}
+	}
 
 	return TRUE;
 }
