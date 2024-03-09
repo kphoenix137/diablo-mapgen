@@ -7,7 +7,6 @@
 #include "all.h"
 
 #include <iostream>
-#include <ctime>
 
 int nSx1;
 int nSy1;
@@ -2202,10 +2201,10 @@ static void ConnectHall(int nX1, int nY1, int nX2, int nY2, int nHd)
 	predungeon[nX2][nY2] = 44;
 	fInroom = FALSE;
 
-	int timeLoopStart = time(NULL);
+	uint64_t timeLoopStart = micros();
 	while (!fDoneflag) {
-		if (time(NULL) - timeLoopStart >= 3) {
-			std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " TIMEOUT: failed to generate" << std::endl;
+		if (micros() - timeLoopStart >= 2 * 1000 * 1000) {
+			std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " TIMEOUT: failed to generate" << std::endl;
 			break;
 		}
 		if (nX1 >= 38 && nCurrd == 2) {
