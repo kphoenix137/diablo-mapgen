@@ -1431,8 +1431,7 @@ static void L5roomGen(int x, int y, int w, int h, int dir)
 
 	dirProb = random_(0, 4);
 
-	switch (dir == 1 ? dirProb != 0 : dirProb == 0) {
-	case FALSE:
+	if (!(dir == 1 ? dirProb != 0 : dirProb == 0)) {
 		num = 0;
 		do {
 			cw = (random_(0, 5) + 2) & 0xFFFFFFFE;
@@ -1453,8 +1452,7 @@ static void L5roomGen(int x, int y, int w, int h, int dir)
 			L5roomGen(cx1, cy1, cw, ch, 1);
 		if (ran2 == TRUE)
 			L5roomGen(cx2, cy1, cw, ch, 1);
-		break;
-	case TRUE:
+	} else {
 		num = 0;
 		do {
 			width = (random_(0, 5) + 2) & 0xFFFFFFFE;
@@ -1475,7 +1473,6 @@ static void L5roomGen(int x, int y, int w, int h, int dir)
 			L5roomGen(rx, ry, width, height, 0);
 		if (ran2 == TRUE)
 			L5roomGen(rx, ry2, width, height, 0);
-		break;
 	}
 }
 
