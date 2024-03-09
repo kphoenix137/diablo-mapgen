@@ -37,9 +37,10 @@ int questdebug = -1;
 
 uint64_t micros()
 {
-	return std::chrono::duration_cast<std::chrono::microseconds>(
-	    std::chrono::high_resolution_clock::now().time_since_epoch())
-	                  .count();
+	return std::chrono::time_point_cast<std::chrono::microseconds>(
+	    std::chrono::high_resolution_clock::now())
+	    .time_since_epoch()
+	    .count();
 }
 
 BOOL delta_quest_inited(int i)
