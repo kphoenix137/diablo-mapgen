@@ -20,6 +20,7 @@
 #include "themes.h"
 #include "trigs.h"
 
+namespace {
 #define MAXVIEWX 21
 #define MAXVIEWY 21
 bool isVisible[MAXVIEWY][MAXVIEWX] = {
@@ -46,22 +47,9 @@ bool isVisible[MAXVIEWY][MAXVIEWX] = {
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, //	+y
 };
 
-typedef struct Point {
-	int x;
-	int y;
+constexpr uint64_t ProgressInterval = 10 * 1000 * 1000;
 
-	bool operator==(const Point &other) const
-	{
-		return x == other.x && y == other.y;
-	}
-
-	bool operator!=(const Point &other) const
-	{
-		return !(*this == other);
-	}
-} Point;
-
-static int InitLevelType(int l)
+int InitLevelType(int l)
 {
 	if (l >= 1 && l <= 4)
 		return DTYPE_CATHEDRAL;
@@ -73,8 +61,27 @@ static int InitLevelType(int l)
 	return DTYPE_HELL;
 }
 
-void whatleveltype()
+void InitEngine()
 {
+	DRLG_PreLoadL2SP();
+	DRLG_PreLoadDiabQuads();
+}
+
+void ShutDownEngine()
+{
+	DRLG_UnloadL2SP();
+	DRLG_FreeDiabQuads();
+}
+
+void InitiateLevel(int level)
+{
+	currlevel = level;
+
+	oobread = false;
+	oobwrite = false;
+
+	InitVision();
+
 	switch (currlevel) {
 	case 1:
 		leveltype = DTYPE_CATHEDRAL;
@@ -252,11 +259,9 @@ bool IsGoodLevel()
 	return true;
 }
 
-int createSpecificDungeon(bool breakOnSuccess)
+int CreateDungeon(bool breakOnSuccess = false)
 {
 	int levelSeed = -1;
-	oobread = false;
-	oobwrite = false;
 	uint32_t lseed = glSeedTbl[currlevel];
 	if (leveltype == DTYPE_CATHEDRAL)
 		levelSeed = CreateL5Dungeon(lseed, 0, breakOnSuccess);
@@ -266,8 +271,7 @@ int createSpecificDungeon(bool breakOnSuccess)
 		levelSeed = CreateL3Dungeon(lseed, 0, breakOnSuccess);
 	else if (leveltype == DTYPE_HELL)
 		levelSeed = CreateL4Dungeon(lseed, 0, breakOnSuccess);
-	if (oobwrite)
-		std::cout << "Game seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
+
 	return levelSeed;
 }
 
@@ -286,7 +290,6 @@ void seedSelection(uint32_t seed)
 
 	for (int i = 0; i < NUMLEVELS; i++) {
 		glSeedTbl[i] = GetRndSeed();
-		gnLevelTypeTbl[i] = InitLevelType(i);
 	}
 }
 
@@ -386,47 +389,17 @@ void createItemsFromObject(int oid)
 	}
 }
 
-void printAsciiLevel()
-{
-	bool steps[MAXDUNX][MAXDUNY];
+struct Configuration {
+	uint32_t startSeed = 0;
+	uint32_t seedCount = 1;
+	bool quiet = false;
+	bool asciiLevels = false;
+	bool exportLevels = false;
+	int quality = 4;
+	bool verbose = false;
+};
 
-	for (int i = 0; i < MAXDUNY; ++i) {
-		for (int j = 0; j < MAXDUNX; ++j) {
-			steps[i][j] = false;
-		}
-	}
-
-	Point position = Spawn;
-	steps[position.x][position.y] = true;
-
-	const char pathxdir[9] = { 0, 0, -1, 1, 0, -1, 1, 1, -1 };
-	const char pathydir[9] = { 0, -1, 0, 0, 1, -1, -1, 1, 1 };
-
-	for (int i = 0; i < MAX_PATH_LENGTH; ++i) {
-		if (Path[i] == 0)
-			break;
-		position.x += pathxdir[Path[i]];
-		position.y += pathydir[Path[i]];
-		steps[position.x][position.y] = true;
-	}
-
-	for (int boby = 16; boby < MAXDUNY - 17; boby++) {
-		for (int bobx = 16; bobx < MAXDUNX - 17; bobx++) {
-			if (Spawn.x == bobx && Spawn.y == boby)
-				std::cout << "^";
-			else if (StairsDown.x == bobx && StairsDown.y == boby)
-				std::cout << "v";
-			else if (steps[bobx][boby])
-				std::cout << "=";
-			else if (nSolidTable[dPiece[bobx][boby]])
-				std::cout << "#";
-			else
-				std::cout << " ";
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-}
+Configuration Config;
 
 void printHelp()
 {
@@ -440,71 +413,66 @@ void printHelp()
 	std::cout << "--verbose      Print out details about rejected seeds" << std::endl;
 }
 
-int main(int argc, char **argv)
+void ParseArguments(int argc, char **argv)
 {
-	uint32_t startSeed = 0;
-	uint32_t seedCount = 1;
-	bool quiet = false;
-	bool asciiLevels = false;
-	bool exportLevels = false;
-	int quality = 4;
-	bool verbose = false;
-
 	for (int i = 1; i < argc; i++) {
 		std::string arg = argv[i];
 		if (arg == "--help") {
 			printHelp();
-			return 0;
+			exit(0);
 		} else if (arg == "--quiet") {
-			quiet = true;
+			Config.quiet = true;
 		} else if (arg == "--ascii") {
-			asciiLevels = true;
+			Config.asciiLevels = true;
 		} else if (arg == "--export") {
-			exportLevels = true;
+			Config.exportLevels = true;
 		} else if (arg == "--start") {
 			i++;
 			if (argc <= i) {
 				std::cerr << "Missing value for --start" << std::endl;
-				return 255;
+				exit(255);
 			}
-			startSeed = std::stoll(argv[i]);
+			Config.startSeed = std::stoll(argv[i]);
 		} else if (arg == "--count") {
 			i++;
 			if (argc <= i) {
 				std::cerr << "Missing value for --count" << std::endl;
-				return 255;
+				exit(255);
 			}
-			seedCount = std::stoll(argv[i]);
+			Config.seedCount = std::stoll(argv[i]);
 		} else if (arg == "--quality") {
 			i++;
 			if (argc <= i) {
 				std::cerr << "Missing value for --quality" << std::endl;
-				return 255;
+				exit(255);
 			}
-			quality = std::stoi(argv[i]);
+			Config.quality = std::stoi(argv[i]);
 		} else if (arg == "--verbose") {
-			verbose = true;
-		} else if (arg == "--verbose") {
-			verbose = true;
+			Config.verbose = true;
 		} else {
 			std::cerr << "Unknown argument: " << arg << std::endl;
-			return 255;
+			exit(255);
 		}
 	}
+}
 
-	DRLG_PreLoadL2SP();
-	DRLG_PreLoadDiabQuads();
+}
 
-	int seconds = time(NULL);
-	uint32_t prevseed = startSeed;
-	for (uint32_t seed = startSeed; seed < startSeed + seedCount; seed++) {
-		int elapsed = time(NULL) - seconds;
-		if (!quiet && elapsed >= 10) {
-			int pct = 100 * (seed - startSeed) / seedCount;
+int main(int argc, char **argv)
+{
+	ParseArguments(argc, argv);
+	InitEngine();
+
+	int yseconds = micros();
+	uint32_t prevseed = Config.startSeed;
+	for (uint32_t seed = Config.startSeed; seed < Config.startSeed + Config.seedCount; seed++) {
+		int elapsed = micros() - yseconds;
+		if (!Config.quiet && elapsed >= ProgressInterval) {
+			int pct = 100 * (seed - Config.startSeed) / Config.seedCount;
 			int speed = ((seed - prevseed) / 10);
-			int eta = (seedCount - (seed - startSeed)) / speed;
+			int eta = (Config.seedCount - (seed - Config.startSeed)) / speed;
 			std::cerr << "Progress: " << pct << "% eta: " << eta << "s (" << speed << "seed/s)" << std::endl;
-			seconds += elapsed;
+			yseconds += elapsed;
 			prevseed = seed;
 		}
 
@@ -512,21 +480,25 @@ int main(int argc, char **argv)
 		seedSelection(seed);
 		InitQuests();
 		if (quests[Q_LTBANNER]._qactive != QUEST_NOTAVAIL) {
-			if (verbose)
-				std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " thrown out: Sign Quest" << std::endl;
+			if (Config.verbose)
+				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " thrown out: Sign Quest" << std::endl;
 			continue;
 		}
 		if (quests[Q_WARLORD]._qactive != QUEST_NOTAVAIL) {
-			if (verbose)
-				std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " thrown out: Warlord" << std::endl;
+			if (Config.verbose)
+				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " thrown out: Warlord" << std::endl;
 			continue;
 		}
 
 		{
-			currlevel = 9;
-			whatleveltype();
-			createSpecificDungeon(false);
+			glSeedTbl[currlevel] = seed;
+			InitiateLevel(9);
+			CreateDungeon();
 			InitStairCordinates();
+
+			std::cerr << "Game Seed: " << seed << std::endl;
+			if (Config.verbose && oobwrite)
+				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
 
 			InitLevelMonsters();
 			SetRndSeed(glSeedTbl[currlevel]);
@@ -565,7 +537,7 @@ int main(int argc, char **argv)
 			if (!foundPuzzler)
 				continue;
 
-			if (!quiet) {
+			if (Config.verbose) {
 				std::cout << "Monster Count: " << nummonsters << std::endl;
 				for (int i = 0; i < nummonsters; i++) {
 					std::cout << "Monster " << i << ": " << monster[monstactive[i]].mName << " (" << monster[monstactive[i]]._mRndSeed << ")" << std::endl;
@@ -589,19 +561,26 @@ int main(int argc, char **argv)
 					std::cout << prefix << "Item " << i << ": " << item[itemactive[i]]._iIName << " (" << item[itemactive[i]]._iSeed << ")" << std::endl;
 				}
 			}
-			if (exportLevels)
+
+			if (Config.asciiLevels)
+				printAsciiLevel(Spawn, StairsDown, Path);
+			if (Config.exportLevels)
 				ExportDun(seed);
 		}
 
-		for (int level = 9; level < NUMLEVELS; level++) {
-			InitVision();
-			currlevel = level;
-			whatleveltype();
-			createSpecificDungeon(false);
+		if (Config.verbose)
+			std::cerr << "Game Seeds: " << seed << std::endl;
+
+		for (int level = 1; level < NUMLEVELS; level++) {
+			InitiateLevel(level);
+			CreateDungeon();
 			InitStairCordinates();
 
+			if (Config.verbose && oobwrite)
+				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
+
 			if (!IsGoodLevel()) {
-				if (level > quality || verbose) {
+				if (level > Config.quality || Config.verbose) {
 					std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " quality: ";
 					for (int p = 0; p < level - 1; p++) {
 						std::cout << "+";
@@ -611,15 +590,15 @@ int main(int argc, char **argv)
 				}
 				break;
 			}
-			if (asciiLevels)
-				printAsciiLevel();
-			if (exportLevels)
+
+			if (Config.asciiLevels)
+				printAsciiLevel(Spawn, StairsDown, Path);
+			if (Config.exportLevels)
 				ExportDun(seed);
 		}
 	}
 
-	DRLG_UnloadL2SP();
-	DRLG_FreeDiabQuads();
+	ShutDownEngine();
 
 	return 0;
 }

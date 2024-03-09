@@ -1,6 +1,7 @@
 #include "level.h"
 
 #include <cstdint>
+#include <iostream>
 #include <stdio.h>
 
 #include "../types.h"
@@ -78,4 +79,46 @@ void ExportDun(int seed)
 		}
 	}
 	fclose(dunFile);
+}
+
+void printAsciiLevel(Point spawn, Point stairsDown, char Path[MAX_PATH_LENGTH])
+{
+	bool steps[MAXDUNX][MAXDUNY];
+
+	for (int i = 0; i < MAXDUNY; ++i) {
+		for (int j = 0; j < MAXDUNX; ++j) {
+			steps[i][j] = false;
+		}
+	}
+
+	Point position = spawn;
+	steps[position.x][position.y] = true;
+
+	const char pathxdir[9] = { 0, 0, -1, 1, 0, -1, 1, 1, -1 };
+	const char pathydir[9] = { 0, -1, 0, 0, 1, -1, -1, 1, 1 };
+
+	for (int i = 0; i < MAX_PATH_LENGTH; ++i) {
+		if (Path[i] == 0)
+			break;
+		position.x += pathxdir[Path[i]];
+		position.y += pathydir[Path[i]];
+		steps[position.x][position.y] = true;
+	}
+
+	for (int boby = 16; boby < MAXDUNY - 17; boby++) {
+		for (int bobx = 16; bobx < MAXDUNX - 17; bobx++) {
+			if (spawn.x == bobx && spawn.y == boby)
+				std::cout << "^";
+			else if (stairsDown.x == bobx && stairsDown.y == boby)
+				std::cout << "v";
+			else if (steps[bobx][boby])
+				std::cout << "=";
+			else if (nSolidTable[dPiece[bobx][boby]])
+				std::cout << "#";
+			else
+				std::cout << " ";
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
 }

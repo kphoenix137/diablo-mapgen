@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <iostream>
 #include <malloc.h>
@@ -17,7 +18,6 @@
 PlayerStruct plr[MAX_PLRS];
 DWORD glSeedTbl[NUMLEVELS];
 _gamedata sgGameInitInfo;
-int gnLevelTypeTbl[NUMLEVELS];
 BOOL light4flag;
 
 const int RndMult = 0x015A4E35;
@@ -34,6 +34,13 @@ int sglGameSeed;
 int SeedCount;
 
 int questdebug = -1;
+
+uint64_t micros()
+{
+	return std::chrono::duration_cast<std::chrono::microseconds>(
+	    std::chrono::high_resolution_clock::now().time_since_epoch())
+	                  .count();
+}
 
 BOOL delta_quest_inited(int i)
 {
@@ -119,7 +126,7 @@ BYTE *LoadFileInMem(std::string pszName, DWORD *pdwFileLen)
 #else
 		getcwd(cwd, sizeof(cwd));
 #endif
-		std::cout << cwd << std::endl;
+		std::cerr << cwd << std::endl;
 		app_fatal("FILE NOT FOUND");
 	}
 	fseek(filestream, 0, SEEK_END); // seek to end of file
@@ -170,7 +177,7 @@ void LoadLvlGFX()
 
 void app_fatal(const char *dummystring)
 {
-	std::cout << dummystring << std::endl;
+	std::cerr << dummystring << std::endl;
 	exit(1);
 }
 

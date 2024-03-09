@@ -5,19 +5,38 @@
 #include <string>
 #define assert_fail(exp) ((void)(exp))
 
+struct Point {
+	int x;
+	int y;
+
+	bool operator==(const Point &other) const
+	{
+		return x == other.x && y == other.y;
+	}
+
+	bool operator!=(const Point &other) const
+	{
+		return !(*this == other);
+	}
+};
+
 const int myplr = 0;
 extern BYTE gbMaxPlayers;
 extern BOOL leveldebug;
 extern BOOL light4flag;
 extern DWORD glSeedTbl[NUMLEVELS];
 extern _gamedata sgGameInitInfo;
-extern int gnLevelTypeTbl[NUMLEVELS];
 extern int gnDifficulty;
 extern PlayerStruct plr[MAX_PLRS];
 extern bool zoomflag;
 extern int questdebug;
 extern bool oobread;
 extern bool oobwrite;
+
+/**
+ * Get time stamp in microseconds.
+ */
+uint64_t micros();
 
 BOOL delta_quest_inited(int i);
 int random_(BYTE idx, int v);

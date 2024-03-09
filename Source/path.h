@@ -6,8 +6,6 @@
 #ifndef __PATH_H__
 #define __PATH_H__
 
-#include "../types.h"
-
 int FindPath(BOOL (*PosOk)(int, int, int), int PosOkArg, int sx, int sy, int dx, int dy, char *path);
 int path_get_h_cost(int sx, int sy, int dx, int dy);
 PATHNODE *GetNextPath();
