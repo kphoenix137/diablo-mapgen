@@ -3448,45 +3448,6 @@ void LoadL2Dungeon(const char *sFileName, int vx, int vy)
 	DRLG_L2Pass3();
 	DRLG_Init_Globals();
 
-	for (j = 0; j < MAXDUNY; j++) {
-		for (i = 0; i < MAXDUNX; i++) {
-			pc = 0;
-			if (dPiece[i][j] == 541) {
-				pc = 5;
-			}
-			if (dPiece[i][j] == 178) {
-				pc = 5;
-			}
-			if (dPiece[i][j] == 551) {
-				pc = 5;
-			}
-			if (dPiece[i][j] == 542) {
-				pc = 6;
-			}
-			if (dPiece[i][j] == 553) {
-				pc = 6;
-			}
-			if (dPiece[i][j] == 13) {
-				pc = 5;
-			}
-			if (dPiece[i][j] == 17) {
-				pc = 6;
-			}
-			dSpecial[i][j] = pc;
-		}
-	}
-	for (j = 0; j < MAXDUNY; j++) {
-		for (i = 0; i < MAXDUNX; i++) {
-			if (dPiece[i][j] == 132) {
-				dSpecial[i][j + 1] = 2;
-				dSpecial[i][j + 2] = 1;
-			} else if (dPiece[i][j] == 135 || dPiece[i][j] == 139) {
-				dSpecial[i + 1][j] = 3;
-				dSpecial[i + 2][j] = 4;
-			}
-		}
-	}
-
 	ViewX = vx;
 	ViewY = vy;
 	SetMapMonsters(pLevelMap, 0, 0);
@@ -3566,7 +3527,6 @@ int CreateL2Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
 
 	DRLG_L2Pass3();
 	DRLG_FreeL2SP();
-	DRLG_InitL2Vals();
 	DRLG_SetPC();
 
 	return levelSeed;

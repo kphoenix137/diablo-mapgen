@@ -369,10 +369,12 @@ BOOL CheckThemeRoom(int tv)
 				return FALSE;
 
 			tarea++;
+			if (tarea > 100)
+				return FALSE;
 		}
 	}
 
-	if (leveltype == DTYPE_CATHEDRAL && (tarea < 9 || tarea > 100))
+	if (tarea < 9)
 		return FALSE;
 
 	for (j = 0; j < MAXDUNY; j++) {
@@ -416,7 +418,7 @@ void InitThemes()
 		for (i = 0; i < sizeof(ThemeGoodIn) / sizeof(ThemeGoodIn[0]); i++)
 			ThemeGoodIn[i] = FALSE;
 
-		for (i = 0; i < 256 && numthemes < MAXTHEMES; i++) {
+		for (i = 0; i < TransVal && numthemes < MAXTHEMES; i++) {
 			if (CheckThemeRoom(i)) {
 				themes[numthemes].ttval = i;
 				for (j = ThemeGood[random_(0, 4)];; j = random_(0, 17)) {
