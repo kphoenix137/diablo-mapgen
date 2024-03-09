@@ -618,7 +618,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	DRLG_FreeL2SP();
+	DRLG_UnloadL2SP();
 	DRLG_FreeDiabQuads();
 
 	return 0;
