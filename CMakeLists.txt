@@ -35,6 +35,10 @@ elseif(MSVC)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LTCG")
 endif()
 
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_link_options(-fuse-ld=lld)
+endif()
+
 set(CMAKE_CXX_STANDARD 20)
 
 set(BIN_TARGET diablo-mapgen)
