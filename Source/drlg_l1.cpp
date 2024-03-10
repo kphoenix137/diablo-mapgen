@@ -2589,7 +2589,7 @@ static void DRLG_L5CornerFix()
 	}
 }
 
-static int DRLG_L5(int entry, bool breakOnSuccess)
+static int DRLG_L5(int entry, bool breakOnSuccess, bool breakOnFailure)
 {
 	int i, j;
 	LONG minarea;
@@ -2618,11 +2618,15 @@ static int DRLG_L5(int entry, bool breakOnSuccess)
 	do {
 		DRLG_InitTrans();
 
+		bool failed;
 		do {
 			levelSeed = GetRndState();
 			InitL5Dungeon();
 			L5firstRoom();
-		} while (L5GetArea() < minarea);
+			failed = L5GetArea() < minarea;
+			if (breakOnFailure && failed)
+				return -1;
+		} while (failed);
 
 		L5makeDungeon();
 		L5makeDmt();
@@ -2735,6 +2739,8 @@ static int DRLG_L5(int entry, bool breakOnSuccess)
 			ViewY--;
 #endif
 		}
+		if (breakOnFailure && doneflag == FALSE)
+			return -1;
 	} while (doneflag == FALSE);
 
 	if (breakOnSuccess)
@@ -2841,7 +2847,7 @@ static int DRLG_L5(int entry, bool breakOnSuccess)
 	return levelSeed;
 }
 
-int CreateL5Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
+int CreateL5Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFailure)
 {
 #ifdef HELLFIRE
 	int i, j;
@@ -2868,8 +2874,8 @@ int CreateL5Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
 	DRLG_InitTrans();
 	DRLG_InitSetPC();
 	DRLG_LoadL1SP();
-	int levelSeed = DRLG_L5(entry, breakOnSuccess);
-	if (breakOnSuccess)
+	int levelSeed = DRLG_L5(entry, breakOnSuccess, breakOnFailure);
+	if (breakOnSuccess || breakOnFailure)
 		return levelSeed;
 	DRLG_L1Pass3();
 	DRLG_FreeL1SP();

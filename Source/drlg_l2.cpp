@@ -3184,7 +3184,7 @@ void L2DoorFix()
 	}
 }
 
-static int DRLG_L2(int entry, bool breakOnSuccess)
+static int DRLG_L2(int entry, bool breakOnSuccess, bool breakOnFailure)
 {
 	int i, j;
 	BOOL doneflag;
@@ -3197,6 +3197,8 @@ static int DRLG_L2(int entry, bool breakOnSuccess)
 		InitDungeon();
 		DRLG_InitTrans();
 		if (!CreateDungeon()) {
+			if (breakOnFailure)
+				return -1;
 			continue;
 		}
 		L2TileFix();
@@ -3233,6 +3235,8 @@ static int DRLG_L2(int entry, bool breakOnSuccess)
 			}
 			ViewY -= 2;
 		}
+		if (breakOnFailure && !doneflag)
+			return -1;
 	}
 	if (breakOnSuccess)
 		return levelSeed;
@@ -3504,7 +3508,7 @@ void LoadPreL2Dungeon(const char *sFileName, int vx, int vy)
 	mem_free_dbg(pLevelMap);
 }
 
-int CreateL2Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
+int CreateL2Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFailure)
 {
 	nSx1 = -1;
 	nSy1 = -1;
@@ -3521,8 +3525,8 @@ int CreateL2Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
 	DRLG_InitTrans();
 	DRLG_InitSetPC();
 	DRLG_LoadL2SP();
-	int levelSeed = DRLG_L2(entry, breakOnSuccess);
-	if (breakOnSuccess)
+	int levelSeed = DRLG_L2(entry, breakOnSuccess, breakOnFailure);
+	if (breakOnSuccess || breakOnFailure)
 		return levelSeed;
 
 	DRLG_L2Pass3();

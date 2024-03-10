@@ -1581,7 +1581,7 @@ void DRLG_L4GeneralFix()
 	}
 }
 
-int DRLG_L4(int entry, bool breakOnSuccess)
+int DRLG_L4(int entry, bool breakOnSuccess, bool breakOnFailure)
 {
 	int i, j, spi, spj, ar;
 	BOOL doneflag;
@@ -1599,6 +1599,8 @@ int DRLG_L4(int entry, bool breakOnSuccess)
 			if (ar >= 173) {
 				uShape();
 			}
+			if (breakOnFailure && ar < 173)
+				return -1;
 		} while (ar < 173);
 		L4makeDungeon();
 		L4makeDmt();
@@ -1695,6 +1697,8 @@ int DRLG_L4(int entry, bool breakOnSuccess)
 				ViewY++;
 			}
 		}
+		if (breakOnFailure && !doneflag)
+			return -1;
 	} while (!doneflag);
 
 	if (breakOnSuccess)
@@ -1844,7 +1848,7 @@ static void DRLG_L4Pass3()
 	}
 }
 
-int CreateL4Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
+int CreateL4Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFailure)
 {
 	SetRndSeed(rseed);
 
@@ -1858,8 +1862,8 @@ int CreateL4Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
 
 	DRLG_InitSetPC();
 	DRLG_LoadL4SP();
-	int levelSeed = DRLG_L4(entry, breakOnSuccess);
-	if (breakOnSuccess)
+	int levelSeed = DRLG_L4(entry, breakOnSuccess, breakOnFailure);
+	if (breakOnSuccess || breakOnFailure)
 		return levelSeed;
 
 	DRLG_L4Pass3();

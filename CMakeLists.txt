@@ -50,6 +50,7 @@ add_executable(${BIN_TARGET}
   Source/drlg_l4.cpp
   Source/engine.cpp
   Source/analyzer/path.cpp
+  Source/analyzer/pattern.cpp
   Source/analyzer/puzzler.cpp
   Source/funkMapGen.cpp
   Source/gendung.cpp

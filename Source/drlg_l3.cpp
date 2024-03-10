@@ -2315,7 +2315,7 @@ BOOL DRLG_L3Lockout()
 	return t == lockoutcnt;
 }
 
-static int DRLG_L3(int entry, bool breakOnSuccess)
+static int DRLG_L3(int entry, bool breakOnSuccess, bool breakOnFailure)
 {
 	int x1, y1, x2, y2, i, j;
 	BOOL found, genok;
@@ -2354,6 +2354,8 @@ static int DRLG_L3(int entry, bool breakOnSuccess)
 				} else {
 					found = FALSE;
 				}
+				if (breakOnFailure && !found)
+					return -1;
 			} while (!found);
 			DRLG_L3MakeMegas();
 			if (entry == ENTRY_MAIN) {
@@ -2449,6 +2451,8 @@ static int DRLG_L3(int entry, bool breakOnSuccess)
 			if (!genok && QuestStatus(Q_ANVIL)) {
 				genok = DRLG_L3Anvil();
 			}
+			if (breakOnFailure && genok == TRUE)
+				return -1;
 		} while (genok == TRUE);
 #ifdef HELLFIRE
 		if (currlevel < 17) {
@@ -2464,6 +2468,8 @@ static int DRLG_L3(int entry, bool breakOnSuccess)
 				lavapool = FALSE;
 		}
 #endif
+	if (breakOnFailure && !lavapool)
+		return -1;
 	} while (!lavapool);
 
 	if (breakOnSuccess)
@@ -2713,7 +2719,7 @@ static void DRLG_L3Pass3()
 	}
 }
 
-int CreateL3Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
+int CreateL3Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFailure)
 {
 	int i, j;
 
@@ -2724,8 +2730,8 @@ int CreateL3Dungeon(DWORD rseed, int entry, bool breakOnSuccess)
 	dmaxy = 96;
 	DRLG_InitTrans();
 	DRLG_InitSetPC();
-	int levelSeed = DRLG_L3(entry, breakOnSuccess);
-	if (breakOnSuccess)
+	int levelSeed = DRLG_L3(entry, breakOnSuccess, breakOnFailure);
+	if (breakOnSuccess || breakOnFailure)
 		return levelSeed;
 	DRLG_L3Pass3();
 

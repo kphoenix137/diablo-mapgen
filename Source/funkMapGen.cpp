@@ -4,6 +4,7 @@
 
 #include "analyzer/path.h"
 #include "analyzer/puzzler.h"
+#include "analyzer/pattern.h"
 #include "drlg_l1.h"
 #include "drlg_l2.h"
 #include "drlg_l3.h"
@@ -108,18 +109,18 @@ void FindStairCordinates()
 	}
 }
 
-int CreateDungeon(bool breakOnSuccess = false)
+int CreateDungeon(bool breakOnFailure, bool breakOnSuccess = false)
 {
 	int levelSeed = -1;
 	uint32_t lseed = glSeedTbl[currlevel];
 	if (leveltype == DTYPE_CATHEDRAL)
-		levelSeed = CreateL5Dungeon(lseed, 0, breakOnSuccess);
+		levelSeed = CreateL5Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
 	else if (leveltype == DTYPE_CATACOMBS)
-		levelSeed = CreateL2Dungeon(lseed, 0, breakOnSuccess);
+		levelSeed = CreateL2Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
 	else if (leveltype == DTYPE_CAVES)
-		levelSeed = CreateL3Dungeon(lseed, 0, breakOnSuccess);
+		levelSeed = CreateL3Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
 	else if (leveltype == DTYPE_HELL)
-		levelSeed = CreateL4Dungeon(lseed, 0, breakOnSuccess);
+		levelSeed = CreateL4Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
 
 	return levelSeed;
 }
@@ -278,7 +279,7 @@ void printHelp()
 	std::cout << "--help         Print this message and exit" << std::endl;
 	std::cout << "--ascii        Print ASCII version of levels" << std::endl;
 	std::cout << "--export       Export levels as .dun files" << std::endl;
-	std::cout << "--scanner <#>  How to analyze levels (none, puzzler, path) [default: none]" << std::endl;
+	std::cout << "--scanner <#>  How to analyze levels (none, puzzler, path, pattern) [default: none]" << std::endl;
 	std::cout << "--start <#>    The seed to start from" << std::endl;
 	std::cout << "--count <#>    The number of seeds to process" << std::endl;
 	std::cout << "--quality <#>  Number of levels that must be good [default: 6]" << std::endl;
@@ -312,6 +313,8 @@ void ParseArguments(int argc, char **argv)
 				Config.scanner = Scanners::Puzzler;
 			} else if (scanner == "path") {
 				Config.scanner = Scanners::Path;
+			} else if (scanner == "pattern") {
+				Config.scanner = Scanners::Pattern;
 			} else {
 				std::cerr << "Unknown scanner: " << scanner << std::endl;
 				exit(255);
@@ -371,6 +374,7 @@ int main(int argc, char **argv)
 
 		int startLevel = 1;
 		int maxLevels = NUMLEVELS;
+		bool breakOnFailure = false;
 
 		if (Config.scanner == Scanners::Path) {
 			if (ShortPathSeedSkip())
@@ -378,8 +382,11 @@ int main(int argc, char **argv)
 		} else if (Config.scanner == Scanners::Puzzler) {
 			startLevel = 9;
 			maxLevels = startLevel + 1;
-			// Force Dungeon Seed
-			glSeedTbl[startLevel] = seed;
+		} else if (Config.scanner == Scanners::Pattern) {
+			glSeedTbl[9] = seed;
+			startLevel = 9;
+			maxLevels = startLevel + 1;
+			breakOnFailure = true;
 		}
 
 		if (Config.verbose)
@@ -388,15 +395,17 @@ int main(int argc, char **argv)
 		for (int level = startLevel; level < maxLevels; level++) {
 			// Generate
 			InitiateLevel(level);
-			CreateDungeon();
-			InitTriggers();
-			CreateDungeonContent();
+			int levelSeed = CreateDungeon(breakOnFailure);
+			if (Config.scanner != Scanners::Pattern) {
+				InitTriggers();
+				CreateDungeonContent();
+
+				// Analyze
+				FindStairCordinates();
+			}
 
 			if (Config.verbose && oobwrite)
 				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
-
-			// Analyze
-			FindStairCordinates();
 
 			if (Config.scanner == Scanners::Path) {
 				if (!ShortPathSearch())
@@ -405,6 +414,10 @@ int main(int argc, char **argv)
 				DropAllItems();
 				if (!SearchForPuzzler())
 					break;
+			} else if (Config.scanner == Scanners::Pattern) {
+				if (levelSeed == -1 || !MatchPattern())
+					break;
+				std::cout << "Level Seed: " << (uint32_t)levelSeed << std::endl;
 			}
 
 			if (Config.asciiLevels)
