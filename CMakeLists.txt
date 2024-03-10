@@ -40,12 +40,13 @@ set(CMAKE_CXX_STANDARD 20)
 set(BIN_TARGET diablo-mapgen)
 
 add_executable(${BIN_TARGET}
-  Source/all.h
   Source/drlg_l1.cpp
   Source/drlg_l2.cpp
   Source/drlg_l3.cpp
   Source/drlg_l4.cpp
   Source/engine.cpp
+  Source/analyzer/path.cpp
+  Source/analyzer/puzzler.cpp
   Source/funkMapGen.cpp
   Source/gendung.cpp
   Source/itemdat.cpp

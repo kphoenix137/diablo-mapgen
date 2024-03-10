@@ -1,68 +1,40 @@
-#include <algorithm>
+#include "funkMapGen.h"
+
 #include <iostream>
-#include <iomanip>
 
-#include "../types.h"
-
+#include "analyzer/path.h"
+#include "analyzer/puzzler.h"
 #include "drlg_l1.h"
 #include "drlg_l2.h"
 #include "drlg_l3.h"
 #include "drlg_l4.h"
-#include "engine.h"
-#include "gendung.h"
 #include "items.h"
 #include "level.h"
 #include "lighting.h"
 #include "monster.h"
 #include "objects.h"
-#include "path.h"
 #include "quests.h"
 #include "themes.h"
 #include "trigs.h"
 
+int MonsterItems;
+int ObjectItems;
+
+Point Spawn;
+Point StairsDown;
+
+char Path[MAX_PATH_LENGTH];
+
+Configuration Config;
+
 namespace {
-#define MAXVIEWX 21
-#define MAXVIEWY 21
-bool isVisible[MAXVIEWY][MAXVIEWX] = {
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, //	-y
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
-	{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
-	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
-	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
-	{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, // -x	origin(10,10)	+x
-	{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-	{ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
-	{ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
-	{ 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, //	+y
-};
 
 constexpr uint64_t ProgressInterval = 10 * 1000 * 1000;
 
-int InitLevelType(int l)
-{
-	if (l >= 1 && l <= 4)
-		return DTYPE_CATHEDRAL;
-	if (l >= 5 && l <= 8)
-		return DTYPE_CATACOMBS;
-	if (l >= 9 && l <= 12)
-		return DTYPE_CAVES;
-
-	return DTYPE_HELL;
-}
-
 void InitEngine()
 {
+	gnDifficulty = DIFF_NORMAL;
+
 	DRLG_PreLoadL2SP();
 	DRLG_PreLoadDiabQuads();
 }
@@ -103,11 +75,7 @@ void InitiateLevel(int level)
 	FillSolidBlockTbls();
 }
 
-Point Spawn;
-Point StairsDown;
-Point StairsDownPrevious;
-
-void FindStairCordinates()
+void InitTriggers()
 {
 	if (leveltype == DTYPE_CATHEDRAL)
 		InitL1Triggers();
@@ -117,7 +85,10 @@ void FindStairCordinates()
 		InitL3Triggers();
 	else if (leveltype == DTYPE_HELL)
 		InitL4Triggers();
+}
 
+void FindStairCordinates()
+{
 	Spawn = { -1, -1 };
 	StairsDown = { -1, -1 };
 
@@ -135,128 +106,6 @@ void FindStairCordinates()
 				Spawn = { trigs[i]._tx + 1, trigs[i]._ty };
 		}
 	}
-}
-
-BOOL PosOkPlayer(int pnum, int x, int y)
-{
-	if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY)
-		return FALSE;
-	int tileId = dPiece[x][y];
-	if (tileId == 0)
-		return FALSE;
-	if (nSolidTable[tileId])
-		return FALSE;
-
-	if (dObject[x][y] != 0) {
-		char bv;
-		if (dObject[x][y] > 0) {
-			bv = dObject[x][y] - 1;
-		} else {
-			bv = -(dObject[x][y] + 1);
-		}
-		if (object[bv]._oSolidFlag) {
-			return FALSE;
-		}
-	}
-
-	return TRUE;
-}
-
-char Path[MAX_PATH_LENGTH];
-
-int PathLength()
-{
-	std::memset(Path, 0, sizeof(Path));
-
-	return FindPath(PosOkPlayer, 0, Spawn.x, Spawn.y, StairsDown.x, StairsDown.y, Path);
-}
-
-int CalcStairsChebyshevDistance()
-{
-	if (Spawn == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
-		return -1;
-	}
-
-	int horizontal = std::max(Spawn.x, StairsDown.x) - std::min(Spawn.x, StairsDown.x);
-	int vertical = std::max(Spawn.y, StairsDown.y) - std::min(Spawn.y, StairsDown.y);
-
-	return std::max(horizontal, vertical);
-}
-
-bool IsVisibleSpawn()
-{
-	if (Spawn == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
-		return false;
-	}
-
-	int horizontal = StairsDown.x - Spawn.x + 10;
-	int vertical = StairsDown.y - Spawn.y + 10;
-
-	if (horizontal < 0 || horizontal > MAXVIEWX)
-		return false;
-	if (vertical < 0 || vertical > MAXVIEWY)
-		return false;
-	return isVisible[vertical][horizontal];
-}
-
-bool IsVisiblePrevious()
-{
-	if (StairsDownPrevious == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
-		return false;
-	}
-
-	int horizontal = StairsDown.x - StairsDownPrevious.x + 10;
-	int vertical = StairsDown.y - StairsDownPrevious.y + 10;
-
-	if (horizontal < 0 || horizontal > MAXVIEWX)
-		return false;
-	if (vertical < 0 || vertical > MAXVIEWY)
-		return false;
-	return isVisible[vertical][horizontal];
-}
-
-int lengthPathToDlvl9 = 0;
-
-bool IsGoodLevel()
-{
-	int maxDistance = 20;
-	int lengthMaxPathToDlvl9 = 72;
-
-	if (leveltype == DTYPE_CATACOMBS || leveltype == DTYPE_CATHEDRAL) {
-		int cDistance = CalcStairsChebyshevDistance();
-		StairsDownPrevious = StairsDown;
-
-		if (cDistance != -1 && cDistance > maxDistance)
-			return false;
-
-		int stairsPath = PathLength();
-		lengthPathToDlvl9 = lengthPathToDlvl9 + stairsPath;
-
-		if (lengthPathToDlvl9 > lengthMaxPathToDlvl9)
-			return false;
-		if (stairsPath == 0 || stairsPath > maxDistance)
-			return false;
-	} else //(leveltype == DTYPE_CAVES || leveltype == DTYPE_HELL)
-	{
-		maxDistance = 15;
-
-		bool isStairsVisibile = IsVisibleSpawn() || IsVisiblePrevious();
-		StairsDownPrevious = StairsDown;
-
-		if (currlevel != 9 && isStairsVisibile)
-			return true;
-
-		int cDistance = CalcStairsChebyshevDistance(); // CONDITIONALLY REWORK REQUIRED: WITH TELEPORT, DLVL 10+ DEPENDING ON DESTINATION VECTOR, MOVEMENT DISTANCE WILL BE SHORTER OR LONGER
-
-		if (cDistance != -1 && cDistance > maxDistance)
-			return false;
-
-		int stairsPath = PathLength(); // CONDITIONALLY OBSOLETED: WITH TELEPORT, DLVL 10+ WILL NOT USE THIS PATHING. ONLY USED FOR PATHING ON DLVL9
-
-		if (stairsPath == 0 || stairsPath > maxDistance)
-			return false;
-	}
-	return true;
 }
 
 int CreateDungeon(bool breakOnSuccess = false)
@@ -278,16 +127,20 @@ int CreateDungeon(bool breakOnSuccess = false)
 void CreateDungeonContent()
 {
 	InitLevelMonsters();
+
 	SetRndSeed(glSeedTbl[currlevel]);
 	GetLevelMTypes();
-	InitThemes();
 
+	InitThemes();
 	SetRndSeed(glSeedTbl[currlevel]);
 	HoldThemeRooms();
 	GetRndSeed();
+
 	InitMonsters();
 	GetRndSeed();
+
 	InitObjects();
+
 	InitItems();
 	CreateThemeRooms();
 }
@@ -296,13 +149,9 @@ void CreateDungeonContent()
  * @brief GET MAIN SEED, GET ALL MAP SEEDS
  * @return nothing, but updates RNG seeds list glSeedTbl[i]
  */
-void seedSelection(uint32_t seed)
+void SetGameSeed(uint32_t seed)
 {
-	SetRndSeed(0);
 	sgGameInitInfo.dwSeed = seed;
-	sgGameInitInfo.bDiff = gnDifficulty;
-
-	gnDifficulty = sgGameInitInfo.bDiff;
 	SetRndSeed(sgGameInitInfo.dwSeed);
 
 	for (int i = 0; i < NUMLEVELS; i++) {
@@ -310,7 +159,7 @@ void seedSelection(uint32_t seed)
 	}
 }
 
-void createItemsFromObject(int oid)
+void CreateItemsFromObject(int oid)
 {
 	switch (object[oid]._otype) {
 	case OBJ_CHEST1:
@@ -406,9 +255,6 @@ void createItemsFromObject(int oid)
 	}
 }
 
-int MonsterItems;
-int ObjectItems;
-
 void DropAllItems()
 {
 	MonsterItems = numitems;
@@ -423,32 +269,21 @@ void DropAllItems()
 	ObjectItems = numitems;
 	for (int i = 0; i < nobjects; i++) {
 		int oid = objectactive[i];
-		createItemsFromObject(oid);
+		CreateItemsFromObject(oid);
 	}
 }
-
-struct Configuration {
-	uint32_t startSeed = 0;
-	uint32_t seedCount = 1;
-	bool quiet = false;
-	bool asciiLevels = false;
-	bool exportLevels = false;
-	int quality = 4;
-	bool verbose = false;
-};
-
-Configuration Config;
 
 void printHelp()
 {
 	std::cout << "--help         Print this message and exit" << std::endl;
-	std::cout << "--quiet        Do not print to console" << std::endl;
 	std::cout << "--ascii        Print ASCII version of levels" << std::endl;
 	std::cout << "--export       Export levels as .dun files" << std::endl;
+	std::cout << "--scanner <#>  How to analyze levels (none, puzzler, path) [default: none]" << std::endl;
 	std::cout << "--start <#>    The seed to start from" << std::endl;
 	std::cout << "--count <#>    The number of seeds to process" << std::endl;
-	std::cout << "--quality <#>  Number of levels that must be good (default 4)" << std::endl;
-	std::cout << "--verbose      Print out details about rejected seeds" << std::endl;
+	std::cout << "--quality <#>  Number of levels that must be good [default: 6]" << std::endl;
+	std::cout << "--quiet        Do print status messages" << std::endl;
+	std::cout << "--verbose      Print out details about seeds" << std::endl;
 }
 
 void ParseArguments(int argc, char **argv)
@@ -464,6 +299,23 @@ void ParseArguments(int argc, char **argv)
 			Config.asciiLevels = true;
 		} else if (arg == "--export") {
 			Config.exportLevels = true;
+		} else if (arg == "--scanner") {
+			i++;
+			if (argc <= i) {
+				std::cerr << "Missing value for --scanner" << std::endl;
+				exit(255);
+			}
+			std::string scanner = argv[i];
+			if (scanner == "none") {
+				Config.scanner = Scanners::None;
+			} else if (scanner == "puzzler") {
+				Config.scanner = Scanners::Puzzler;
+			} else if (scanner == "path") {
+				Config.scanner = Scanners::Path;
+			} else {
+				std::cerr << "Unknown scanner: " << scanner << std::endl;
+				exit(255);
+			}
 		} else if (arg == "--start") {
 			i++;
 			if (argc <= i) {
@@ -514,92 +366,45 @@ int main(int argc, char **argv)
 			prevseed = seed;
 		}
 
-		lengthPathToDlvl9 = 0;
-		seedSelection(seed);
+		SetGameSeed(seed);
 		InitQuests();
-		if (quests[Q_LTBANNER]._qactive != QUEST_NOTAVAIL) {
-			if (Config.verbose)
-				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " thrown out: Sign Quest" << std::endl;
-			continue;
-		}
-		if (quests[Q_WARLORD]._qactive != QUEST_NOTAVAIL) {
-			if (Config.verbose)
-				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " thrown out: Warlord" << std::endl;
-			continue;
-		}
 
-		if (0) {
-			glSeedTbl[currlevel] = seed;
-			InitiateLevel(9);
-			CreateDungeon();
-			FindStairCordinates();
-			CreateDungeonContent();
-			DropAllItems();
+		int startLevel = 1;
+		int maxLevels = NUMLEVELS;
 
-			std::cerr << "Game Seed: " << seed << std::endl;
-			if (Config.verbose && oobwrite)
-				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
-
-			bool foundPuzzler = false;
-			for (int i = 0; i < numitems; i++) {
-				int ii = itemactive[i];
-				foundPuzzler |= item[ii]._iMagical == ITEM_QUALITY_UNIQUE && item[ii]._iUid == 60;
-			}
-			if (!foundPuzzler)
+		if (Config.scanner == Scanners::Path) {
+			if (ShortPathSeedSkip())
 				continue;
-
-			if (Config.verbose) {
-				std::cout << "Monster Count: " << nummonsters << std::endl;
-				for (int i = 0; i < nummonsters; i++) {
-					std::cout << "Monster " << i << ": " << monster[monstactive[i]].mName << " (" << monster[monstactive[i]]._mRndSeed << ")" << std::endl;
-				}
-				std::cout << std::endl;
-				std::cout << "Object Count: " << nobjects << std::endl;
-				for (int i = 0; i < nobjects; i++) {
-					int oid = objectactive[i];
-					char objstr[50];
-					GetObjectStr(oid, objstr);
-					std::cout << "Object " << i << ": " << objstr << " (" << object[oid]._oRndSeed << ")" << std::endl;
-				}
-				std::cout << std::endl;
-				std::cout << "Item Count: " << numitems << std::endl;
-				for (int i = 0; i < numitems; i++) {
-					std::string prefix = "";
-					if (i >= ObjectItems)
-						prefix = "Object ";
-					else if (i >= MonsterItems)
-						prefix = "Monster ";
-					std::cout << prefix << "Item " << i << ": " << item[itemactive[i]]._iIName << " (" << item[itemactive[i]]._iSeed << ")" << std::endl;
-				}
-			}
-
-			if (Config.asciiLevels)
-				printAsciiLevel(Spawn, StairsDown, Path);
-			if (Config.exportLevels)
-				ExportDun(seed);
+		} else if (Config.scanner == Scanners::Puzzler) {
+			startLevel = 9;
+			maxLevels = startLevel + 1;
+			// Force Dungeon Seed
+			glSeedTbl[startLevel] = seed;
 		}
 
 		if (Config.verbose)
 			std::cerr << "Game Seeds: " << seed << std::endl;
 
-		for (int level = 1; level < NUMLEVELS; level++) {
+		for (int level = startLevel; level < maxLevels; level++) {
+			// Generate
 			InitiateLevel(level);
 			CreateDungeon();
-			FindStairCordinates();
+			InitTriggers();
+			CreateDungeonContent();
 
 			if (Config.verbose && oobwrite)
 				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
 
-			if (!IsGoodLevel()) {
-				if (level > Config.quality || Config.verbose) {
-					std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " quality: ";
-					for (int p = 0; p < level - 1; p++) {
-						std::cout << "+";
-					}
-					std::cout << " (" << (level - 1) << ")" << std::endl;
+			// Analyze
+			FindStairCordinates();
+
+			if (Config.scanner == Scanners::Path) {
+				if (!ShortPathSearch())
 					break;
-				}
-				break;
+			} else if (Config.scanner == Scanners::Puzzler) {
+				DropAllItems();
+				if (!SearchForPuzzler())
+					break;
 			}
 
 			if (Config.asciiLevels)
