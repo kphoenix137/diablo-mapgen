@@ -17,10 +17,10 @@ inline void WriteLE16(FILE *out, uint16_t val)
 	fwrite(&val, 1, 2, out);
 }
 
-void ExportDun(int seed)
+void ExportDun(uint32_t seed)
 {
 	char fileName[32];
-	sprintf(fileName, "%d-%d-%d.dun", seed, currlevel, glSeedTbl[currlevel]);
+	sprintf(fileName, "%u-%u-%u.dun", seed, currlevel, glSeedTbl[currlevel]);
 	FILE *dunFile = fopen(fileName, "wb");
 
 	WriteLE16(dunFile, DMAXX);
