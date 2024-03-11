@@ -37,7 +37,7 @@ int questdebug = -1;
 
 uint64_t micros()
 {
-	auto now = std::chrono::high_resolution_clock::now();
+	auto now = std::chrono::steady_clock::now();
 	auto since_epoch = now.time_since_epoch();
 	return std::chrono::duration_cast<std::chrono::microseconds>(since_epoch).count();
 }
