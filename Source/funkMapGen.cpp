@@ -32,9 +32,12 @@ namespace {
 
 constexpr uint64_t ProgressInterval = 10 * 1000 * 1000;
 
+BYTE previousLevelType = DTYPE_NONE;
+
 void InitEngine()
 {
 	gnDifficulty = DIFF_NORMAL;
+	leveltype = DTYPE_NONE;
 
 	DRLG_PreLoadL2SP();
 	DRLG_PreLoadDiabQuads();
@@ -53,24 +56,20 @@ void InitiateLevel(int level)
 	oobread = false;
 	oobwrite = false;
 
+	if (level > 12)
+		leveltype = DTYPE_HELL;
+	else if (level > 8)
+		leveltype = DTYPE_CAVES;
+	else if (level > 4)
+		leveltype = DTYPE_CATACOMBS;
+	else if (level > 0)
+		leveltype = DTYPE_CATACOMBS;
+
 	InitVision();
 
-	switch (currlevel) {
-	case 1:
-		leveltype = DTYPE_CATHEDRAL;
-		break;
-	case 5:
-		leveltype = DTYPE_CATACOMBS;
-		break;
-	case 9:
-		leveltype = DTYPE_CAVES;
-		break;
-	case 13:
-		leveltype = DTYPE_HELL;
-		break;
-	default:
+	if (leveltype == previousLevelType)
 		return;
-	}
+	previousLevelType = leveltype;
 
 	LoadLvlGFX();
 	FillSolidBlockTbls();
@@ -109,7 +108,7 @@ void FindStairCordinates()
 	}
 }
 
-int CreateDungeon(bool breakOnFailure, bool breakOnSuccess = false)
+int CreateDungeon(bool breakOnSuccess, bool breakOnFailure)
 {
 	int levelSeed = -1;
 	uint32_t lseed = glSeedTbl[currlevel];
@@ -125,12 +124,16 @@ int CreateDungeon(bool breakOnFailure, bool breakOnSuccess = false)
 	return levelSeed;
 }
 
-void CreateDungeonContent()
+void InitDungeonMonsters()
 {
 	InitLevelMonsters();
-
 	SetRndSeed(glSeedTbl[currlevel]);
 	GetLevelMTypes();
+}
+
+void CreateDungeonContent()
+{
+	InitDungeonMonsters();
 
 	InitThemes();
 	SetRndSeed(glSeedTbl[currlevel]);
@@ -279,7 +282,12 @@ void printHelp()
 	std::cout << "--help         Print this message and exit" << std::endl;
 	std::cout << "--ascii        Print ASCII version of levels" << std::endl;
 	std::cout << "--export       Export levels as .dun files" << std::endl;
-	std::cout << "--scanner <#>  How to analyze levels (none, puzzler, path, pattern) [default: none]" << std::endl;
+	std::cout << "--scanner <#>  How to analyze levels [default: none]" << std::endl;
+	std::cout << "                   none: No analyzing" << std::endl;
+	std::cout << "                   puzzler: Search for Naj's Puzzler on level 9" << std::endl;
+	std::cout << "                   path: Search for the shortst stairs walk path" << std::endl;
+	std::cout << "                   pattern: Search a set tile pattern" << std::endl;
+	std::cout << "                   gameseed: Search for GameSeeds with LevelSeed" << std::endl;
 	std::cout << "--start <#>    The seed to start from" << std::endl;
 	std::cout << "--count <#>    The number of seeds to process" << std::endl;
 	std::cout << "--quality <#>  Number of levels that must be good [default: 6]" << std::endl;
@@ -315,6 +323,8 @@ void ParseArguments(int argc, char **argv)
 				Config.scanner = Scanners::Path;
 			} else if (scanner == "pattern") {
 				Config.scanner = Scanners::Pattern;
+			} else if (scanner == "gameseed") {
+				Config.scanner = Scanners::GameSeed;
 			} else {
 				std::cerr << "Unknown scanner: " << scanner << std::endl;
 				exit(255);
@@ -339,7 +349,7 @@ void ParseArguments(int argc, char **argv)
 				std::cerr << "Missing value for --quality" << std::endl;
 				exit(255);
 			}
-			Config.quality = std::stoi(argv[i]);
+			Config.quality = std::stoll(argv[i]);
 		} else if (arg == "--verbose") {
 			Config.verbose = true;
 		} else {
@@ -374,29 +384,41 @@ int main(int argc, char **argv)
 
 		int startLevel = 1;
 		int maxLevels = NUMLEVELS;
+		bool breakOnSuccess = false;
 		bool breakOnFailure = false;
+
+		if (Config.scanner != Scanners::Path && Config.scanner != Scanners::None) {
+			startLevel = 9;
+			maxLevels = startLevel + 1;
+		}
 
 		if (Config.scanner == Scanners::Path) {
 			if (ShortPathSeedSkip())
 				continue;
-		} else if (Config.scanner == Scanners::Puzzler) {
-			startLevel = 9;
-			maxLevels = startLevel + 1;
 		} else if (Config.scanner == Scanners::Pattern) {
 			glSeedTbl[9] = seed;
-			startLevel = 9;
-			maxLevels = startLevel + 1;
 			breakOnFailure = true;
+		} else if (Config.scanner == Scanners::GameSeed) {
+			breakOnSuccess = true;
 		}
 
 		if (Config.verbose)
 			std::cerr << "Game Seeds: " << seed << std::endl;
 
 		for (int level = startLevel; level < maxLevels; level++) {
-			// Generate
 			InitiateLevel(level);
-			int levelSeed = CreateDungeon(breakOnFailure);
-			if (Config.scanner != Scanners::Pattern) {
+
+			if (Config.scanner == Scanners::GameSeed) {
+				InitDungeonMonsters();
+				bool hasLavaLoards = false;
+				for (int i = 0; i < nummtypes && !hasLavaLoards; i++)
+					hasLavaLoards = Monsters[i].mtype == MT_WMAGMA;
+				if (!hasLavaLoards)
+					break;
+			}
+
+			int levelSeed = CreateDungeon(breakOnSuccess, breakOnFailure);
+			if (Config.scanner != Scanners::Pattern && Config.scanner != Scanners::GameSeed) {
 				InitTriggers();
 				CreateDungeonContent();
 
@@ -418,6 +440,10 @@ int main(int argc, char **argv)
 				if (levelSeed == -1 || !MatchPattern())
 					break;
 				std::cout << "Level Seed: " << (uint32_t)levelSeed << std::endl;
+			} else if (Config.scanner == Scanners::GameSeed) {
+				if (levelSeed != Config.quality)
+					break;
+				std::cout << "Game Seed: " << seed << std::endl;
 			}
 
 			if (Config.asciiLevels)

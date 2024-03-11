@@ -7,6 +7,7 @@ enum class Scanners {
 	Path,
 	Puzzler,
 	Pattern,
+	GameSeed,
 };
 
 struct Configuration {
@@ -16,7 +17,7 @@ struct Configuration {
 	bool quiet = false;
 	bool asciiLevels = false;
 	bool exportLevels = false;
-	int quality = 6;
+	uint32_t quality = 6;
 	bool verbose = false;
 };
 
