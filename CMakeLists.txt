@@ -21,6 +21,10 @@ if (NOT (CMAKE_CXX_COMPILER_ID MATCH "GNU") OR NOT (CMAKE_CXX_COMPILER_VERSION V
   endif()
 endif()
 
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+endif()
+
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions -funroll-loops -march=native")
   if(CMAKE_BUILD_TYPE MATCHES "GNU")
