@@ -85,6 +85,7 @@ void InitTriggers()
 		InitL3Triggers();
 	else if (leveltype == DTYPE_HELL)
 		InitL4Triggers();
+	Freeupstairs();
 }
 
 void FindStairCordinates()

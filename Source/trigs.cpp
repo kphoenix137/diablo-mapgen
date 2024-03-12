@@ -283,3 +283,19 @@ void InitVPTriggers()
 	trigs[0]._ty = 32;
 	trigs[0]._tmsg = WM_DIABRTNLVL;
 }
+
+void Freeupstairs()
+{
+	int i, tx, ty, xx, yy;
+
+	for (i = 0; i < numtrigs; i++) {
+		tx = trigs[i]._tx;
+		ty = trigs[i]._ty;
+
+		for (yy = -2; yy <= 2; yy++) {
+			for (xx = -2; xx <= 2; xx++) {
+				dFlags[tx + xx][ty + yy] |= BFLAG_POPULATED;
+			}
+		}
+	}
+}

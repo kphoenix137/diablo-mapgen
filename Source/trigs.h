@@ -22,5 +22,6 @@ void InitSKingTriggers();
 void InitSChambTriggers();
 void InitPWaterTriggers();
 void InitVPTriggers();
+void Freeupstairs();
 
 #endif /* __TRIGS_H__ */
