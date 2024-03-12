@@ -9,18 +9,6 @@ project(DiabloMapGen
   LANGUAGES C CXX)
 set(PROJECT_VERSION_WITH_SUFFIX "${VERSION_PREFIX}${VERSION_SUFFIX}")
 
-# GCC 12 and 13 produces a none working result with LTO enabled (for Linux x86_64)
-if (NOT (CMAKE_CXX_COMPILER_ID MATCH "GNU") OR NOT (CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "12" OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "13"))
-  # Check for LTO support
-  include(CheckIPOSupported)
-  check_ipo_supported(RESULT lto_supported OUTPUT error)
-
-  # Enable LTO if supported
-  if(lto_supported)
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
-  endif()
-endif()
-
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 endif()
