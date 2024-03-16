@@ -406,6 +406,8 @@ int main(int argc, char **argv)
 		if (Config.verbose)
 			std::cerr << "Game Seeds: " << seed << std::endl;
 
+		memset(UniqueItemFlag, 0, sizeof(UniqueItemFlag));
+
 		for (int level = startLevel; level < maxLevels; level++) {
 			InitiateLevel(level);
 
