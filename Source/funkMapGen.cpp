@@ -63,7 +63,7 @@ void InitiateLevel(int level)
 	else if (level > 4)
 		leveltype = DTYPE_CATACOMBS;
 	else if (level > 0)
-		leveltype = DTYPE_CATACOMBS;
+		leveltype = DTYPE_CATHEDRAL;
 
 	InitVision();
 
