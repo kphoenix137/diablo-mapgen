@@ -437,6 +437,7 @@ int main(int argc, char **argv)
 				DropAllItems();
 				if (!SearchForPuzzler())
 					break;
+				std::cout << "Game Seed: " << seed << std::endl;
 			} else if (Config.scanner == Scanners::Pattern) {
 				if (levelSeed == -1 || !MatchPattern())
 					break;
