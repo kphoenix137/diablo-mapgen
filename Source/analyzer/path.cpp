@@ -115,8 +115,8 @@ int CalcStairsChebyshevDistance()
 
 bool IsGoodLevel()
 {
-	int maxDistance = 20;
-	int lengthMaxPathToDlvl9 = 72;
+	int maxDistance = 25;
+	int lengthMaxPathToDlvl9 = 100;
 
 	if (leveltype == DTYPE_CATACOMBS || leveltype == DTYPE_CATHEDRAL) {
 		int cDistance = CalcStairsChebyshevDistance();
@@ -134,7 +134,7 @@ bool IsGoodLevel()
 			return false;
 	} else //(leveltype == DTYPE_CAVES || leveltype == DTYPE_HELL)
 	{
-		maxDistance = 15;
+		maxDistance = 25;
 
 		bool isStairsVisibile = IsVisibleSpawn() || IsVisiblePrevious();
 		StairsDownPrevious = StairsDown;
@@ -185,7 +185,7 @@ bool ShortPathSearch()
 		for (int p = 0; p < level - 1; p++) {
 			std::cout << "+";
 		}
-		std::cout << " (" << (level - 1) << ")" << std::endl;
+		std::cout << " (" << (level - 1) << " in " << lengthPathToDlvl9 << " steps)" << std::endl;
 		return false;
 	}
 	return false;
