@@ -112,12 +112,12 @@ void printAsciiLevel()
 				std::cout << "^";
 			else if (Point { bobx, boby } == StairsDown)
 				std::cout << "v";
-			else if (Point { bobx, boby } == POI)
-				std::cout << "*";
 			else if (steps[bobx][boby])
 				std::cout << "=";
 			else if (nSolidTable[dPiece[bobx][boby]])
 				std::cout << "#";
+			else if (Point { bobx, boby } == POI)
+				std::cout << "*";
 			else
 				std::cout << " ";
 		}

@@ -52,6 +52,7 @@ void ShutDownEngine()
 
 void InitiateLevel(int level)
 {
+	POI = { -1, -1 };
 	currlevel = level;
 
 	oobread = false;
@@ -306,6 +307,7 @@ void printHelp()
 	std::cout << "                   none: No analyzing" << std::endl;
 	std::cout << "                   puzzler: Search for Naj's Puzzler on level 9" << std::endl;
 	std::cout << "                   path: Search for the shortst stairs walk path" << std::endl;
+	std::cout << "                   warp: Find seeds with a warp on level 15" << std::endl;
 	std::cout << "                   pattern: Search a set tile pattern" << std::endl;
 	std::cout << "                   gameseed: Search for GameSeeds with LevelSeed" << std::endl;
 	std::cout << "--start <#>    The seed to start from" << std::endl;
@@ -341,6 +343,8 @@ void ParseArguments(int argc, char **argv)
 				Config.scanner = Scanners::Puzzler;
 			} else if (scanner == "path") {
 				Config.scanner = Scanners::Path;
+			} else if (scanner == "warp") {
+				Config.scanner = Scanners::Warp;
 			} else if (scanner == "pattern") {
 				Config.scanner = Scanners::Pattern;
 			} else if (scanner == "gameseed") {
@@ -407,7 +411,10 @@ int main(int argc, char **argv)
 		bool breakOnSuccess = false;
 		bool breakOnFailure = false;
 
-		if (Config.scanner != Scanners::Path && Config.scanner != Scanners::None) {
+		if (Config.scanner == Scanners::Warp) {
+			startLevel = 15;
+			maxLevels = startLevel + 1;
+		} else if (Config.scanner != Scanners::Path && Config.scanner != Scanners::None) {
 			startLevel = 9;
 			maxLevels = startLevel + 1;
 		}
@@ -443,6 +450,8 @@ int main(int argc, char **argv)
 			if (Config.scanner != Scanners::Pattern && Config.scanner != Scanners::GameSeed) {
 				InitTriggers();
 				CreateDungeonContent();
+				if (level == 15)
+					POI = { quests[Q_BETRAYER]._qtx, quests[Q_BETRAYER]._qty };
 
 				// Analyze
 				FindStairCordinates();
@@ -454,6 +463,10 @@ int main(int argc, char **argv)
 			if (Config.scanner == Scanners::Path) {
 				if (!ShortPathSearch())
 					break;
+			} else if (Config.scanner == Scanners::Warp) {
+				if (nSolidTable[dPiece[POI.x][POI.y]])
+					break;
+				std::cout << "Game Seed: " << seed << std::endl;
 			} else if (Config.scanner == Scanners::Puzzler) {
 				DropAllItems();
 				if (!SearchForPuzzler())

@@ -6,6 +6,7 @@ enum class Scanners {
 	None,
 	Path,
 	Puzzler,
+	Warp,
 	Pattern,
 	GameSeed,
 };
