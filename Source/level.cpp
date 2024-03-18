@@ -82,6 +82,51 @@ void ExportDun(uint32_t seed)
 	fclose(dunFile);
 }
 
+std::string red(std::string text)
+{
+#ifdef _WIN32
+	return text;
+#else
+	return "\033[0;31m" + text + "\033[0m";
+#endif
+}
+
+std::string green(std::string text)
+{
+#ifdef _WIN32
+	return text;
+#else
+	return "\033[1;32m" + text + "\033[0m";
+#endif
+}
+
+std::string yellow(std::string text)
+{
+#ifdef _WIN32
+	return text;
+#else
+	return "\033[1;33m" + text + "\033[0m";
+#endif
+}
+
+std::string gray(std::string text)
+{
+#ifdef _WIN32
+	return text;
+#else
+	return "\033[0;90m" + text + "\033[0m";
+#endif
+}
+
+std::string cyan(std::string text)
+{
+#ifdef _WIN32
+	return text;
+#else
+	return "\033[0;36m" + text + "\033[0m";
+#endif
+}
+
 void printAsciiLevel()
 {
 	bool steps[MAXDUNX][MAXDUNY];
@@ -109,15 +154,15 @@ void printAsciiLevel()
 	for (int boby = 16; boby < MAXDUNY - 17; boby++) {
 		for (int bobx = 16; bobx < MAXDUNX - 17; bobx++) {
 			if (Point { bobx, boby } == Spawn)
-				std::cout << "^";
+				std::cout << red("^");
 			else if (Point { bobx, boby } == StairsDown)
-				std::cout << "v";
+				std::cout << green("v");
 			else if (steps[bobx][boby])
-				std::cout << "=";
+				std::cout << cyan("=");
 			else if (nSolidTable[dPiece[bobx][boby]])
-				std::cout << "#";
+				std::cout << gray("#");
 			else if (Point { bobx, boby } == POI)
-				std::cout << "*";
+				std::cout << yellow("*");
 			else
 				std::cout << " ";
 		}
