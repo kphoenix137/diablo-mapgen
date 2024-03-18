@@ -7,12 +7,15 @@
 
 bool SearchForPuzzler()
 {
-	bool foundPuzzler = false;
+	POI = { -1, -1 };
 	for (int i = 0; i < numitems; i++) {
 		int ii = itemactive[i];
-		foundPuzzler |= item[ii]._iMagical == ITEM_QUALITY_UNIQUE && item[ii]._iUid == 60;
+		if (item[ii]._iMagical == ITEM_QUALITY_UNIQUE && item[ii]._iUid == 60) {
+			POI = { item[ii]._ix, item[ii]._iy };
+			break;
+		}
 	}
-	if (!foundPuzzler)
+	if (POI == Point { -1, -1 })
 		return false;
 
 	if (Config.verbose) {

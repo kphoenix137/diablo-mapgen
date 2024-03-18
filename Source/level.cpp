@@ -6,6 +6,7 @@
 
 #include "../types.h"
 #include "engine.h"
+#include "funkMapGen.h"
 #include "gendung.h"
 #include "monstdat.h"
 #include "monster.h"
@@ -81,7 +82,7 @@ void ExportDun(uint32_t seed)
 	fclose(dunFile);
 }
 
-void printAsciiLevel(Point spawn, Point stairsDown, char Path[MAX_PATH_LENGTH])
+void printAsciiLevel()
 {
 	bool steps[MAXDUNX][MAXDUNY];
 
@@ -91,7 +92,7 @@ void printAsciiLevel(Point spawn, Point stairsDown, char Path[MAX_PATH_LENGTH])
 		}
 	}
 
-	Point position = spawn;
+	Point position = Spawn;
 	steps[position.x][position.y] = true;
 
 	const char pathxdir[9] = { 0, 0, -1, 1, 0, -1, 1, 1, -1 };
@@ -107,10 +108,12 @@ void printAsciiLevel(Point spawn, Point stairsDown, char Path[MAX_PATH_LENGTH])
 
 	for (int boby = 16; boby < MAXDUNY - 17; boby++) {
 		for (int bobx = 16; bobx < MAXDUNX - 17; bobx++) {
-			if (spawn.x == bobx && spawn.y == boby)
+			if (Point { bobx, boby } == Spawn)
 				std::cout << "^";
-			else if (stairsDown.x == bobx && stairsDown.y == boby)
+			else if (Point { bobx, boby } == StairsDown)
 				std::cout << "v";
+			else if (Point { bobx, boby } == POI)
+				std::cout << "*";
 			else if (steps[bobx][boby])
 				std::cout << "=";
 			else if (nSolidTable[dPiece[bobx][boby]])

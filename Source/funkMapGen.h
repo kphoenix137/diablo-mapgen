@@ -26,6 +26,7 @@ extern int ObjectItems;
 
 extern Point Spawn;
 extern Point StairsDown;
+extern Point POI;
 
 extern char Path[MAX_PATH_LENGTH];
 

@@ -21,8 +21,9 @@
 int MonsterItems;
 int ObjectItems;
 
-Point Spawn;
-Point StairsDown;
+Point Spawn = { -1, -1 };
+Point StairsDown = { -1, -1 };
+Point POI = { -1, -1 };
 
 char Path[MAX_PATH_LENGTH];
 
@@ -469,7 +470,7 @@ int main(int argc, char **argv)
 			}
 
 			if (Config.asciiLevels)
-				printAsciiLevel(Spawn, StairsDown, Path);
+				printAsciiLevel();
 			if (Config.exportLevels)
 				ExportDun(seed);
 		}
