@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "engine.h"
 
 enum class Scanners {
@@ -14,6 +16,7 @@ enum class Scanners {
 struct Configuration {
 	uint32_t startSeed = 0;
 	uint32_t seedCount = 1;
+	std::string seedFile;
 	Scanners scanner = Scanners::None;
 	bool quiet = false;
 	bool asciiLevels = false;

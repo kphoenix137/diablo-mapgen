@@ -1,6 +1,9 @@
 #include "funkMapGen.h"
 
 #include <iostream>
+#include <limits>
+#include <fstream>
+#include <vector>
 
 #include "analyzer/path.h"
 #include "analyzer/puzzler.h"
@@ -312,6 +315,7 @@ void printHelp()
 	std::cout << "                   gameseed: Search for GameSeeds with LevelSeed" << std::endl;
 	std::cout << "--start <#>    The seed to start from" << std::endl;
 	std::cout << "--count <#>    The number of seeds to process" << std::endl;
+	std::cout << "--seeds <#>    A file to read seeds from" << std::endl;
 	std::cout << "--quality <#>  Number of levels that must be good [default: 6]" << std::endl;
 	std::cout << "--quiet        Do print status messages" << std::endl;
 	std::cout << "--verbose      Print out details about seeds" << std::endl;
@@ -319,6 +323,9 @@ void printHelp()
 
 void ParseArguments(int argc, char **argv)
 {
+	bool fromFile = false;
+	bool hasCount = false;
+
 	for (int i = 1; i < argc; i++) {
 		std::string arg = argv[i];
 		if (arg == "--help") {
@@ -353,6 +360,14 @@ void ParseArguments(int argc, char **argv)
 				std::cerr << "Unknown scanner: " << scanner << std::endl;
 				exit(255);
 			}
+		} else if (arg == "--seeds") {
+			i++;
+			if (argc <= i) {
+				std::cerr << "Missing filename for --seeds" << std::endl;
+				exit(255);
+			}
+			fromFile = true;
+			Config.seedFile = argv[i];
 		} else if (arg == "--start") {
 			i++;
 			if (argc <= i) {
@@ -366,6 +381,7 @@ void ParseArguments(int argc, char **argv)
 				std::cerr << "Missing value for --count" << std::endl;
 				exit(255);
 			}
+			hasCount = true;
 			Config.seedCount = std::stoll(argv[i]);
 		} else if (arg == "--quality") {
 			i++;
@@ -381,6 +397,32 @@ void ParseArguments(int argc, char **argv)
 			exit(255);
 		}
 	}
+
+	if (fromFile && !hasCount) {
+		Config.seedCount = std::numeric_limits<uint32_t>::max();
+	}
+}
+
+std::vector<uint32_t> SeedsFromFile;
+
+void readFromFile()
+{
+	if (Config.seedFile.empty()) {
+		return;
+	}
+	std::ifstream file(Config.seedFile);
+	if (!file.is_open()) {
+		std::cerr << "Unable to read seeds file: " << Config.seedFile << std::endl;
+		exit(255);
+	}
+
+	std::string line;
+	while (std::getline(file, line)) {
+		SeedsFromFile.push_back(std::stoll(line));
+	}
+
+	if (file.is_open())
+		file.close();
 }
 
 }
@@ -391,16 +433,26 @@ int main(int argc, char **argv)
 	InitEngine();
 
 	int yseconds = micros();
-	uint32_t prevseed = Config.startSeed;
-	for (uint32_t seed = Config.startSeed; seed < Config.startSeed + Config.seedCount; seed++) {
+	uint32_t prevseed = 0;
+
+	readFromFile();
+
+	for (uint32_t seedIndex = 0; seedIndex < Config.seedCount; seedIndex++) {
+		uint32_t seed = seedIndex + Config.startSeed;
+		if (!SeedsFromFile.empty()) {
+			if (seed >= SeedsFromFile.size())
+				break;
+			seed = SeedsFromFile[seed];
+		}
+
 		int elapsed = micros() - yseconds;
 		if (!Config.quiet && elapsed >= ProgressInterval) {
-			int pct = 100 * (seed - Config.startSeed) / Config.seedCount;
-			int speed = ((seed - prevseed) / 10);
-			int eta = (Config.seedCount - (seed - Config.startSeed)) / speed;
+			int pct = 100 * seedIndex / Config.seedCount;
+			int speed = ((seedIndex - prevseed) / 10);
+			int eta = (Config.seedCount - seedIndex) / speed;
 			std::cerr << "Progress: " << pct << "% eta: " << eta << "s (" << speed << "seed/s)" << std::endl;
 			yseconds += elapsed;
-			prevseed = seed;
+			prevseed = seedIndex;
 		}
 
 		SetGameSeed(seed);
@@ -440,21 +492,24 @@ int main(int argc, char **argv)
 			if (Config.scanner == Scanners::GameSeed) {
 				InitDungeonMonsters();
 				bool hasLavaLoards = false;
+
 				for (int i = 0; i < nummtypes && !hasLavaLoards; i++)
 					hasLavaLoards = Monsters[i].mtype == MT_WMAGMA;
+
 				if (!hasLavaLoards)
 					break;
 			}
 
 			int levelSeed = CreateDungeon(breakOnSuccess, breakOnFailure);
+
 			if (Config.scanner != Scanners::Pattern && Config.scanner != Scanners::GameSeed) {
 				InitTriggers();
 				CreateDungeonContent();
+
 				if (level == 15)
 					POI = { quests[Q_BETRAYER]._qtx, quests[Q_BETRAYER]._qty };
 
-				// Analyze
-				FindStairCordinates();
+				FindStairCordinates(); // Analyze
 			}
 
 			if (Config.verbose && oobwrite)
@@ -466,19 +521,24 @@ int main(int argc, char **argv)
 			} else if (Config.scanner == Scanners::Warp) {
 				if (nSolidTable[dPiece[POI.x][POI.y]])
 					break;
+
 				std::cout << "Game Seed: " << seed << std::endl;
 			} else if (Config.scanner == Scanners::Puzzler) {
 				DropAllItems();
+
 				if (!SearchForPuzzler())
 					break;
+
 				std::cout << "Game Seed: " << seed << std::endl;
 			} else if (Config.scanner == Scanners::Pattern) {
 				if (levelSeed == -1 || !MatchPattern())
 					break;
+
 				std::cout << "Level Seed: " << (uint32_t)levelSeed << std::endl;
 			} else if (Config.scanner == Scanners::GameSeed) {
 				if (levelSeed != Config.quality)
 					break;
+
 				std::cout << "Game Seed: " << seed << std::endl;
 			}
 
