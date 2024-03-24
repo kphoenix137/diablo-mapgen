@@ -7,6 +7,7 @@
 enum class Scanners {
 	None,
 	Path,
+	Quest,
 	Puzzler,
 	Warp,
 	Pattern,

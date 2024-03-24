@@ -8,6 +8,7 @@
 #include "analyzer/path.h"
 #include "analyzer/puzzler.h"
 #include "analyzer/pattern.h"
+#include "analyzer/quest.h"
 #include "drlg_l1.h"
 #include "drlg_l2.h"
 #include "drlg_l3.h"
@@ -326,8 +327,6 @@ void ParseArguments(int argc, char **argv)
 	bool fromFile = false;
 	bool hasCount = false;
 
-	std::cerr << "Parsing arguments" << std::endl;
-
 	for (int i = 1; i < argc; i++) {
 		std::string arg = argv[i];
 		if (arg == "--help") {
@@ -352,6 +351,8 @@ void ParseArguments(int argc, char **argv)
 				Config.scanner = Scanners::Puzzler;
 			} else if (scanner == "path") {
 				Config.scanner = Scanners::Path;
+			} else if (scanner == "quest") {
+				Config.scanner = Scanners::Quest;
 			} else if (scanner == "warp") {
 				Config.scanner = Scanners::Warp;
 			} else if (scanner == "pattern") {
@@ -460,6 +461,9 @@ int main(int argc, char **argv)
 			prevseed = seedIndex;
 		}
 
+		if (Config.verbose)
+			std::cerr << "Processing: " << seed << std::endl;
+
 		SetGameSeed(seed);
 		InitQuests();
 
@@ -476,18 +480,18 @@ int main(int argc, char **argv)
 			maxLevels = startLevel + 1;
 		}
 
-		if (Config.scanner == Scanners::Path) {
-			if (ShortPathSeedSkip())
-				continue;
+		if (Config.scanner == Scanners::Quest) {
+			if (!SkipQuest())
+				std::cout << seed << std::endl;
+			continue;
+		} else if (Config.scanner == Scanners::Path) {
+			PathScannerInit();
 		} else if (Config.scanner == Scanners::Pattern) {
 			glSeedTbl[9] = seed;
 			breakOnFailure = true;
 		} else if (Config.scanner == Scanners::GameSeed) {
 			breakOnSuccess = true;
 		}
-
-		if (Config.verbose)
-			std::cerr << "Game Seeds: " << seed << std::endl;
 
 		memset(UniqueItemFlag, 0, sizeof(UniqueItemFlag));
 

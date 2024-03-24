@@ -1,4 +1,4 @@
 #pragma once
 
-bool ShortPathSeedSkip();
+bool PathScannerInit();
 bool ShortPathSearch();
