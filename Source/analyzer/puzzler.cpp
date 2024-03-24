@@ -19,27 +19,27 @@ bool SearchForPuzzler()
 		return false;
 
 	if (Config.verbose) {
-		std::cout << "Monster Count: " << nummonsters << std::endl;
+		std::cerr << "Monster Count: " << nummonsters << std::endl;
 		for (int i = 0; i < nummonsters; i++) {
-			std::cout << "Monster " << i << ": " << monster[monstactive[i]].mName << " (" << monster[monstactive[i]]._mRndSeed << ")" << std::endl;
+			std::cerr << "Monster " << i << ": " << monster[monstactive[i]].mName << " (" << monster[monstactive[i]]._mRndSeed << ")" << std::endl;
 		}
-		std::cout << std::endl;
-		std::cout << "Object Count: " << nobjects << std::endl;
+		std::cerr << std::endl;
+		std::cerr << "Object Count: " << nobjects << std::endl;
 		for (int i = 0; i < nobjects; i++) {
 			int oid = objectactive[i];
 			char objstr[50];
 			GetObjectStr(oid, objstr);
-			std::cout << "Object " << i << ": " << objstr << " (" << object[oid]._oRndSeed << ")" << std::endl;
+			std::cerr << "Object " << i << ": " << objstr << " (" << object[oid]._oRndSeed << ")" << std::endl;
 		}
-		std::cout << std::endl;
-		std::cout << "Item Count: " << numitems << std::endl;
+		std::cerr << std::endl;
+		std::cerr << "Item Count: " << numitems << std::endl;
 		for (int i = 0; i < numitems; i++) {
 			std::string prefix = "";
 			if (i >= ObjectItems)
 				prefix = "Object ";
 			else if (i >= MonsterItems)
 				prefix = "Monster ";
-			std::cout << prefix << "Item " << i << ": " << item[itemactive[i]]._iIName << " (" << item[itemactive[i]]._iSeed << ")" << std::endl;
+			std::cerr << prefix << "Item " << i << ": " << item[itemactive[i]]._iIName << " (" << item[itemactive[i]]._iSeed << ")" << std::endl;
 		}
 	}
 

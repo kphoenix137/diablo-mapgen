@@ -175,18 +175,11 @@ bool ShortPathSeedSkip()
 
 bool ShortPathSearch()
 {
-	if (IsGoodLevel()) {
-		return true;
-	}
-
 	int level = currlevel;
-	if (level > Config.quality || Config.verbose) {
-		std::cout << "Game Seed: " << sgGameInitInfo.dwSeed << " quality: ";
-		for (int p = 0; p < level - 1; p++) {
-			std::cout << "+";
-		}
-		std::cout << " (" << (level - 1) << " in " << lengthPathToDlvl9 << " steps)" << std::endl;
+	if (level == Config.quality) {
+		std::cout << sgGameInitInfo.dwSeed << " (level " << (level - 1) << " in " << lengthPathToDlvl9 << " steps)" << std::endl;
 		return false;
 	}
-	return false;
+
+	return IsGoodLevel();
 }

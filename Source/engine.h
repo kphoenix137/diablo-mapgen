@@ -1,6 +1,7 @@
 #pragma once
 #include "../types.h"
 #include "gendung.h"
+#include "objects.h"
 
 #include <string>
 #define assert_fail(exp) ((void)(exp))
@@ -71,6 +72,24 @@ inline void SetDungeon(int x, int y, BYTE value)
 		return;
 	}
 	dungeon[x][y] = value;
+}
+
+inline void SetObjectSelFlag(int id, int value)
+{
+	if (id < 0 || id >= MAXOBJECTS) {
+		oobwrite = true;
+		return;
+	}
+	object[id]._oSelFlag = value;
+}
+
+inline void IncrementObjectFrame(int id, int value)
+{
+	if (id < 0 || id >= MAXOBJECTS) {
+		oobwrite = true;
+		return;
+	}
+	object[id]._oAnimFrame += value;
 }
 
 BYTE *DiabloAllocPtr(DWORD dwBytes);

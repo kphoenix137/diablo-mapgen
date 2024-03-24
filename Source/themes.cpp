@@ -748,8 +748,8 @@ void Theme_Library(int t)
 				AddObject(OBJ_BOOKSTAND, xp, yp);
 				if (random_(0, 2 * librnd[leveltype - 1]) != 0) { /// BUGFIX: check dObject[xp][yp] was populated by AddObject
 					oi = dObject[xp][yp] - 1;
-					object[oi]._oSelFlag = 0;
-					object[oi]._oAnimFrame += 2;
+					SetObjectSelFlag(oi, 0);
+					IncrementObjectFrame(oi, 2);
 				}
 			}
 		}

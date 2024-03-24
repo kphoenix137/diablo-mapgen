@@ -4,6 +4,8 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
   message(WARNING [[In-source build detected, please eg. create a new directory and use `cmake ..`]])
 endif()
 
+set(BIN_TARGET diablo-mapgen)
+
 project(DiabloMapGen
   VERSION "0.1.0"
   LANGUAGES C CXX)
@@ -20,6 +22,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   endif()
   if(CMAKE_BUILD_TYPE MATCHES "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
   endif()
   if(CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
@@ -30,8 +33,6 @@ elseif(MSVC)
 endif()
 
 set(CMAKE_CXX_STANDARD 20)
-
-set(BIN_TARGET diablo-mapgen)
 
 add_executable(${BIN_TARGET}
   Source/drlg_l1.cpp
@@ -60,6 +61,10 @@ add_executable(${BIN_TARGET}
   Source/themes.cpp
   Source/trigs.cpp
   )
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND CMAKE_BUILD_TYPE MATCHES "Debug")
+	target_link_libraries(${BIN_TARGET} PUBLIC "-fsanitize=undefined")
+endif()
 
 if(CMAKE_STRIP)
   add_custom_command(

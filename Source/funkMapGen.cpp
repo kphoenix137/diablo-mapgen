@@ -326,6 +326,8 @@ void ParseArguments(int argc, char **argv)
 	bool fromFile = false;
 	bool hasCount = false;
 
+	std::cerr << "Parsing arguments" << std::endl;
+
 	for (int i = 1; i < argc; i++) {
 		std::string arg = argv[i];
 		if (arg == "--help") {
@@ -403,22 +405,25 @@ void ParseArguments(int argc, char **argv)
 	}
 }
 
-std::vector<uint32_t> SeedsFromFile;
+std::vector<uint32_t> SeedsFromFile = {};
 
 void readFromFile()
 {
-	if (Config.seedFile.empty()) {
+	if (Config.seedFile.empty())
 		return;
-	}
+
 	std::ifstream file(Config.seedFile);
 	if (!file.is_open()) {
 		std::cerr << "Unable to read seeds file: " << Config.seedFile << std::endl;
 		exit(255);
 	}
 
+	if (!Config.quiet)
+		std::cerr << "Loading seeds from: " << Config.seedFile << std::endl;
+
 	std::string line;
 	while (std::getline(file, line)) {
-		SeedsFromFile.push_back(std::stoll(line));
+		SeedsFromFile.push_back(std::stoll(line.substr(0, line.find(' '))));
 	}
 
 	if (file.is_open())
@@ -522,14 +527,14 @@ int main(int argc, char **argv)
 				if (nSolidTable[dPiece[POI.x][POI.y]])
 					break;
 
-				std::cout << "Game Seed: " << seed << std::endl;
+				std::cout << seed << std::endl;
 			} else if (Config.scanner == Scanners::Puzzler) {
 				DropAllItems();
 
 				if (!SearchForPuzzler())
 					break;
 
-				std::cout << "Game Seed: " << seed << std::endl;
+				std::cout << seed << std::endl;
 			} else if (Config.scanner == Scanners::Pattern) {
 				if (levelSeed == -1 || !MatchPattern())
 					break;
@@ -539,7 +544,7 @@ int main(int argc, char **argv)
 				if (levelSeed != Config.quality)
 					break;
 
-				std::cout << "Game Seed: " << seed << std::endl;
+				std::cout << seed << std::endl;
 			}
 
 			if (Config.asciiLevels)
