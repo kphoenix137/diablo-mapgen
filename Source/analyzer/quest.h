@@ -1,3 +1,8 @@
 #pragma once
 
-bool SkipQuest();
+#include "../funkMapGen.h"
+
+class ScannerQuest : public Scanner {
+public:
+	bool skipSeed() override;
+};

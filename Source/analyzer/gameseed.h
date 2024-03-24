@@ -2,8 +2,9 @@
 
 #include "../funkMapGen.h"
 
-class ScannerPuzzler : public Scanner {
+class ScannerGameSeed : public Scanner {
 public:
+	bool breakOnFailure() override;
 	bool skipLevel(int level) override;
 	bool levelMatches(int levelSeed) override;
 };

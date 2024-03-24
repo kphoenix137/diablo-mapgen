@@ -1,3 +1,5 @@
+#include "path.h"
+
 #include <iostream>
 
 #include "../../types.h"
@@ -62,8 +64,6 @@ BOOL PosOkPlayer(int pnum, int x, int y)
 
 int PathLength()
 {
-	std::memset(Path, 0, sizeof(Path));
-
 	return FindPath(PosOkPlayer, 0, Spawn.x, Spawn.y, StairsDown.x, StairsDown.y, Path);
 }
 
@@ -99,7 +99,7 @@ bool IsVisiblePrevious()
 	return isVisible[vertical][horizontal];
 }
 
-int lengthPathToDlvl9 = 0;
+int TotalTickLenth;
 
 int CalcStairsChebyshevDistance()
 {
@@ -115,59 +115,88 @@ int CalcStairsChebyshevDistance()
 
 bool IsGoodLevel()
 {
-	int maxDistance = 25;
-	int lengthMaxPathToDlvl9 = 100;
+	constexpr int ticksToTeleport = 12;
+	constexpr int ticksToWalkATile = 8;
+	int tickLenth = 0;
 
-	if (leveltype == DTYPE_CATACOMBS || leveltype == DTYPE_CATHEDRAL) {
+	if (currlevel < 9) {
 		int cDistance = CalcStairsChebyshevDistance();
-		StairsDownPrevious = StairsDown;
-
-		if (cDistance != -1 && cDistance > maxDistance)
+		if (cDistance != -1 && cDistance > MAX_PATH_LENGTH)
 			return false;
 
 		int stairsPath = PathLength();
-		lengthPathToDlvl9 = lengthPathToDlvl9 + stairsPath;
-
-		if (lengthPathToDlvl9 > lengthMaxPathToDlvl9)
-			return false;
-		if (stairsPath == 0 || stairsPath > maxDistance)
-			return false;
-	} else //(leveltype == DTYPE_CAVES || leveltype == DTYPE_HELL)
-	{
-		maxDistance = 25;
-
-		bool isStairsVisibile = IsVisibleSpawn() || IsVisiblePrevious();
-		StairsDownPrevious = StairsDown;
-
-		if (currlevel != 9 && isStairsVisibile)
-			return true;
-
-		int cDistance = CalcStairsChebyshevDistance(); // CONDITIONALLY REWORK REQUIRED: WITH TELEPORT, DLVL 10+ DEPENDING ON DESTINATION VECTOR, MOVEMENT DISTANCE WILL BE SHORTER OR LONGER
-
-		if (cDistance != -1 && cDistance > maxDistance)
+		if (stairsPath == 0)
 			return false;
 
-		int stairsPath = PathLength(); // CONDITIONALLY OBSOLETED: WITH TELEPORT, DLVL 10+ WILL NOT USE THIS PATHING. ONLY USED FOR PATHING ON DLVL9
-
-		if (stairsPath == 0 || stairsPath > maxDistance)
+		tickLenth = stairsPath * ticksToWalkATile;
+	} else if (currlevel == 9) {
+		/** @todo Calculate walk to Puzzler and TP to exit */
+		int cDistance = CalcStairsChebyshevDistance();
+		if (cDistance != -1 && cDistance > MAX_PATH_LENGTH)
 			return false;
+
+		int stairsPath = PathLength();
+		if (stairsPath == 0)
+			return false;
+
+		tickLenth = stairsPath * ticksToWalkATile;
+	} else if (currlevel == 15) {
+		/** @todo Try warp, or teleport to staff + walk in town then teleport to Laz, and then exit */
+		if (IsVisibleSpawn() || IsVisiblePrevious()) {
+			tickLenth = ticksToTeleport;
+		} else {
+			int cDistance = CalcStairsChebyshevDistance();
+			if (cDistance == -1)
+				return false;
+			/** @todo Take teleport limits in to considerations instead of just estimating 5 steps */
+			tickLenth = cDistance * ticksToTeleport / 5;
+		}
+	} else {
+		if (IsVisibleSpawn() || IsVisiblePrevious()) {
+			tickLenth = ticksToTeleport;
+		} else {
+			int cDistance = CalcStairsChebyshevDistance();
+			if (cDistance == -1)
+				return false;
+			/** @todo Take teleport limits in to considerations instead of just estimating 5 steps */
+			tickLenth = cDistance * ticksToTeleport / 5;
+		}
 	}
+
+	TotalTickLenth += tickLenth;
+
 	return true;
 }
 
-bool PathScannerInit()
+bool Ended;
+
+bool ScannerPath::skipSeed()
 {
-	lengthPathToDlvl9 = 0;
+	TotalTickLenth = 0;
+	Ended = false;
+
 	return false;
 }
 
-bool ShortPathSearch()
+bool ScannerPath::skipLevel(int level)
 {
-	int level = currlevel;
-	if (level == Config.quality) {
-		std::cout << sgGameInitInfo.dwSeed << " (level " << (level - 1) << " in " << lengthPathToDlvl9 << " steps)" << std::endl;
-		return false;
+	return Ended;
+}
+
+bool ScannerPath::levelMatches(int levelSeed)
+{
+	std::memset(Path, 0, sizeof(Path));
+	if (!IsGoodLevel()) {
+		Ended = true;
 	}
 
-	return IsGoodLevel();
+	StairsDownPrevious = StairsDown;
+
+	int level = currlevel;
+	if (level == Config.quality - 1) {
+		std::cout << sgGameInitInfo.dwSeed << " (level " << (level + 1) << " in " << ((float)TotalTickLenth / 50) << " sec)" << std::endl;
+		Ended = true;
+	}
+
+	return true;
 }

@@ -149,6 +149,15 @@ static BYTE GetDung(int x, int y)
 	return dung[x][y];
 }
 
+static void SetDung(int x, int y, int value)
+{
+	if (x < 0 || y < 0 || x >= 20 || y >= 20) {
+		oobwrite = true;
+		return;
+	}
+	dung[x][y] = value;
+}
+
 static void DRLG_L4Shadows()
 {
 	int x, y;
@@ -1094,7 +1103,7 @@ static void L4drawRoom(int x, int y, int width, int height)
 
 	for (j = 0; j < height; j++) {
 		for (i = 0; i < width; i++) {
-			dung[i + x][j + y] = 1;
+			SetDung(i + x, j + y, 1);
 		}
 	}
 }

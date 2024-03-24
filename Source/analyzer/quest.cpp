@@ -1,3 +1,5 @@
+#include "quest.h"
+
 #include <iostream>
 
 #include "../../types.h"
@@ -5,7 +7,7 @@
 #include "../funkMapGen.h"
 #include "../quests.h"
 
-bool SkipQuest()
+bool ScannerQuest::skipSeed()
 {
 	if (quests[Q_LTBANNER]._qactive != QUEST_NOTAVAIL) {
 		if (Config.verbose)
@@ -18,5 +20,7 @@ bool SkipQuest()
 		return true;
 	}
 
-	return false;
+	std::cout << sgGameInitInfo.dwSeed << std::endl;
+
+	return true;
 }

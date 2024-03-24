@@ -1,4 +1,7 @@
+#include "pattern.h"
+
 #include <cstdint>
+#include <iostream>
 
 #include "../../types.h"
 
@@ -21,7 +24,24 @@ const uint8_t GROOBO9[TEMPLATEX][TEMPLATEY] = {
 	// clang-format on
 };
 
-bool MatchPattern()
+bool ScannerPattern::breakOnFailure()
+{
+	return true;
+}
+
+bool ScannerPattern::skipSeed()
+{
+	glSeedTbl[9] = sgGameInitInfo.dwSeed;
+
+	return false;
+}
+
+bool ScannerPattern::skipLevel(int level)
+{
+	return level != 9;
+}
+
+bool ScannerPattern::levelMatches(int levelSeed)
 {
 	bool foundStairs = false;
 	int sx = 0;
@@ -53,6 +73,8 @@ bool MatchPattern()
 		if (!found)
 			return false;
 	}
+
+	std::cout << "Level Seed: " << (uint32_t)levelSeed << std::endl;
 
 	return true;
 }

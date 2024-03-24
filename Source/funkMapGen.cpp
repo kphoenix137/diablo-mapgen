@@ -1,14 +1,16 @@
 #include "funkMapGen.h"
 
+#include <fstream>
 #include <iostream>
 #include <limits>
-#include <fstream>
 #include <vector>
 
+#include "analyzer/gameseed.h"
 #include "analyzer/path.h"
-#include "analyzer/puzzler.h"
 #include "analyzer/pattern.h"
+#include "analyzer/puzzler.h"
 #include "analyzer/quest.h"
+#include "analyzer/warp.h"
 #include "drlg_l1.h"
 #include "drlg_l2.h"
 #include "drlg_l3.h"
@@ -38,6 +40,7 @@ namespace {
 constexpr uint64_t ProgressInterval = 10 * 1000 * 1000;
 
 BYTE previousLevelType = DTYPE_NONE;
+Scanner *scanner;
 
 void InitEngine()
 {
@@ -46,12 +49,29 @@ void InitEngine()
 
 	DRLG_PreLoadL2SP();
 	DRLG_PreLoadDiabQuads();
+
+	if (Config.scanner == Scanners::None) {
+		scanner = new Scanner();
+	} else if (Config.scanner == Scanners::Path) {
+		scanner = new ScannerPath();
+	} else if (Config.scanner == Scanners::Quest) {
+		scanner = new ScannerQuest();
+	} else if (Config.scanner == Scanners::Puzzler) {
+		scanner = new ScannerPuzzler();
+	} else if (Config.scanner == Scanners::Warp) {
+		scanner = new ScannerWarp();
+	} else if (Config.scanner == Scanners::Pattern) {
+		scanner = new ScannerPattern();
+	} else if (Config.scanner == Scanners::GameSeed) {
+		scanner = new ScannerGameSeed();
+	}
 }
 
 void ShutDownEngine()
 {
 	DRLG_UnloadL2SP();
 	DRLG_FreeDiabQuads();
+	delete scanner;
 }
 
 void InitiateLevel(int level)
@@ -133,29 +153,6 @@ void FindStairCordinates()
 	}
 }
 
-int CreateDungeon(bool breakOnSuccess, bool breakOnFailure)
-{
-	int levelSeed = -1;
-	uint32_t lseed = glSeedTbl[currlevel];
-	if (leveltype == DTYPE_CATHEDRAL)
-		levelSeed = CreateL5Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
-	else if (leveltype == DTYPE_CATACOMBS)
-		levelSeed = CreateL2Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
-	else if (leveltype == DTYPE_CAVES)
-		levelSeed = CreateL3Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
-	else if (leveltype == DTYPE_HELL)
-		levelSeed = CreateL4Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
-
-	return levelSeed;
-}
-
-void InitDungeonMonsters()
-{
-	InitLevelMonsters();
-	SetRndSeed(glSeedTbl[currlevel]);
-	GetLevelMTypes();
-}
-
 void CreateDungeonContent()
 {
 	InitDungeonMonsters();
@@ -174,6 +171,35 @@ void CreateDungeonContent()
 	CreateThemeRooms();
 }
 
+int CreateDungeon(bool breakOnSuccess, bool breakOnFailure)
+{
+	uint32_t lseed = glSeedTbl[currlevel];
+	uint32_t levelSeed = -1;
+	if (leveltype == DTYPE_CATHEDRAL)
+		levelSeed = CreateL5Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
+	if (leveltype == DTYPE_CATACOMBS)
+		levelSeed = CreateL2Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
+	if (leveltype == DTYPE_CAVES)
+		levelSeed = CreateL3Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
+	if (leveltype == DTYPE_HELL)
+		levelSeed = CreateL4Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
+
+	if (!breakOnSuccess && !breakOnFailure) {
+		InitTriggers();
+		CreateDungeonContent();
+
+		if (currlevel == 15)
+			POI = { quests[Q_BETRAYER]._qtx, quests[Q_BETRAYER]._qty };
+
+		FindStairCordinates();
+	}
+
+	if (Config.verbose && oobwrite)
+		std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
+
+	return levelSeed;
+}
+
 /**
  * @brief GET MAIN SEED, GET ALL MAP SEEDS
  * @return nothing, but updates RNG seeds list glSeedTbl[i]
@@ -186,119 +212,52 @@ void SetGameSeed(uint32_t seed)
 	for (int i = 0; i < NUMLEVELS; i++) {
 		glSeedTbl[i] = GetRndSeed();
 	}
+
+	InitQuests();
+	memset(UniqueItemFlag, 0, sizeof(UniqueItemFlag));
 }
 
-void CreateItemsFromObject(int oid)
+std::vector<uint32_t> SeedsFromFile = {};
+
+void readFromFile()
 {
-	switch (object[oid]._otype) {
-	case OBJ_CHEST1:
-	case OBJ_CHEST2:
-	case OBJ_CHEST3:
-	case OBJ_TCHEST1:
-	case OBJ_TCHEST2:
-	case OBJ_TCHEST3:
-		SetRndSeed(object[oid]._oRndSeed);
-		if (setlevel) {
-			for (int j = 0; j < object[oid]._oVar1; j++) {
-				CreateRndItem(object[oid]._ox, object[oid]._oy, TRUE, TRUE, FALSE);
-			}
-		} else {
-			for (int j = 0; j < object[oid]._oVar1; j++) {
-				if (object[oid]._oVar2 != 0)
-					CreateRndItem(object[oid]._ox, object[oid]._oy, FALSE, TRUE, FALSE);
-				else
-					CreateRndUseful(0, object[oid]._ox, object[oid]._oy, TRUE);
-			}
-		}
-		break;
-	case OBJ_SARC:
-		SetRndSeed(object[oid]._oRndSeed);
-		if (object[oid]._oVar1 <= 2)
-			CreateRndItem(object[oid]._ox, object[oid]._oy, FALSE, TRUE, FALSE);
-		break;
-	case OBJ_DECAP:
-		SetRndSeed(object[oid]._oRndSeed);
-		CreateRndItem(object[oid]._ox, object[oid]._oy, FALSE, TRUE, FALSE);
-		break;
-	case OBJ_BARREL:
-		SetRndSeed(object[oid]._oRndSeed);
-		if (object[oid]._oVar2 <= 1) {
-			if (object[oid]._oVar3 == 0)
-				CreateRndUseful(0, object[oid]._ox, object[oid]._oy, TRUE);
-			else
-				CreateRndItem(object[oid]._ox, object[oid]._oy, FALSE, TRUE, FALSE);
-		}
-		break;
-	case OBJ_SKELBOOK:
-	case OBJ_BOOKSTAND:
-		SetRndSeed(object[oid]._oRndSeed);
-		if (random_(161, 5) != 0)
-			CreateTypeItem(object[oid]._ox, object[oid]._oy, FALSE, ITYPE_MISC, IMISC_SCROLL, TRUE, FALSE);
-		else
-			CreateTypeItem(object[oid]._ox, object[oid]._oy, FALSE, ITYPE_MISC, IMISC_BOOK, TRUE, FALSE);
-		break;
-	case OBJ_BOOKCASEL:
-	case OBJ_BOOKCASER:
-		SetRndSeed(object[oid]._oRndSeed);
-		CreateTypeItem(object[oid]._ox, object[oid]._oy, FALSE, ITYPE_MISC, IMISC_BOOK, TRUE, FALSE);
-		break;
-	case OBJ_ARMORSTAND:
-	case OBJ_WARARMOR: {
-		SetRndSeed(object[oid]._oRndSeed);
-		BOOL uniqueRnd = random_(0, 2);
-		if (currlevel <= 5) {
-			CreateTypeItem(object[oid]._ox, object[oid]._oy, TRUE, ITYPE_LARMOR, IMISC_NONE, TRUE, FALSE);
-		} else if (currlevel >= 6 && currlevel <= 9) {
-			CreateTypeItem(object[oid]._ox, object[oid]._oy, uniqueRnd, ITYPE_MARMOR, IMISC_NONE, TRUE, FALSE);
-		} else if (currlevel >= 10 && currlevel <= 12) {
-			CreateTypeItem(object[oid]._ox, object[oid]._oy, FALSE, ITYPE_HARMOR, IMISC_NONE, TRUE, FALSE);
-		} else if (currlevel >= 13 && currlevel <= 16) {
-			CreateTypeItem(object[oid]._ox, object[oid]._oy, TRUE, ITYPE_HARMOR, IMISC_NONE, TRUE, FALSE);
-		}
-	} break;
-	case OBJ_WARWEAP:
-	case OBJ_WEAPONRACK: {
-		SetRndSeed(object[oid]._oRndSeed);
-		int weaponType;
+	if (Config.seedFile.empty())
+		return;
 
-		switch (random_(0, 4) + ITYPE_SWORD) {
-		case ITYPE_SWORD:
-			weaponType = ITYPE_SWORD;
-			break;
-		case ITYPE_AXE:
-			weaponType = ITYPE_AXE;
-			break;
-		case ITYPE_BOW:
-			weaponType = ITYPE_BOW;
-			break;
-		case ITYPE_MACE:
-			weaponType = ITYPE_MACE;
-			break;
-		}
-
-		if (leveltype > 1)
-			CreateTypeItem(object[oid]._ox, object[oid]._oy, TRUE, weaponType, IMISC_NONE, TRUE, FALSE);
-		else
-			CreateTypeItem(object[oid]._ox, object[oid]._oy, FALSE, weaponType, IMISC_NONE, TRUE, FALSE);
-	} break;
+	std::ifstream file(Config.seedFile);
+	if (!file.is_open()) {
+		std::cerr << "Unable to read seeds file: " << Config.seedFile << std::endl;
+		exit(255);
 	}
+
+	if (!Config.quiet)
+		std::cerr << "Loading seeds from: " << Config.seedFile << std::endl;
+
+	std::string line;
+	while (std::getline(file, line)) {
+		SeedsFromFile.push_back(std::stoll(line.substr(0, line.find(' '))));
+	}
+
+	if (file.is_open())
+		file.close();
 }
 
-void DropAllItems()
-{
-	MonsterItems = numitems;
-	for (int i = 0; i < nummonsters; i++) {
-		int mid = monstactive[i];
-		if (monster[mid].MType->mtype == MT_GOLEM)
-			continue;
-		SetRndSeed(monster[mid]._mRndSeed);
-		SpawnItem(mid, monster[mid]._mx, monster[mid]._my, TRUE);
-	}
+int ProgressseedMicros;
+uint32_t ProgressseedIndex = 0;
 
-	ObjectItems = numitems;
-	for (int i = 0; i < nobjects; i++) {
-		int oid = objectactive[i];
-		CreateItemsFromObject(oid);
+void printProgress(uint32_t seedIndex, uint32_t seed)
+{
+	if (Config.verbose)
+		std::cerr << "Processing: " << seed << std::endl;
+
+	int elapsed = micros() - ProgressseedMicros;
+	if (!Config.quiet && elapsed >= ProgressInterval) {
+		int pct = 100 * seedIndex / Config.seedCount;
+		int speed = ((seedIndex - ProgressseedIndex) / 10);
+		int eta = (Config.seedCount - seedIndex) / speed;
+		std::cerr << "Progress: " << pct << "% eta: " << eta << "s (" << speed << "seed/s)" << std::endl;
+		ProgressseedMicros += elapsed;
+		ProgressseedIndex = seedIndex;
 	}
 }
 
@@ -317,7 +276,7 @@ void printHelp()
 	std::cout << "--start <#>    The seed to start from" << std::endl;
 	std::cout << "--count <#>    The number of seeds to process" << std::endl;
 	std::cout << "--seeds <#>    A file to read seeds from" << std::endl;
-	std::cout << "--quality <#>  Number of levels that must be good [default: 6]" << std::endl;
+	std::cout << "--quality <#>  Number of levels that must be good [default: 8]" << std::endl;
 	std::cout << "--quiet        Do print status messages" << std::endl;
 	std::cout << "--verbose      Print out details about seeds" << std::endl;
 }
@@ -406,43 +365,22 @@ void ParseArguments(int argc, char **argv)
 	}
 }
 
-std::vector<uint32_t> SeedsFromFile = {};
-
-void readFromFile()
-{
-	if (Config.seedFile.empty())
-		return;
-
-	std::ifstream file(Config.seedFile);
-	if (!file.is_open()) {
-		std::cerr << "Unable to read seeds file: " << Config.seedFile << std::endl;
-		exit(255);
-	}
-
-	if (!Config.quiet)
-		std::cerr << "Loading seeds from: " << Config.seedFile << std::endl;
-
-	std::string line;
-	while (std::getline(file, line)) {
-		SeedsFromFile.push_back(std::stoll(line.substr(0, line.find(' '))));
-	}
-
-	if (file.is_open())
-		file.close();
 }
 
+void InitDungeonMonsters()
+{
+	InitLevelMonsters();
+	SetRndSeed(glSeedTbl[currlevel]);
+	GetLevelMTypes();
 }
 
 int main(int argc, char **argv)
 {
 	ParseArguments(argc, argv);
 	InitEngine();
-
-	int yseconds = micros();
-	uint32_t prevseed = 0;
-
 	readFromFile();
 
+	ProgressseedMicros = micros();
 	for (uint32_t seedIndex = 0; seedIndex < Config.seedCount; seedIndex++) {
 		uint32_t seed = seedIndex + Config.startSeed;
 		if (!SeedsFromFile.empty()) {
@@ -450,106 +388,20 @@ int main(int argc, char **argv)
 				break;
 			seed = SeedsFromFile[seed];
 		}
-
-		int elapsed = micros() - yseconds;
-		if (!Config.quiet && elapsed >= ProgressInterval) {
-			int pct = 100 * seedIndex / Config.seedCount;
-			int speed = ((seedIndex - prevseed) / 10);
-			int eta = (Config.seedCount - seedIndex) / speed;
-			std::cerr << "Progress: " << pct << "% eta: " << eta << "s (" << speed << "seed/s)" << std::endl;
-			yseconds += elapsed;
-			prevseed = seedIndex;
-		}
-
-		if (Config.verbose)
-			std::cerr << "Processing: " << seed << std::endl;
+		printProgress(seedIndex, seed);
 
 		SetGameSeed(seed);
-		InitQuests();
+		if (scanner->skipSeed())
+			break;
 
-		int startLevel = 1;
-		int maxLevels = NUMLEVELS;
-		bool breakOnSuccess = false;
-		bool breakOnFailure = false;
-
-		if (Config.scanner == Scanners::Warp) {
-			startLevel = 15;
-			maxLevels = startLevel + 1;
-		} else if (Config.scanner != Scanners::Path && Config.scanner != Scanners::None) {
-			startLevel = 9;
-			maxLevels = startLevel + 1;
-		}
-
-		if (Config.scanner == Scanners::Quest) {
-			if (!SkipQuest())
-				std::cout << seed << std::endl;
-			continue;
-		} else if (Config.scanner == Scanners::Path) {
-			PathScannerInit();
-		} else if (Config.scanner == Scanners::Pattern) {
-			glSeedTbl[9] = seed;
-			breakOnFailure = true;
-		} else if (Config.scanner == Scanners::GameSeed) {
-			breakOnSuccess = true;
-		}
-
-		memset(UniqueItemFlag, 0, sizeof(UniqueItemFlag));
-
-		for (int level = startLevel; level < maxLevels; level++) {
+		for (int level = 1; level < NUMLEVELS; level++) {
 			InitiateLevel(level);
+			if (scanner->skipLevel(level))
+				continue;
 
-			if (Config.scanner == Scanners::GameSeed) {
-				InitDungeonMonsters();
-				bool hasLavaLoards = false;
-
-				for (int i = 0; i < nummtypes && !hasLavaLoards; i++)
-					hasLavaLoards = Monsters[i].mtype == MT_WMAGMA;
-
-				if (!hasLavaLoards)
-					break;
-			}
-
-			int levelSeed = CreateDungeon(breakOnSuccess, breakOnFailure);
-
-			if (Config.scanner != Scanners::Pattern && Config.scanner != Scanners::GameSeed) {
-				InitTriggers();
-				CreateDungeonContent();
-
-				if (level == 15)
-					POI = { quests[Q_BETRAYER]._qtx, quests[Q_BETRAYER]._qty };
-
-				FindStairCordinates(); // Analyze
-			}
-
-			if (Config.verbose && oobwrite)
-				std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " OOB write detected" << std::endl;
-
-			if (Config.scanner == Scanners::Path) {
-				if (!ShortPathSearch())
-					break;
-			} else if (Config.scanner == Scanners::Warp) {
-				if (nSolidTable[dPiece[POI.x][POI.y]])
-					break;
-
-				std::cout << seed << std::endl;
-			} else if (Config.scanner == Scanners::Puzzler) {
-				DropAllItems();
-
-				if (!SearchForPuzzler())
-					break;
-
-				std::cout << seed << std::endl;
-			} else if (Config.scanner == Scanners::Pattern) {
-				if (levelSeed == -1 || !MatchPattern())
-					break;
-
-				std::cout << "Level Seed: " << (uint32_t)levelSeed << std::endl;
-			} else if (Config.scanner == Scanners::GameSeed) {
-				if (levelSeed != Config.quality)
-					break;
-
-				std::cout << seed << std::endl;
-			}
+			int levelSeed = CreateDungeon(scanner->breakOnSuccess(), scanner->breakOnFailure());
+			if (!scanner->levelMatches(levelSeed))
+				continue;
 
 			if (Config.asciiLevels)
 				printAsciiLevel();
