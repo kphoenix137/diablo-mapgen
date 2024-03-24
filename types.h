@@ -8,6 +8,7 @@
 
 #include "resource.h"
 #include <cstdint>
+#include <optional>
 
 #ifdef _WIN32
 #define NOMINMAX

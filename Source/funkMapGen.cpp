@@ -1,6 +1,7 @@
 #include "funkMapGen.h"
 
 #include <fstream>
+#include <optional>
 #include <iostream>
 #include <limits>
 #include <vector>
@@ -171,20 +172,20 @@ void CreateDungeonContent()
 	CreateThemeRooms();
 }
 
-int CreateDungeon(bool breakOnSuccess, bool breakOnFailure)
+std::optional<uint32_t> CreateDungeon(DungeonMode mode)
 {
 	uint32_t lseed = glSeedTbl[currlevel];
-	uint32_t levelSeed = -1;
+	std::optional<uint32_t> levelSeed = std::nullopt;
 	if (leveltype == DTYPE_CATHEDRAL)
-		levelSeed = CreateL5Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
+		levelSeed = CreateL5Dungeon(lseed, 0, mode);
 	if (leveltype == DTYPE_CATACOMBS)
-		levelSeed = CreateL2Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
+		levelSeed = CreateL2Dungeon(lseed, 0, mode);
 	if (leveltype == DTYPE_CAVES)
-		levelSeed = CreateL3Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
+		levelSeed = CreateL3Dungeon(lseed, 0, mode);
 	if (leveltype == DTYPE_HELL)
-		levelSeed = CreateL4Dungeon(lseed, 0, breakOnSuccess, breakOnFailure);
+		levelSeed = CreateL4Dungeon(lseed, 0, mode);
 
-	if (!breakOnSuccess && !breakOnFailure) {
+	if (mode == DungeonMode::Full) {
 		InitTriggers();
 		CreateDungeonContent();
 
@@ -399,7 +400,7 @@ int main(int argc, char **argv)
 			if (scanner->skipLevel(level))
 				continue;
 
-			int levelSeed = CreateDungeon(scanner->breakOnSuccess(), scanner->breakOnFailure());
+			std::optional<uint32_t> levelSeed = CreateDungeon(scanner->getDungeonMode());
 			if (!scanner->levelMatches(levelSeed))
 				continue;
 

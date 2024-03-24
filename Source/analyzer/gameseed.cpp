@@ -7,9 +7,9 @@
 #include "../funkMapGen.h"
 #include "../monster.h"
 
-bool ScannerGameSeed::breakOnFailure()
+DungeonMode ScannerGameSeed::getDungeonMode()
 {
-	return true;
+	return DungeonMode::BreakOnSuccess;
 }
 
 bool ScannerGameSeed::skipLevel(int level)
@@ -26,9 +26,9 @@ bool ScannerGameSeed::skipLevel(int level)
 	return !hasLavaLoards;
 }
 
-bool ScannerGameSeed::levelMatches(int levelSeed)
+bool ScannerGameSeed::levelMatches(std::optional<uint32_t> levelSeed)
 {
-	if (levelSeed == -1)
+	if (levelSeed == std::nullopt)
 		return false;
 
 	std::cout << sgGameInitInfo.dwSeed << std::endl;

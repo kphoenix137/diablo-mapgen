@@ -183,7 +183,7 @@ bool ScannerPath::skipLevel(int level)
 	return Ended;
 }
 
-bool ScannerPath::levelMatches(int levelSeed)
+bool ScannerPath::levelMatches(std::optional<uint32_t> levelSeed)
 {
 	std::memset(Path, 0, sizeof(Path));
 	if (!IsGoodLevel()) {

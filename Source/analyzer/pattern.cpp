@@ -24,9 +24,9 @@ const uint8_t GROOBO9[TEMPLATEX][TEMPLATEY] = {
 	// clang-format on
 };
 
-bool ScannerPattern::breakOnFailure()
+DungeonMode ScannerPattern::getDungeonMode()
 {
-	return true;
+	return DungeonMode::BreakOnFailure;
 }
 
 bool ScannerPattern::skipSeed()
@@ -41,8 +41,11 @@ bool ScannerPattern::skipLevel(int level)
 	return level != 9;
 }
 
-bool ScannerPattern::levelMatches(int levelSeed)
+bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
 {
+	if (levelSeed == std::nullopt)
+		return false;
+
 	bool foundStairs = false;
 	int sx = 0;
 	int sy = 0;
@@ -74,7 +77,7 @@ bool ScannerPattern::levelMatches(int levelSeed)
 			return false;
 	}
 
-	std::cout << "Level Seed: " << (uint32_t)levelSeed << std::endl;
+	std::cout << "Level Seed: " << *levelSeed << std::endl;
 
 	return true;
 }

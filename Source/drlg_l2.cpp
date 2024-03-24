@@ -3184,21 +3184,21 @@ void L2DoorFix()
 	}
 }
 
-static int DRLG_L2(int entry, bool breakOnSuccess, bool breakOnFailure)
+static std::optional<uint32_t> DRLG_L2(int entry, DungeonMode mode)
 {
 	int i, j;
 	BOOL doneflag;
 
 	doneflag = FALSE;
-	int levelSeed = -1;
+	std::optional<uint32_t> levelSeed = std::nullopt;
 	while (!doneflag) {
 		levelSeed = GetRndState();
 		nRoomCnt = 0;
 		InitDungeon();
 		DRLG_InitTrans();
 		if (!CreateDungeon()) {
-			if (breakOnFailure)
-				return -1;
+			if (mode == DungeonMode::BreakOnFailure)
+				return std::nullopt;
 			continue;
 		}
 		L2TileFix();
@@ -3235,10 +3235,10 @@ static int DRLG_L2(int entry, bool breakOnSuccess, bool breakOnFailure)
 			}
 			ViewY -= 2;
 		}
-		if (breakOnFailure && !doneflag)
-			return -1;
+		if (mode == DungeonMode::BreakOnFailure && !doneflag)
+			return std::nullopt;
 	}
-	if (breakOnSuccess)
+	if (mode == DungeonMode::BreakOnSuccess)
 		return levelSeed;
 
 	L2LockoutFix();
@@ -3508,7 +3508,7 @@ void LoadPreL2Dungeon(const char *sFileName, int vx, int vy)
 	mem_free_dbg(pLevelMap);
 }
 
-int CreateL2Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFailure)
+std::optional<uint32_t> CreateL2Dungeon(DWORD rseed, int entry, DungeonMode mode)
 {
 	nSx1 = -1;
 	nSy1 = -1;
@@ -3525,8 +3525,8 @@ int CreateL2Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFai
 	DRLG_InitTrans();
 	DRLG_InitSetPC();
 	DRLG_LoadL2SP();
-	int levelSeed = DRLG_L2(entry, breakOnSuccess, breakOnFailure);
-	if (breakOnSuccess || breakOnFailure)
+	std::optional<uint32_t> levelSeed = DRLG_L2(entry, mode);
+	if (mode != DungeonMode::Full)
 		return levelSeed;
 
 	DRLG_L2Pass3();

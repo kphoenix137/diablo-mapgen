@@ -11,7 +11,7 @@ bool ScannerWarp::skipLevel(int level)
 	return level != 15;
 }
 
-bool ScannerWarp::levelMatches(int levelSeed)
+bool ScannerWarp::levelMatches(std::optional<uint32_t> levelSeed)
 {
 	if (nSolidTable[dPiece[POI.x][POI.y]])
 		return false;

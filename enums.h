@@ -3548,3 +3548,9 @@ typedef enum dlrg_flag {
 	DLRG_CHAMBER   = 0x40,
 	DLRG_PROTECTED = 0x80,
 } dlrg_flag;
+
+enum class DungeonMode {
+	Full,
+	BreakOnFailure,
+	BreakOnSuccess,
+};

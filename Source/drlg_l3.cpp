@@ -2315,14 +2315,14 @@ BOOL DRLG_L3Lockout()
 	return t == lockoutcnt;
 }
 
-static int DRLG_L3(int entry, bool breakOnSuccess, bool breakOnFailure)
+static std::optional<uint32_t> DRLG_L3(int entry, DungeonMode mode)
 {
 	int x1, y1, x2, y2, i, j;
 	BOOL found, genok;
 
 	lavapool = FALSE;
 
-	int levelSeed = -1;
+	std::optional<uint32_t> levelSeed = std::nullopt;
 	do {
 		do {
 			do {
@@ -2354,8 +2354,8 @@ static int DRLG_L3(int entry, bool breakOnSuccess, bool breakOnFailure)
 				} else {
 					found = FALSE;
 				}
-				if (breakOnFailure && !found)
-					return -1;
+				if (mode == DungeonMode::BreakOnFailure && !found)
+					return std::nullopt;
 			} while (!found);
 			DRLG_L3MakeMegas();
 			if (entry == ENTRY_MAIN) {
@@ -2451,8 +2451,8 @@ static int DRLG_L3(int entry, bool breakOnSuccess, bool breakOnFailure)
 			if (!genok && QuestStatus(Q_ANVIL)) {
 				genok = DRLG_L3Anvil();
 			}
-			if (breakOnFailure && genok == TRUE)
-				return -1;
+			if (mode == DungeonMode::BreakOnFailure && genok == TRUE)
+				return std::nullopt;
 		} while (genok == TRUE);
 #ifdef HELLFIRE
 		if (currlevel < 17) {
@@ -2468,11 +2468,11 @@ static int DRLG_L3(int entry, bool breakOnSuccess, bool breakOnFailure)
 				lavapool = FALSE;
 		}
 #endif
-	if (breakOnFailure && !lavapool)
-		return -1;
+		if (mode == DungeonMode::BreakOnFailure && !lavapool)
+			return std::nullopt;
 	} while (!lavapool);
 
-	if (breakOnSuccess)
+	if (mode == DungeonMode::BreakOnSuccess)
 		return levelSeed;
 
 #ifdef HELLFIRE
@@ -2719,7 +2719,7 @@ static void DRLG_L3Pass3()
 	}
 }
 
-int CreateL3Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFailure)
+std::optional<uint32_t> CreateL3Dungeon(DWORD rseed, int entry, DungeonMode mode)
 {
 	int i, j;
 
@@ -2730,8 +2730,8 @@ int CreateL3Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFai
 	dmaxy = 96;
 	DRLG_InitTrans();
 	DRLG_InitSetPC();
-	int levelSeed = DRLG_L3(entry, breakOnSuccess, breakOnFailure);
-	if (breakOnSuccess || breakOnFailure)
+	std::optional<uint32_t> levelSeed = DRLG_L3(entry, mode);
+	if (mode != DungeonMode::Full)
 		return levelSeed;
 	DRLG_L3Pass3();
 

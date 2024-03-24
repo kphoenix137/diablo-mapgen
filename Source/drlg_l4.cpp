@@ -1590,12 +1590,12 @@ void DRLG_L4GeneralFix()
 	}
 }
 
-int DRLG_L4(int entry, bool breakOnSuccess, bool breakOnFailure)
+std::optional<uint32_t> DRLG_L4(int entry, DungeonMode mode)
 {
 	int i, j, spi, spj, ar;
 	BOOL doneflag;
 
-	int levelSeed = -1;
+	std::optional<uint32_t> levelSeed = std::nullopt;
 
 	do {
 		DRLG_InitTrans();
@@ -1608,8 +1608,8 @@ int DRLG_L4(int entry, bool breakOnSuccess, bool breakOnFailure)
 			if (ar >= 173) {
 				uShape();
 			}
-			if (breakOnFailure && ar < 173)
-				return -1;
+			if (mode == DungeonMode::BreakOnFailure && ar < 173)
+				return std::nullopt;
 		} while (ar < 173);
 		L4makeDungeon();
 		L4makeDmt();
@@ -1706,11 +1706,11 @@ int DRLG_L4(int entry, bool breakOnSuccess, bool breakOnFailure)
 				ViewY++;
 			}
 		}
-		if (breakOnFailure && !doneflag)
-			return -1;
+		if (mode == DungeonMode::BreakOnFailure && !doneflag)
+			return std::nullopt;
 	} while (!doneflag);
 
-	if (breakOnSuccess)
+	if (mode == DungeonMode::BreakOnSuccess)
 		return levelSeed;
 
 	DRLG_L4GeneralFix();
@@ -1857,7 +1857,7 @@ static void DRLG_L4Pass3()
 	}
 }
 
-int CreateL4Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFailure)
+std::optional<uint32_t> CreateL4Dungeon(DWORD rseed, int entry, DungeonMode mode)
 {
 	SetRndSeed(rseed);
 
@@ -1871,8 +1871,8 @@ int CreateL4Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFai
 
 	DRLG_InitSetPC();
 	DRLG_LoadL4SP();
-	int levelSeed = DRLG_L4(entry, breakOnSuccess, breakOnFailure);
-	if (breakOnSuccess || breakOnFailure)
+	std::optional<uint32_t> levelSeed = DRLG_L4(entry, mode);
+	if (mode != DungeonMode::Full)
 		return levelSeed;
 
 	DRLG_L4Pass3();

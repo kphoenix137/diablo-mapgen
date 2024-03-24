@@ -6,7 +6,7 @@
 #ifndef __DRLG_L3_H__
 #define __DRLG_L3_H__
 
-int CreateL3Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFailure);
+std::optional<uint32_t> CreateL3Dungeon(DWORD rseed, int entry, DungeonMode mode);
 void LoadL3Dungeon(const char *sFileName, int vx, int vy);
 void LoadPreL3Dungeon(const char *sFileName, int vx, int vy);
 

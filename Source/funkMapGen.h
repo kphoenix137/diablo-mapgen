@@ -14,24 +14,13 @@ enum class Scanners {
 	GameSeed,
 };
 
-enum class Filter {
-	None,
-	Break,
-	Continue,
-};
-
 class Scanner {
 public:
 	virtual void init() {};
 
-	virtual bool breakOnSuccess()
+	virtual DungeonMode getDungeonMode()
 	{
-		return false;
-	};
-
-	virtual bool breakOnFailure()
-	{
-		return false;
+		return DungeonMode::Full;
 	};
 
 	virtual bool skipSeed()
@@ -44,7 +33,7 @@ public:
 		return false;
 	};
 
-	virtual bool levelMatches(int levelSeed)
+	virtual bool levelMatches(std::optional<uint32_t> levelSeed)
 	{
 		return true;
 	};

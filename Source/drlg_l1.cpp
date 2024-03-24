@@ -2589,7 +2589,7 @@ static void DRLG_L5CornerFix()
 	}
 }
 
-static int DRLG_L5(int entry, bool breakOnSuccess, bool breakOnFailure)
+static std::optional<uint32_t> DRLG_L5(int entry, DungeonMode mode)
 {
 	int i, j;
 	LONG minarea;
@@ -2613,7 +2613,7 @@ static int DRLG_L5(int entry, bool breakOnSuccess, bool breakOnFailure)
 #endif
 	}
 
-	int levelSeed = -1;
+	std::optional<uint32_t> levelSeed = std::nullopt;
 
 	do {
 		DRLG_InitTrans();
@@ -2624,8 +2624,8 @@ static int DRLG_L5(int entry, bool breakOnSuccess, bool breakOnFailure)
 			InitL5Dungeon();
 			L5firstRoom();
 			failed = L5GetArea() < minarea;
-			if (breakOnFailure && failed)
-				return -1;
+			if (mode == DungeonMode::BreakOnFailure && failed)
+				return std::nullopt;
 		} while (failed);
 
 		L5makeDungeon();
@@ -2739,11 +2739,11 @@ static int DRLG_L5(int entry, bool breakOnSuccess, bool breakOnFailure)
 			ViewY--;
 #endif
 		}
-		if (breakOnFailure && doneflag == FALSE)
-			return -1;
+		if (mode == DungeonMode::BreakOnFailure && doneflag == FALSE)
+			return std::nullopt;
 	} while (doneflag == FALSE);
 
-	if (breakOnSuccess)
+	if (mode == DungeonMode::BreakOnSuccess)
 		return levelSeed;
 
 	for (j = 0; j < DMAXY; j++) {
@@ -2847,7 +2847,7 @@ static int DRLG_L5(int entry, bool breakOnSuccess, bool breakOnFailure)
 	return levelSeed;
 }
 
-int CreateL5Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFailure)
+std::optional<uint32_t> CreateL5Dungeon(DWORD rseed, int entry, DungeonMode mode)
 {
 #ifdef HELLFIRE
 	int i, j;
@@ -2874,8 +2874,8 @@ int CreateL5Dungeon(DWORD rseed, int entry, bool breakOnSuccess, bool breakOnFai
 	DRLG_InitTrans();
 	DRLG_InitSetPC();
 	DRLG_LoadL1SP();
-	int levelSeed = DRLG_L5(entry, breakOnSuccess, breakOnFailure);
-	if (breakOnSuccess || breakOnFailure)
+	std::optional<uint32_t> levelSeed = DRLG_L5(entry, mode);
+	if (mode != DungeonMode::Full)
 		return levelSeed;
 	DRLG_L1Pass3();
 	DRLG_FreeL1SP();

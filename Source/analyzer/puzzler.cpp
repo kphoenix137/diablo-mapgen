@@ -125,7 +125,7 @@ bool ScannerPuzzler::skipLevel(int level)
 	return level != 9;
 }
 
-bool ScannerPuzzler::levelMatches(int levelSeed)
+bool ScannerPuzzler::levelMatches(std::optional<uint32_t> levelSeed)
 {
 	DropAllItems();
 
