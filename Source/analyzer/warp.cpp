@@ -13,7 +13,7 @@ bool ScannerWarp::skipLevel(int level)
 
 bool ScannerWarp::levelMatches(std::optional<uint32_t> levelSeed)
 {
-	if (nSolidTable[dPiece[POI.x][POI.y]])
+	if (POI == Point { -1, -1 })
 		return false;
 
 	std::cout << sgGameInitInfo.dwSeed << std::endl;

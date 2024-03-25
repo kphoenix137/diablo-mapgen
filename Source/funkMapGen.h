@@ -51,7 +51,7 @@ struct Configuration {
 	bool quiet = false;
 	bool asciiLevels = false;
 	bool exportLevels = false;
-	uint32_t quality = 9;
+	uint32_t etc = 420;
 	bool verbose = false;
 };
 

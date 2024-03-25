@@ -125,7 +125,7 @@ bool ScannerPuzzler::skipLevel(int level)
 	return level != 9;
 }
 
-bool ScannerPuzzler::levelMatches(std::optional<uint32_t> levelSeed)
+void LocatePuzzler()
 {
 	DropAllItems();
 
@@ -137,6 +137,11 @@ bool ScannerPuzzler::levelMatches(std::optional<uint32_t> levelSeed)
 			break;
 		}
 	}
+}
+
+bool ScannerPuzzler::levelMatches(std::optional<uint32_t> levelSeed)
+{
+	LocatePuzzler();
 	if (POI == Point { -1, -1 })
 		return false;
 

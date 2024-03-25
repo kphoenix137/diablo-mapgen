@@ -33,5 +33,5 @@ bool ScannerGameSeed::levelMatches(std::optional<uint32_t> levelSeed)
 
 	std::cout << sgGameInitInfo.dwSeed << std::endl;
 
-	return levelSeed == Config.quality;
+	return levelSeed == Config.etc;
 }

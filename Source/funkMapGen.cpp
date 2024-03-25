@@ -189,8 +189,12 @@ std::optional<uint32_t> CreateDungeon(DungeonMode mode)
 		InitTriggers();
 		CreateDungeonContent();
 
-		if (currlevel == 15)
-			POI = { quests[Q_BETRAYER]._qtx, quests[Q_BETRAYER]._qty };
+		if (currlevel == 15) {
+			// Locate Lazarus warp point
+			Point point = { quests[Q_BETRAYER]._qtx, quests[Q_BETRAYER]._qty };
+			if (!nSolidTable[dPiece[point.x][point.y]])
+				POI = point;
+		}
 
 		FindStairCordinates();
 	}
@@ -270,14 +274,14 @@ void printHelp()
 	std::cout << "--scanner <#>  How to analyze levels [default: none]" << std::endl;
 	std::cout << "                   none: No analyzing" << std::endl;
 	std::cout << "                   puzzler: Search for Naj's Puzzler on level 9" << std::endl;
-	std::cout << "                   path: Search for the shortst stairs walk path" << std::endl;
+	std::cout << "                   path: Estimate the time to complete the game" << std::endl;
 	std::cout << "                   warp: Find seeds with a warp on level 15" << std::endl;
 	std::cout << "                   pattern: Search a set tile pattern" << std::endl;
 	std::cout << "                   gameseed: Search for GameSeeds with LevelSeed" << std::endl;
 	std::cout << "--start <#>    The seed to start from" << std::endl;
 	std::cout << "--count <#>    The number of seeds to process" << std::endl;
 	std::cout << "--seeds <#>    A file to read seeds from" << std::endl;
-	std::cout << "--quality <#>  Number of levels that must be good [default: 8]" << std::endl;
+	std::cout << "--etc <#>      Max number of sec to complete the game [default: 420]" << std::endl;
 	std::cout << "--quiet        Do print status messages" << std::endl;
 	std::cout << "--verbose      Print out details about seeds" << std::endl;
 }
@@ -346,13 +350,13 @@ void ParseArguments(int argc, char **argv)
 			}
 			hasCount = true;
 			Config.seedCount = std::stoll(argv[i]);
-		} else if (arg == "--quality") {
+		} else if (arg == "--etc") {
 			i++;
 			if (argc <= i) {
-				std::cerr << "Missing value for --quality" << std::endl;
+				std::cerr << "Missing value for --etc" << std::endl;
 				exit(255);
 			}
-			Config.quality = std::stoll(argv[i]);
+			Config.etc = std::stoll(argv[i]);
 		} else if (arg == "--verbose") {
 			Config.verbose = true;
 		} else {
@@ -393,7 +397,7 @@ int main(int argc, char **argv)
 
 		SetGameSeed(seed);
 		if (scanner->skipSeed())
-			break;
+			continue;
 
 		for (int level = 1; level < NUMLEVELS; level++) {
 			InitiateLevel(level);

@@ -4,6 +4,7 @@
 
 #include "../../types.h"
 
+#include "puzzler.h"
 #include "../funkMapGen.h"
 #include "../objects.h"
 #include "../path.h"
@@ -62,35 +63,22 @@ BOOL PosOkPlayer(int pnum, int x, int y)
 	return TRUE;
 }
 
-int PathLength()
+int PathLength(Point start, Point end)
 {
-	return FindPath(PosOkPlayer, 0, Spawn.x, Spawn.y, StairsDown.x, StairsDown.y, Path);
+	return FindPath(PosOkPlayer, 0, start.x, start.y, end.x, end.y, Path);
 }
 
-bool IsVisibleSpawn()
+/**
+ * Unused
+ */
+bool IsVisible(Point start, Point end)
 {
-	if (Spawn == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
+	if (start == Point { -1, -1 } || end == Point { -1, -1 }) {
 		return false;
 	}
 
-	int horizontal = StairsDown.x - Spawn.x + 10;
-	int vertical = StairsDown.y - Spawn.y + 10;
-
-	if (horizontal < 0 || horizontal > MAXVIEWX)
-		return false;
-	if (vertical < 0 || vertical > MAXVIEWY)
-		return false;
-	return isVisible[vertical][horizontal];
-}
-
-bool IsVisiblePrevious()
-{
-	if (StairsDownPrevious == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
-		return false;
-	}
-
-	int horizontal = StairsDown.x - StairsDownPrevious.x + 10;
-	int vertical = StairsDown.y - StairsDownPrevious.y + 10;
+	int horizontal = end.x - start.x + 10;
+	int vertical = end.y - start.y + 10;
 
 	if (horizontal < 0 || horizontal > MAXVIEWX)
 		return false;
@@ -101,78 +89,208 @@ bool IsVisiblePrevious()
 
 int TotalTickLenth;
 
-int CalcStairsChebyshevDistance()
+std::string formatTime()
 {
-	if (Spawn == Point { -1, -1 } || StairsDown == Point { -1, -1 }) {
-		return -1;
-	}
+	float time = (float)TotalTickLenth / 20;
+	int min = time / 60;
+	char fmt[12];
+	sprintf(fmt, "%u:%05.2lf", min, time - min * 60);
 
-	int horizontal = std::max(Spawn.x, StairsDown.x) - std::min(Spawn.x, StairsDown.x);
-	int vertical = std::max(Spawn.y, StairsDown.y) - std::min(Spawn.y, StairsDown.y);
+	return fmt;
+}
+
+int CalcStairsChebyshevDistance(Point start, Point end)
+{
+	if (start == Point { -1, -1 } || end == Point { -1, -1 })
+		return -1;
+
+	int horizontal = std::max(start.x, end.x) - std::min(start.x, end.x);
+	int vertical = std::max(start.y, end.y) - std::min(start.y, end.y);
 
 	return std::max(horizontal, vertical);
 }
 
-bool IsGoodLevel()
+int GetWalkTime(Point start, Point end)
+{
+	constexpr int ticksToWalkATile = 8;
+
+	int cDistance = CalcStairsChebyshevDistance(start, end);
+	if (cDistance == -1 || cDistance > MAX_PATH_LENGTH)
+		return -1;
+
+	int stairsPath = PathLength(start, end);
+	if (stairsPath == 0)
+		return -1;
+
+	return stairsPath * ticksToWalkATile;
+}
+
+int GetTeleportTime(Point start, Point end)
 {
 	constexpr int ticksToTeleport = 12;
-	constexpr int ticksToWalkATile = 8;
+
+	int cDistance = CalcStairsChebyshevDistance(start, end);
+	if (cDistance == -1) {
+		return -1;
+	}
+
+	if (IsVisible(start, end))
+		cDistance = 5;
+
+	/** @todo Take teleport limits in to considerations instead of just estimating 5 steps */
+	return cDistance * ticksToTeleport / 5;
+}
+
+int GetShortestTeleportTime(Point startA, Point startB, Point end)
+{
+	int teleportTime = GetTeleportTime(startA, end);
+	int teleportTimePrevious = GetTeleportTime(startB, end);
+	if (teleportTime == -1)
+		teleportTime = teleportTimePrevious;
+	if (teleportTime == -1)
+		return -1;
+
+	return std::min(teleportTime, teleportTimePrevious);
+}
+
+bool IsGoodLevelSoursororStrategy()
+{
 	int tickLenth = 0;
+	tickLenth += 20; // Load screens
 
 	if (currlevel < 9) {
-		int cDistance = CalcStairsChebyshevDistance();
-		if (cDistance != -1 && cDistance > MAX_PATH_LENGTH)
+		int walkTicks = GetWalkTime(Spawn, StairsDown);
+		if (walkTicks == -1) {
+			if (Config.verbose)
+				std::cerr << "Path: Gave up on walking to the stairs" << std::endl;
 			return false;
-
-		int stairsPath = PathLength();
-		if (stairsPath == 0)
-			return false;
-
-		tickLenth = stairsPath * ticksToWalkATile;
-	} else if (currlevel == 9) {
-		/** @todo Calculate walk to Puzzler and TP to exit */
-		int cDistance = CalcStairsChebyshevDistance();
-		if (cDistance != -1 && cDistance > MAX_PATH_LENGTH)
-			return false;
-
-		int stairsPath = PathLength();
-		if (stairsPath == 0)
-			return false;
-
-		tickLenth = stairsPath * ticksToWalkATile;
-	} else if (currlevel == 15) {
-		/** @todo Try warp, or teleport to staff + walk in town then teleport to Laz, and then exit */
-		if (IsVisibleSpawn() || IsVisiblePrevious()) {
-			tickLenth = ticksToTeleport;
-		} else {
-			int cDistance = CalcStairsChebyshevDistance();
-			if (cDistance == -1)
-				return false;
-			/** @todo Take teleport limits in to considerations instead of just estimating 5 steps */
-			tickLenth = cDistance * ticksToTeleport / 5;
 		}
-	} else {
-		if (IsVisibleSpawn() || IsVisiblePrevious()) {
-			tickLenth = ticksToTeleport;
+		tickLenth += walkTicks;
+	} else if (currlevel == 9) {
+		LocatePuzzler();
+		int pathToPuzzler = -1;
+		if (POI != Point { -1, -1 }) {
+			int walkTicks = GetWalkTime(Spawn, POI);
+			if (walkTicks != -1) {
+				int teleportTime = GetTeleportTime(Spawn, StairsDown);
+				if (teleportTime != -1) {
+					pathToPuzzler += walkTicks;
+					pathToPuzzler += 40; // Pick up Puzzler
+					pathToPuzzler += teleportTime;
+				}
+			}
+		}
+
+		if (pathToPuzzler != -1) {
+			if (Config.verbose)
+				std::cerr << "Path: Found Naj's Puzzler" << std::endl;
+			tickLenth += pathToPuzzler;
 		} else {
-			int cDistance = CalcStairsChebyshevDistance();
-			if (cDistance == -1)
+			if (Config.verbose)
+				std::cerr << "Path: Went to town to get a book of teleport" << std::endl;
+			tickLenth += 880; // Buying a book of teleport
+			int walkTicks = GetTeleportTime(Spawn, StairsDown);
+			if (walkTicks == -1) {
+				if (Config.verbose)
+					std::cerr << "Path: Couldn't find the stairs" << std::endl;
 				return false;
-			/** @todo Take teleport limits in to considerations instead of just estimating 5 steps */
-			tickLenth = cDistance * ticksToTeleport / 5;
+			}
+			tickLenth += walkTicks;
+		}
+
+		tickLenth += 1100; // Fight monsters to get Puzzler or level up to read the book
+	} else if (currlevel == 15) {
+		Point target = { -1, -1 };
+
+		// Locate Lazarus staff
+		for (int i = 0; i < nobjects; i++) {
+			int oid = objectactive[i];
+			ObjectStruct stand = object[oid];
+			if (stand._otype != OBJ_LAZSTAND)
+				continue;
+			target = { stand._ox, stand._oy };
+		}
+
+		// Locate Lazarous warp
+		if (POI != Point { -1, -1 }) {
+			if (Config.verbose)
+				std::cerr << "Path: Found the warp to Lazarus" << std::endl;
+			target = POI;
+		}
+
+		int teleportTime = GetShortestTeleportTime(Spawn, StairsDownPrevious, target);
+		if (teleportTime == -1) {
+			if (Config.verbose)
+				std::cerr << "Path: Couldn't find the stairs" << std::endl;
+			return false;
+		}
+		tickLenth += teleportTime;
+
+		if (POI == Point { -1, -1 }) {
+			if (Config.verbose)
+				std::cerr << "Path: Told Cain about Lazarus" << std::endl;
+			tickLenth += 20;  // Pick up staff
+			tickLenth += 580; // Show staff to Cain
+		}
+
+		tickLenth += 460; // Defeat Lazarus
+
+		int teleportTime2 = GetTeleportTime(target, StairsDown);
+		if (teleportTime2 == -1) {
+			if (Config.verbose)
+				std::cerr << "Path: Couldn't find the stairs" << std::endl;
+			return false;
+		}
+		tickLenth += teleportTime2;
+	} else {
+		int teleportTime = GetShortestTeleportTime(Spawn, StairsDownPrevious, StairsDown);
+		if (teleportTime == -1) {
+			if (Config.verbose)
+				std::cerr << "Path: Couldn't find the stairs" << std::endl;
+			return false;
+		}
+		tickLenth += teleportTime;
+
+		if (currlevel == 16) {
+			tickLenth += 180; // Defeat Diablo
 		}
 	}
 
 	TotalTickLenth += tickLenth;
 
+	if (Config.verbose)
+		std::cerr << "Path: Compleated dlvl " << (int)currlevel << " @ " << formatTime() << std::endl;
+
+	if (TotalTickLenth > Config.etc * 20) {
+		if (Config.verbose)
+			std::cerr << "Path: It's to slow to beat this one, giving up" << std::endl;
+		return false;
+	}
+
 	return true;
+}
+
+bool IsGoodLevel()
+{
+	return IsGoodLevelSoursororStrategy();
 }
 
 bool Ended;
 
 bool ScannerPath::skipSeed()
 {
+	if (quests[Q_LTBANNER]._qactive != QUEST_NOTAVAIL) {
+		if (Config.verbose)
+			std::cerr << "Game Seed: " << sgGameInitInfo.dwSeed << " thrown out: Sign Quest" << std::endl;
+		return true;
+	}
+
 	TotalTickLenth = 0;
+	TotalTickLenth += 435;  // Walk to Adria
+	TotalTickLenth += 1400; // Dup gold
+	TotalTickLenth += 250;  // Buy to books
+	TotalTickLenth += 200;  // Buy full manas
+	TotalTickLenth += 540;  // Walk to church
 	Ended = false;
 
 	return false;
@@ -188,13 +306,14 @@ bool ScannerPath::levelMatches(std::optional<uint32_t> levelSeed)
 	std::memset(Path, 0, sizeof(Path));
 	if (!IsGoodLevel()) {
 		Ended = true;
+		return false;
 	}
 
 	StairsDownPrevious = StairsDown;
 
 	int level = currlevel;
-	if (level == Config.quality - 1) {
-		std::cout << sgGameInitInfo.dwSeed << " (level " << (level + 1) << " in " << ((float)TotalTickLenth / 50) << " sec)" << std::endl;
+	if (level == 16) {
+		std::cout << sgGameInitInfo.dwSeed << " (etc " << formatTime() << ")" << std::endl;
 		Ended = true;
 	}
 

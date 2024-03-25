@@ -90,7 +90,7 @@ void ExportDun(uint32_t seed)
 std::string red(std::string text)
 {
 #ifdef _WIN32
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
 	return text;
 #else
 	return "\033[0;31m" + text + "\033[0m";
@@ -100,7 +100,7 @@ std::string red(std::string text)
 std::string green(std::string text)
 {
 #ifdef _WIN32
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
 	return text;
 #else
 	return "\033[1;32m" + text + "\033[0m";
@@ -110,7 +110,7 @@ std::string green(std::string text)
 std::string yellow(std::string text)
 {
 #ifdef _WIN32
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN);
 	return text;
 #else
 	return "\033[1;33m" + text + "\033[0m";
@@ -120,7 +120,7 @@ std::string yellow(std::string text)
 std::string gray(std::string text)
 {
 #ifdef _WIN32
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	return text;
 #else
 	return "\033[0;90m" + text + "\033[0m";
@@ -130,7 +130,7 @@ std::string gray(std::string text)
 std::string cyan(std::string text)
 {
 #ifdef _WIN32
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_BLUE);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_BLUE);
 	return text;
 #else
 	return "\033[0;36m" + text + "\033[0m";
@@ -167,12 +167,12 @@ void printAsciiLevel()
 				std::cout << red("^");
 			else if (Point { bobx, boby } == StairsDown)
 				std::cout << green("v");
-			else if (steps[bobx][boby])
-				std::cout << cyan("=");
 			else if (nSolidTable[dPiece[bobx][boby]])
 				std::cout << gray("#");
 			else if (Point { bobx, boby } == POI)
 				std::cout << yellow("*");
+			else if (steps[bobx][boby])
+				std::cout << cyan("=");
 			else
 				std::cout << " ";
 		}
