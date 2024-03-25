@@ -239,9 +239,10 @@ void readFromFile()
 		std::cerr << "Loading seeds from: " << Config.seedFile << std::endl;
 
 	std::string line;
-	while (std::getline(file, line)) {
+	while (std::getline(file, line))
 		SeedsFromFile.push_back(std::stoll(line.substr(0, line.find(' '))));
-	}
+
+	Config.seedCount = std::min(Config.seedCount, uint32_t(SeedsFromFile.size() - Config.startSeed));
 
 	if (file.is_open())
 		file.close();
@@ -389,8 +390,6 @@ int main(int argc, char **argv)
 	for (uint32_t seedIndex = 0; seedIndex < Config.seedCount; seedIndex++) {
 		uint32_t seed = seedIndex + Config.startSeed;
 		if (!SeedsFromFile.empty()) {
-			if (seed >= SeedsFromFile.size())
-				break;
 			seed = SeedsFromFile[seed];
 		}
 		printProgress(seedIndex, seed);
@@ -400,10 +399,10 @@ int main(int argc, char **argv)
 			continue;
 
 		for (int level = 1; level < NUMLEVELS; level++) {
-			InitiateLevel(level);
 			if (scanner->skipLevel(level))
 				continue;
 
+			InitiateLevel(level);
 			std::optional<uint32_t> levelSeed = CreateDungeon(scanner->getDungeonMode());
 			if (!scanner->levelMatches(levelSeed))
 				continue;
