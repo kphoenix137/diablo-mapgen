@@ -153,6 +153,26 @@ int GetShortestTeleportTime(Point startA, Point startB, Point end)
 	return std::min(teleportTime, teleportTimePrevious);
 }
 
+void setDoorSolidState(BOOLEAN doorState)
+{
+	if (leveltype == DTYPE_CATHEDRAL) {
+		nSolidTable[44] = doorState;
+		nSolidTable[46] = doorState;
+		nSolidTable[51] = doorState;
+		nSolidTable[56] = doorState;
+		nSolidTable[214] = doorState;
+		nSolidTable[270] = doorState;
+	} else if (leveltype == DTYPE_CATACOMBS) {
+		nSolidTable[55] = doorState;
+		nSolidTable[58] = doorState;
+		nSolidTable[538] = doorState;
+		nSolidTable[540] = doorState;
+	} else if (leveltype == DTYPE_CAVES) {
+		nSolidTable[531] = doorState;
+		nSolidTable[534] = doorState;
+	}
+}
+
 bool IsGoodLevelSoursororStrategy()
 {
 	int tickLenth = 0;
@@ -272,7 +292,11 @@ bool IsGoodLevelSoursororStrategy()
 
 bool IsGoodLevel()
 {
-	return IsGoodLevelSoursororStrategy();
+	setDoorSolidState(FALSE); // Open doors
+	bool result = IsGoodLevelSoursororStrategy();
+	setDoorSolidState(TRUE); // Close doors
+
+	return result;
 }
 
 bool Ended;

@@ -100,24 +100,6 @@ void InitiateLevel(int level)
 
 	LoadLvlGFX();
 	FillSolidBlockTbls();
-
-	// Mark doors as non solid
-	if (leveltype == DTYPE_CATHEDRAL) {
-		nSolidTable[44] = FALSE;
-		nSolidTable[46] = FALSE;
-		nSolidTable[51] = FALSE;
-		nSolidTable[56] = FALSE;
-		nSolidTable[214] = FALSE;
-		nSolidTable[270] = FALSE;
-	} else if (leveltype == DTYPE_CATACOMBS) {
-		nSolidTable[55] = FALSE;
-		nSolidTable[58] = FALSE;
-		nSolidTable[538] = FALSE;
-		nSolidTable[540] = FALSE;
-	} else if (leveltype == DTYPE_CAVES) {
-		nSolidTable[531] = FALSE;
-		nSolidTable[534] = FALSE;
-	}
 }
 
 void InitTriggers()
@@ -255,16 +237,20 @@ void printProgress(uint32_t seedIndex, uint32_t seed)
 {
 	if (Config.verbose)
 		std::cerr << "Processing: " << seed << std::endl;
+	if (Config.quiet)
+		return;
 
 	int elapsed = micros() - ProgressseedMicros;
-	if (!Config.quiet && elapsed >= ProgressInterval) {
-		int pct = 100 * seedIndex / Config.seedCount;
-		int speed = ((seedIndex - ProgressseedIndex) / 10);
-		int eta = (Config.seedCount - seedIndex) / speed;
-		std::cerr << "Progress: " << pct << "% eta: " << eta << "s (" << speed << "seed/s)" << std::endl;
-		ProgressseedMicros += elapsed;
-		ProgressseedIndex = seedIndex;
-	}
+	if (elapsed < ProgressInterval)
+		return;
+	ProgressseedMicros += elapsed;
+
+	int pct = 100 * seedIndex / Config.seedCount;
+	int speed = (seedIndex - ProgressseedIndex) / 10;
+	int eta = (Config.seedCount - seedIndex) / speed;
+	ProgressseedIndex = seedIndex;
+
+	std::cerr << "Progress: " << pct << "% eta: " << eta << "s (" << speed << "seed/s)" << std::endl;
 }
 
 void printHelp()
