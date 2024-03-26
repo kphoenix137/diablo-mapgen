@@ -2066,7 +2066,7 @@ static void DRLG_L5Subs()
 					i = -1;
 
 					while (rv >= 0) {
-						if (++i == sizeof(L5BTYPES))
+						if (++i == sizeof(L5BTYPES) - 1)
 							i = 0;
 						if (c == L5BTYPES[i])
 							rv--;
