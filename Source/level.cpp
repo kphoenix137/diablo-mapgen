@@ -67,7 +67,7 @@ void ExportDun(uint32_t seed)
 		for (int x = 16; x < MAXDUNX - 16; x++) {
 			uint16_t objectId = 0;
 			if (dObject[x][y] > 0) {
-				for (int i = 0; i < sizeof(ObjTypeConv) / sizeof(*ObjTypeConv); i++) {
+				for (int i = 0; i < 139; i++) {
 					if (ObjTypeConv[i] == object[dObject[x][y] - 1]._otype) {
 						objectId = i;
 						break;
