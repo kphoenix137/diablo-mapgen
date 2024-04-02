@@ -145,7 +145,7 @@ int ObjTypeConv[] = {
 	OBJ_TCHEST3,
 	OBJ_LAZSTAND,
 	OBJ_BOOKSTAND,
-	OBJ_BOOKSHELFR,
+	0,
 };
 
 /** Contains the data related to each object ID. */
