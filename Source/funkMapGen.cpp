@@ -11,6 +11,7 @@
 #include "analyzer/pattern.h"
 #include "analyzer/puzzler.h"
 #include "analyzer/quest.h"
+#include "analyzer/stairs.h"
 #include "analyzer/warp.h"
 #include "drlg_l1.h"
 #include "drlg_l2.h"
@@ -61,6 +62,8 @@ void InitEngine()
 		scanner = new ScannerPuzzler();
 	} else if (Config.scanner == Scanners::Warp) {
 		scanner = new ScannerWarp();
+	} else if (Config.scanner == Scanners::Stairs) {
+		scanner = new ScannerStairs();
 	} else if (Config.scanner == Scanners::Pattern) {
 		scanner = new ScannerPattern();
 	} else if (Config.scanner == Scanners::GameSeed) {
@@ -263,6 +266,7 @@ void printHelp()
 	std::cout << "                   puzzler: Search for Naj's Puzzler on level 9" << std::endl;
 	std::cout << "                   path: Estimate the time to complete the game" << std::endl;
 	std::cout << "                   warp: Find seeds with a warp on level 15" << std::endl;
+	std::cout << "                   stairs: Look for stairs with a very short distance to level 9" << std::endl;
 	std::cout << "                   pattern: Search a set tile pattern" << std::endl;
 	std::cout << "                   gameseed: Search for GameSeeds with LevelSeed" << std::endl;
 	std::cout << "--start <#>    The seed to start from" << std::endl;
@@ -306,6 +310,8 @@ void ParseArguments(int argc, char **argv)
 				Config.scanner = Scanners::Quest;
 			} else if (scanner == "warp") {
 				Config.scanner = Scanners::Warp;
+			} else if (scanner == "stairs") {
+				Config.scanner = Scanners::Stairs;
 			} else if (scanner == "pattern") {
 				Config.scanner = Scanners::Pattern;
 			} else if (scanner == "gameseed") {

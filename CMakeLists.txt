@@ -45,6 +45,7 @@ add_executable(${BIN_TARGET}
   Source/analyzer/pattern.cpp
   Source/analyzer/puzzler.cpp
   Source/analyzer/quest.cpp
+  Source/analyzer/stairs.cpp
   Source/analyzer/warp.cpp
   Source/funkMapGen.cpp
   Source/gendung.cpp

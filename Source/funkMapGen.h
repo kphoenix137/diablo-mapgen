@@ -9,6 +9,7 @@ enum class Scanners {
 	Path,
 	Quest,
 	Puzzler,
+	Stairs,
 	Warp,
 	Pattern,
 	GameSeed,
