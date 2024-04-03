@@ -335,7 +335,7 @@ bool ScannerPath::levelMatches(std::optional<uint32_t> levelSeed)
 	std::memset(Path, 0, sizeof(Path));
 	if (!IsGoodLevel()) {
 		Ended = true;
-		return false;
+		return Config.verbose;
 	}
 
 	StairsDownPrevious = StairsDown;
