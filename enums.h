@@ -3551,6 +3551,7 @@ typedef enum dlrg_flag {
 
 enum class DungeonMode {
 	Full,
+	NoContent,
 	BreakOnFailure,
 	BreakOnSuccess,
 };

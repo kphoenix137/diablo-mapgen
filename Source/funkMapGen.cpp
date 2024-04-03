@@ -170,9 +170,11 @@ std::optional<uint32_t> CreateDungeon(DungeonMode mode)
 	if (leveltype == DTYPE_HELL)
 		levelSeed = CreateL4Dungeon(lseed, 0, mode);
 
-	if (mode == DungeonMode::Full) {
+	if (mode == DungeonMode::Full || mode == DungeonMode::NoContent) {
 		InitTriggers();
-		CreateDungeonContent();
+
+		if (mode != DungeonMode::NoContent)
+			CreateDungeonContent();
 
 		if (currlevel == 15) {
 			// Locate Lazarus warp point

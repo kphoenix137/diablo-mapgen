@@ -69,6 +69,11 @@ bool Failed;
 
 }
 
+DungeonMode ScannerStairs::getDungeonMode()
+{
+	return DungeonMode::NoContent;
+}
+
 bool ScannerStairs::skipSeed()
 {
 	Failed = false;
