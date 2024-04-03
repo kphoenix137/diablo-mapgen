@@ -3526,7 +3526,7 @@ std::optional<uint32_t> CreateL2Dungeon(DWORD rseed, int entry, DungeonMode mode
 	DRLG_InitSetPC();
 	DRLG_LoadL2SP();
 	std::optional<uint32_t> levelSeed = DRLG_L2(entry, mode);
-	if (mode != DungeonMode::Full) {
+	if (mode == DungeonMode::BreakOnFailure || mode == DungeonMode::BreakOnSuccess) {
 		DRLG_FreeL2SP();
 		return levelSeed;
 	}

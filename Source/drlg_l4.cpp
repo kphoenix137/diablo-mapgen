@@ -1872,7 +1872,7 @@ std::optional<uint32_t> CreateL4Dungeon(DWORD rseed, int entry, DungeonMode mode
 	DRLG_InitSetPC();
 	DRLG_LoadL4SP();
 	std::optional<uint32_t> levelSeed = DRLG_L4(entry, mode);
-	if (mode != DungeonMode::Full) {
+	if (mode == DungeonMode::BreakOnFailure || mode == DungeonMode::BreakOnSuccess) {
 		DRLG_FreeL4SP();
 		return levelSeed;
 	}

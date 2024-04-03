@@ -2875,7 +2875,7 @@ std::optional<uint32_t> CreateL5Dungeon(DWORD rseed, int entry, DungeonMode mode
 	DRLG_InitSetPC();
 	DRLG_LoadL1SP();
 	std::optional<uint32_t> levelSeed = DRLG_L5(entry, mode);
-	if (mode != DungeonMode::Full) {
+	if (mode == DungeonMode::BreakOnFailure || mode == DungeonMode::BreakOnSuccess) {
 		DRLG_FreeL1SP();
 		return levelSeed;
 	}

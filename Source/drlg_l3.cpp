@@ -2731,7 +2731,7 @@ std::optional<uint32_t> CreateL3Dungeon(DWORD rseed, int entry, DungeonMode mode
 	DRLG_InitTrans();
 	DRLG_InitSetPC();
 	std::optional<uint32_t> levelSeed = DRLG_L3(entry, mode);
-	if (mode != DungeonMode::Full)
+	if (mode == DungeonMode::BreakOnFailure || mode == DungeonMode::BreakOnSuccess)
 		return levelSeed;
 	DRLG_L3Pass3();
 
