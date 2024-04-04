@@ -232,13 +232,12 @@ BOOL path_parent_path(PATHNODE *pPath, int dx, int dy, int sx, int sy)
 			}
 			pPath->Child[i] = dxdy;
 			if (next_g < dxdy->g && path_solid_pieces(pPath, dx, dy)) {
-				/** @todo This causes the search to fail for some long paths, disabled untill we can fix it */
 				// update the node
-				//dxdy->Parent = pPath;
-				//dxdy->g = next_g;
-				//dxdy->f = next_g + dxdy->h;
-				//// already explored, so re-update others starting from that node
-				//path_set_coords(dxdy);
+				dxdy->Parent = pPath;
+				dxdy->g = next_g;
+				dxdy->f = next_g + dxdy->h;
+				// already explored, so re-update others starting from that node
+				path_set_coords(dxdy);
 			}
 		} else {
 			// case 3: (dx,dy) is totally new
