@@ -1516,9 +1516,9 @@ typedef struct PkPlayerStruct {
 //////////////////////////////////////////////////
 
 typedef struct PATHNODE {
-	char f;
-	char h;
-	char g;
+	int f;
+	int h;
+	int g;
 	int x;
 	int y;
 	struct PATHNODE *Parent;
