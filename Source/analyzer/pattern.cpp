@@ -14,14 +14,14 @@
 
 const uint8_t GROOBO1[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
-    {   0,  0, 22, 22, 22,  0,  4,  0,  0 },
-    {   0, 22, 66,204, 22, 22,  1,129,  0 },
-    {   4, 63, 64, 65,  2,  2, 16,130,128 },
+    {   0,  0,  0,  0,  0,  0,  4,  0,  0 },
+    {   0,  0, 66,204,  0,  0,  1,129,  0 },
+    {   4, 63, 64, 65,  2,  0, 16,130,128 },
     {   1,129, 67, 68, 62, 57, 58,  0,135 },
     {   1,130,128,  0, 61, 59, 60,129,104 },
-    { 100,  0,  0,  0,  0,  0,  0,130,128 },
+    {   0,  0,  0,  0,  0,  0,  0,130,128 },
     {   0,  0,  0,  0,  0,  0,140,140,140 },
-    {   0,  0,  0,  0,  0,  0, 10, 12, 12 },
+    {   0,  0,  0,  0,  0,  0, 10,  0,  0 },
 	// clang-format on
 };
 
@@ -54,21 +54,21 @@ const uint8_t GROOBO3[TEMPLATEX][TEMPLATEY] = {
 const uint8_t GROOBO4[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
     {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
-    {   0,  0,  0, 66,204,  0,  0,  0,  0 },
-    {   0,  0, 63, 64, 65,  0,  0,  0,  0 },
-    {   0,  1,  0, 67, 68, 62, 57, 58,  0 },
-    {  18,  1,  0,  0,  0, 61, 59, 60,  0 },
-    {   0,107,  0,  0,  0,  0,  0,  0,  0 },
+    {   0,  0, 66,204,  0,  0,  0,122,  0 },
+    {   4, 63, 64, 65,  2,  0,  0, 16, 13 },
+    {   1,163, 67, 68, 62, 57, 58,162,162 },
+    {   1,163,  0,162, 61, 59, 60,  0, 13 },
+    { 107,163,  0,  0, 13,163, 13,163, 13 },
     {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
-    {   0,  0, 19, 19, 19, 19, 19, 19, 19 },
+    {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
 	// clang-format on
 };
 
 const uint8_t GROOBO5[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
-    {   1,  0,  0,  0,  0,  0,  0,  0,  0 },
-    {  81,  0, 72, 77,  0, 48, 71,  0,  0 },
-    {   1,  0, 76,  0,  0, 50, 78,  0,  0 },
+    {   1,  3,  3,  3,  3,  3,  0,  0,  0 },
+    {  81,  3, 72, 77,  3, 48, 71,  0,  0 },
+    {   1,  3, 76,  3,  3, 50, 78,  3,  0 },
     {   1,  0,  0,  0,  0,  0,  0,  0,  0 },
     {   0,  0,  0,  0, 13, 11, 11, 11, 11 },
     {   0,  0,  0,  0, 10,  0,  0,  0,  0 },
@@ -208,14 +208,14 @@ const uint8_t GROOBO15[TEMPLATEX][TEMPLATEY] = {
 
 const uint8_t GROOBO16[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
-    {   0,  0,  0, 96,  6,  6,  0,118,116 },
-    {   0, 36, 38, 35, 51,  6,  0,115,  8 },
-    {   0, 37, 34, 33, 32,  6,  0, 14, 11 },
+    {   0,  0,  0, 96,  6,  6,  0,118,  0 },
+    {   0, 36, 38, 35, 51,  6,  0,  0,  0 },
+    {   0, 37, 34, 33, 32,  6,  0,  0,  0 },
     {   0, 96,  6, 31,  6,  6,  0,  0,  0 },
     {   0,  6, 51,  6,  6,  6,  0,  0,  0 },
     {   0,  0, 50, 51,  6,  6,  0,  0,  0 },
-    {   0,  0,  6, 97,  6,  6,  0,118, 15 },
-    {   0,  0,  0,  0,  0,  0,  0,115,124 },
+    {   0,  0,  6, 97,  6,  6,  0,  0,  0 },
+    {   0,  0,  0,  0,  0,  0,  0,115,  0 },
 	// clang-format on
 };
 
@@ -226,46 +226,37 @@ DungeonMode ScannerPattern::getDungeonMode()
 
 bool ScannerPattern::skipSeed()
 {
-	// glSeedTbl[1] = sgGameInitInfo.dwSeed;
-
+	// Church
+	glSeedTbl[1] = sgGameInitInfo.dwSeed;
 	quests[Q_BUTCHER]._qactive = QUEST_INIT;
 	quests[Q_PWATER]._qactive = QUEST_INIT;
-	glSeedTbl[2] = sgGameInitInfo.dwSeed;
-
-	quests[Q_SKELKING]._qactive = QUEST_INIT;
+	glSeedTbl[2] = sgGameInitInfo.dwSeed; // Matches lseed 3227087147
+	quests[Q_SKELKING]._qactive = QUEST_NOTAVAIL; //QUEST_INIT;
 	glSeedTbl[3] = sgGameInitInfo.dwSeed;
+	quests[Q_LTBANNER]._qactive = QUEST_NOTAVAIL;
+	glSeedTbl[4] = sgGameInitInfo.dwSeed;
 
-	// quests[Q_LTBANNER]._qactive = QUEST_NOTAVAIL;
-	// glSeedTbl[4] = sgGameInitInfo.dwSeed;
-
-	quests[Q_BLOOD]._qactive = QUEST_NOTAVAIL;
-	// quests[Q_BLOOD]._qactive = QUEST_INIT;
+	// Catacombs
+	quests[Q_BLOOD]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
 	glSeedTbl[5] = sgGameInitInfo.dwSeed;
-
-	quests[Q_SCHAMB]._qactive = QUEST_NOTAVAIL;
-	// quests[Q_SCHAMB]._qactive = QUEST_INIT;
+	quests[Q_SCHAMB]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
 	glSeedTbl[6] = sgGameInitInfo.dwSeed;
-
-	quests[Q_BLIND]._qactive = QUEST_NOTAVAIL;
-	// quests[Q_BLIND]._qactive = QUEST_INIT;
+	quests[Q_BLIND]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
 	glSeedTbl[7] = sgGameInitInfo.dwSeed;
-
 	glSeedTbl[8] = sgGameInitInfo.dwSeed;
 
-	glSeedTbl[9] = sgGameInitInfo.dwSeed;
-
-	quests[Q_ANVIL]._qactive = QUEST_NOTAVAIL;
-	// quests[Q_ANVIL]._qactive = QUEST_INIT;
+	// Caves
+	glSeedTbl[9] = sgGameInitInfo.dwSeed; // Matches lseed 3916317768
+	quests[Q_ANVIL]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
 	glSeedTbl[10] = sgGameInitInfo.dwSeed;
+	glSeedTbl[11] = sgGameInitInfo.dwSeed; // Matches lseed 1903656652
+	glSeedTbl[12] = sgGameInitInfo.dwSeed; // Matches lseed 2376709555
 
-	glSeedTbl[11] = sgGameInitInfo.dwSeed;
-	glSeedTbl[12] = sgGameInitInfo.dwSeed;
-
+	// Hell
 	quests[Q_WARLORD]._qactive = QUEST_NOTAVAIL;
-	glSeedTbl[13] = sgGameInitInfo.dwSeed;
-
-	glSeedTbl[14] = sgGameInitInfo.dwSeed;
-	glSeedTbl[15] = sgGameInitInfo.dwSeed;
+	glSeedTbl[13] = sgGameInitInfo.dwSeed; // Matches lseed 4250794344
+	glSeedTbl[14] = sgGameInitInfo.dwSeed; // Matches lseed 1005627431
+	glSeedTbl[15] = sgGameInitInfo.dwSeed; // Matches lseed 2844841604
 	glSeedTbl[16] = sgGameInitInfo.dwSeed;
 
 	return false;
@@ -273,18 +264,16 @@ bool ScannerPattern::skipSeed()
 
 bool ScannerPattern::skipLevel(int level)
 {
-	return level != 3
+	return level != 1
+	    && level != 3
+	    && level != 4
 	    && level != 5
 	    && level != 6
 	    && level != 7
 	    && level != 8
 	    && level != 10
-	    && level != 11
-	    && level != 12
-	    && level != 13
-	    && level != 14
-	    && level != 15
 	    && level != 16;
+
 	return level == 1 || level == 4; // Pattern is still not correct
 }
 
@@ -305,7 +294,7 @@ bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
 		stairTile = 65;
 		pattern = &GROOBO3;
 	} else if (currlevel == 4) {
-		stairTile = 66;
+		stairTile = 204;
 		pattern = &GROOBO4;
 	} else if (currlevel == 5) {
 		stairTile = 77;
