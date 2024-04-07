@@ -359,7 +359,7 @@ bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
 		}
 	}
 
-	if (sx < 0 || sy < 0 || sx >= DMAXX - TEMPLATEX || sy >= DMAXY - TEMPLATEY) {
+	if (!foundStairs) {
 		if (Config.verbose)
 			std::cerr << "Pattern: Failed to locate the stairs on level seed " << *levelSeed << std::endl;
 		return false;
@@ -369,9 +369,8 @@ bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
 	int misses = 0;
 	for (int column = 0; column < TEMPLATEX; column++) {
 		for (int row = 0; row < TEMPLATEY; row++) {
-			if ((*pattern)[row][column] == 0) {
+			if ((*pattern)[row][column] == 0)
 				continue;
-			}
 			if (dungeon[sx + column][sy + row] != (*pattern)[row][column]) {
 				misses++;
 				if (misses > 1) {
