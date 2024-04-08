@@ -264,14 +264,12 @@ bool ScannerPattern::skipSeed()
 
 bool ScannerPattern::skipLevel(int level)
 {
-	return level != 1
-	    && level != 3
+	return level != 3
 	    && level != 4
 	    && level != 5
 	    && level != 6
 	    && level != 7
 	    && level != 8
-	    && level != 10
 	    && level != 16;
 
 	return level == 4; // Pattern is still not correct
