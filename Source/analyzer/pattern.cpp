@@ -227,11 +227,11 @@ DungeonMode ScannerPattern::getDungeonMode()
 bool ScannerPattern::skipSeed()
 {
 	// Church
-	glSeedTbl[1] = sgGameInitInfo.dwSeed;
+	glSeedTbl[1] = sgGameInitInfo.dwSeed; // Matches lseed 1691869883
 	quests[Q_BUTCHER]._qactive = QUEST_INIT;
 	quests[Q_PWATER]._qactive = QUEST_INIT;
-	glSeedTbl[2] = sgGameInitInfo.dwSeed; // Matches lseed 3227087147
-	quests[Q_SKELKING]._qactive = QUEST_NOTAVAIL; //QUEST_INIT;
+	glSeedTbl[2] = sgGameInitInfo.dwSeed;         // Matches lseed 3227087147
+	quests[Q_SKELKING]._qactive = QUEST_NOTAVAIL; // QUEST_INIT;
 	glSeedTbl[3] = sgGameInitInfo.dwSeed;
 	quests[Q_LTBANNER]._qactive = QUEST_NOTAVAIL;
 	glSeedTbl[4] = sgGameInitInfo.dwSeed;
@@ -247,8 +247,8 @@ bool ScannerPattern::skipSeed()
 
 	// Caves
 	glSeedTbl[9] = sgGameInitInfo.dwSeed; // Matches lseed 3916317768
-	quests[Q_ANVIL]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
-	glSeedTbl[10] = sgGameInitInfo.dwSeed;
+	quests[Q_ANVIL]._qactive = QUEST_INIT;
+	glSeedTbl[10] = sgGameInitInfo.dwSeed; // Matches lseed 618024415
 	glSeedTbl[11] = sgGameInitInfo.dwSeed; // Matches lseed 1903656652
 	glSeedTbl[12] = sgGameInitInfo.dwSeed; // Matches lseed 2376709555
 
@@ -274,7 +274,7 @@ bool ScannerPattern::skipLevel(int level)
 	    && level != 10
 	    && level != 16;
 
-	return level == 1 || level == 4; // Pattern is still not correct
+	return level == 4; // Pattern is still not correct
 }
 
 bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
