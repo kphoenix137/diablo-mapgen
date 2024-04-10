@@ -358,7 +358,9 @@ bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
 		for (int row = 0; row < TEMPLATEX; row++) {
 			if ((*pattern)[row][column] == 0)
 				continue;
-			if (dungeon[sx + column][sy + row] != (*pattern)[row][column]) {
+			int x = sx + column;
+			int y = sy + row;
+			if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXX || dungeon[x][y] != (*pattern)[row][column]) {
 				misses++;
 				if (misses > 1) {
 					found = false;
