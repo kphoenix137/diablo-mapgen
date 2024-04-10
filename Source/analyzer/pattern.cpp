@@ -257,7 +257,7 @@ bool ScannerPattern::skipSeed()
 	glSeedTbl[13] = sgGameInitInfo.dwSeed; // Matches lseed 4250794344
 	glSeedTbl[14] = sgGameInitInfo.dwSeed; // Matches lseed 1005627431
 	glSeedTbl[15] = sgGameInitInfo.dwSeed; // Matches lseed 2844841604
-	glSeedTbl[16] = sgGameInitInfo.dwSeed;
+	glSeedTbl[16] = sgGameInitInfo.dwSeed; // Matches lseed 277866386
 
 	return false;
 }
