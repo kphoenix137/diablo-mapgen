@@ -170,6 +170,8 @@ void printAsciiLevel()
 			else if (nSolidTable[dPiece[bobx][boby]])
 				std::cout << gray("#");
 			else if (Point { bobx, boby } == POI)
+				std::cout << red("!");
+			else if (dObject[bobx][boby])
 				std::cout << yellow("*");
 			else if (steps[bobx][boby])
 				std::cout << cyan("=");
