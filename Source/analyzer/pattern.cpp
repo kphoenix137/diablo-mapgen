@@ -239,9 +239,9 @@ bool ScannerPattern::skipSeed()
 	// Catacombs
 	quests[Q_BLOOD]._qactive = QUEST_INIT;
 	glSeedTbl[5] = sgGameInitInfo.dwSeed; // Matches lseed 3155785492
-	quests[Q_SCHAMB]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
+	quests[Q_SCHAMB]._qactive = QUEST_NOTAVAIL; // QUEST_INIT;
 	glSeedTbl[6] = sgGameInitInfo.dwSeed;
-	quests[Q_BLIND]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
+	quests[Q_BLIND]._qactive = QUEST_NOTAVAIL; // QUEST_INIT;
 	glSeedTbl[7] = sgGameInitInfo.dwSeed;
 	glSeedTbl[8] = sgGameInitInfo.dwSeed;
 
@@ -264,15 +264,10 @@ bool ScannerPattern::skipSeed()
 
 bool ScannerPattern::skipLevel(int level)
 {
-	return level != 3
-	    && level != 4
-	    && level != 5
-	    && level != 6
-	    && level != 7
-	    && level != 8
-	    && level != 16;
+	return level != 6
+	    && level != 7;
 
-	return level == 4; // Pattern is still not correct
+	return level == 3 || level == 4 || level == 8; // Pattern is still not correct
 }
 
 bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
