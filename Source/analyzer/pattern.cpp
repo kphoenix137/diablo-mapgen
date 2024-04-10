@@ -237,8 +237,8 @@ bool ScannerPattern::skipSeed()
 	glSeedTbl[4] = sgGameInitInfo.dwSeed;
 
 	// Catacombs
-	quests[Q_BLOOD]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
-	glSeedTbl[5] = sgGameInitInfo.dwSeed;
+	quests[Q_BLOOD]._qactive = QUEST_INIT;
+	glSeedTbl[5] = sgGameInitInfo.dwSeed; // Matches lseed 3155785492
 	quests[Q_SCHAMB]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
 	glSeedTbl[6] = sgGameInitInfo.dwSeed;
 	quests[Q_BLIND]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
