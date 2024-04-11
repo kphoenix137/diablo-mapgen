@@ -143,8 +143,13 @@ const BYTE L4BTYPES[140] = {
 static BYTE GetDung(int x, int y)
 {
 	if (x < 0 || y < 0 || x >= 20 || y >= 20) {
-		oobread = true;
-		return 0;
+		int index = x * 20 + y;
+		x = index / 20;
+		y = index % 20;
+		if (x < 0 || y < 0 || x >= 20) {
+			oobread = true;
+			return 0;
+		}
 	}
 	return dung[x][y];
 }
@@ -152,8 +157,13 @@ static BYTE GetDung(int x, int y)
 static void SetDung(int x, int y, int value)
 {
 	if (x < 0 || y < 0 || x >= 20 || y >= 20) {
-		oobwrite = true;
-		return;
+		int index = x * 20 + y;
+		x = index / 20;
+		y = index % 20;
+		if (x < 0 || y < 0 || x >= 20) {
+			oobwrite = true;
+			return;
+		}
 	}
 	dung[x][y] = value;
 }

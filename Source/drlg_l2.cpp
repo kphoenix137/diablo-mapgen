@@ -1627,8 +1627,13 @@ int Patterns[100][10] = {
 static BYTE GetPreDungeon(int x, int y)
 {
 	if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXY) {
-		oobread = true;
-		return 0;
+		int index = x * DMAXY + y;
+		x = index / DMAXY;
+		y = index % DMAXY;
+		if (x < 0 || y < 0 || x >= DMAXX) {
+			oobread = true;
+			return 0;
+		}
 	}
 	return predungeon[x][y];
 }

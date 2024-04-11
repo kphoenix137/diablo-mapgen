@@ -50,8 +50,13 @@ int GetRndState();
 inline int GetdPiece(int x, int y)
 {
 	if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY) {
-		oobread = true;
-		return 0;
+		int index = x * MAXDUNY + y;
+		x = index / MAXDUNY;
+		y = index % MAXDUNY;
+		if (x < 0 || y < 0 || x >= MAXDUNX) {
+			oobread = true;
+			return 0;
+		}
 	}
 	return dPiece[x][y];
 }
@@ -59,8 +64,13 @@ inline int GetdPiece(int x, int y)
 inline BYTE GetDungeon(int x, int y)
 {
 	if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXY) {
-		oobread = true;
-		return 0;
+		int index = x * DMAXY + y;
+		x = index / DMAXY;
+		y = index % DMAXY;
+		if (x < 0 || y < 0 || x >= DMAXX) {
+			oobread = true;
+			return 0;
+		}
 	}
 	return dungeon[x][y];
 }
@@ -68,8 +78,13 @@ inline BYTE GetDungeon(int x, int y)
 inline void SetDungeon(int x, int y, BYTE value)
 {
 	if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXY) {
-		oobwrite = true;
-		return;
+		int index = x * DMAXY + y;
+		x = index / DMAXY;
+		y = index % DMAXY;
+		if (x < 0 || y < 0 || x >= DMAXX) {
+			oobwrite = true;
+			return;
+		}
 	}
 	dungeon[x][y] = value;
 }
