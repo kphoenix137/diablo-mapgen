@@ -252,10 +252,24 @@ void printProgress(uint32_t seedIndex, uint32_t seed)
 
 	int pct = 100 * seedIndex / Config.seedCount;
 	int speed = (seedIndex - ProgressseedIndex) / 10;
-	int eta = (Config.seedCount - seedIndex) / speed;
+	int seconds = (Config.seedCount - seedIndex) / speed;
 	ProgressseedIndex = seedIndex;
 
-	std::cerr << "Progress: " << pct << "% eta: " << eta << "s (" << speed << "seed/s)" << std::endl;
+	int days = seconds / (24 * 3600);
+	seconds %= (24 * 3600);
+	int hours = seconds / 3600;
+	seconds %= 3600;
+	int minutes = seconds / 60;
+	seconds %= 60;
+
+	std::cerr << "Progress: " << pct << "% eta: ";
+	if (days > 0)
+		std::cerr << days << "d";
+	if (hours > 0 || days > 0)
+		std::cerr << hours << "h";
+	if (minutes > 0 || hours > 0 || days > 0)
+		std::cerr << minutes << "m";
+	std::cerr << seconds << "s (" << speed << " seed/s)" << std::endl;
 }
 
 void printHelp()
