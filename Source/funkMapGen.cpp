@@ -3,6 +3,7 @@
 #include <fstream>
 #include <optional>
 #include <iostream>
+#include <iomanip>
 #include <limits>
 #include <vector>
 
@@ -266,10 +267,10 @@ void printProgress(uint32_t seedIndex, uint32_t seed)
 	if (days > 0)
 		std::cerr << days << "d";
 	if (hours > 0 || days > 0)
-		std::cerr << hours << "h";
+		std::cerr << std::setw(2) << std::setfill('0') << hours << "h";
 	if (minutes > 0 || hours > 0 || days > 0)
-		std::cerr << minutes << "m";
-	std::cerr << seconds << "s (" << speed << " seed/s)" << std::endl;
+		std::cerr << std::setw(2) << std::setfill('0') << minutes << "m";
+	std::cerr << std::setw(2) << std::setfill('0') << seconds << "s (" << speed << " seed/s)" << std::endl;
 }
 
 void printHelp()
