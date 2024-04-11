@@ -143,19 +143,6 @@ const uint8_t GROOBO10[TEMPLATEX][TEMPLATEY] = {
 
 const uint8_t GROOBO11[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
-    {   0,  0,  0,  8,  8,  8,  8, 47,107 },
-    {   0, 11,  3, 51, 50,  8,  8, 46,  7 },
-    {  87, 12, 13, 48, 49,  3,  8,130,136 },
-    {   1, 14,106,106,  7,  4,  8,  1, 14 },
-    {   0, 12,106,  7,  5,  6,  8,  8,  1 },
-    {   0,  0,106,107, 13,  3,  8,  0,  0 },
-    {   0,  0,  0,  0,  0,  4,  0,  0,  0 },
-    {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
-	// clang-format on
-};
-
-const uint8_t GROOBO12[TEMPLATEX][TEMPLATEY] = {
-	// clang-format off
     {   0,  3,  8,  8,  8,  8,  0,  0,  0 },
     {   7, 13,  3, 51, 50,  8,  8,  0,  0 },
     {   7,  7, 13, 48, 49,  3,  8,  0,  0 },
@@ -164,6 +151,19 @@ const uint8_t GROOBO12[TEMPLATEX][TEMPLATEY] = {
     {  97, 47,  7,  7,  4, 11,  0,  0,  0 },
     {   8, 46,106,106, 13, 12,  0,  0,  0 },
     {   8,130,134,136,146,136,  0,  0,  0 },
+	// clang-format on
+};
+
+const uint8_t GROOBO12[TEMPLATEX][TEMPLATEY] = {
+	// clang-format off
+    {   0,  0,  0,  8,  8,  8,  8, 47,107 },
+    {   0, 11,  3, 51, 50,  8,  8, 46,  7 },
+    {  87, 12, 13, 48, 49,  3,  8,130,136 },
+    {   1, 14,106,106,  7,  4,  8,  1, 14 },
+    {   0, 12,106,  7,  5,  6,  8,  8,  1 },
+    {   0,  0,106,107, 13,  3,  8,  0,  0 },
+    {   0,  0,  0,  0,  0,  4,  0,  0,  0 },
+    {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
 	// clang-format on
 };
 
@@ -227,10 +227,10 @@ DungeonMode ScannerPattern::getDungeonMode()
 bool ScannerPattern::skipSeed()
 {
 	// Church
-	glSeedTbl[1] = sgGameInitInfo.dwSeed; // Matches lseed 1691869883
+	glSeedTbl[1] = sgGameInitInfo.dwSeed; // Matches level seed 1691869883, game seed 1230144506
 	quests[Q_BUTCHER]._qactive = QUEST_INIT;
 	quests[Q_PWATER]._qactive = QUEST_INIT;
-	glSeedTbl[2] = sgGameInitInfo.dwSeed;         // Matches lseed 3227087147
+	glSeedTbl[2] = sgGameInitInfo.dwSeed;         // Matches level seed 3227087147
 	quests[Q_SKELKING]._qactive = QUEST_NOTAVAIL; // QUEST_INIT;
 	glSeedTbl[3] = sgGameInitInfo.dwSeed;
 	quests[Q_LTBANNER]._qactive = QUEST_NOTAVAIL;
@@ -238,7 +238,7 @@ bool ScannerPattern::skipSeed()
 
 	// Catacombs
 	quests[Q_BLOOD]._qactive = QUEST_INIT;
-	glSeedTbl[5] = sgGameInitInfo.dwSeed; // Matches lseed 3155785492
+	glSeedTbl[5] = sgGameInitInfo.dwSeed;       // Matches level seed 3155785492
 	quests[Q_SCHAMB]._qactive = QUEST_NOTAVAIL; // QUEST_INIT;
 	glSeedTbl[6] = sgGameInitInfo.dwSeed;
 	quests[Q_BLIND]._qactive = QUEST_NOTAVAIL; // QUEST_INIT;
@@ -246,18 +246,18 @@ bool ScannerPattern::skipSeed()
 	glSeedTbl[8] = sgGameInitInfo.dwSeed;
 
 	// Caves
-	glSeedTbl[9] = sgGameInitInfo.dwSeed; // Matches lseed 3916317768
+	glSeedTbl[9] = sgGameInitInfo.dwSeed; // Matches level seed 3916317768, game seed 2728353700 or 3284159136
 	quests[Q_ANVIL]._qactive = QUEST_INIT;
-	glSeedTbl[10] = sgGameInitInfo.dwSeed; // Matches lseed 618024415
-	glSeedTbl[11] = sgGameInitInfo.dwSeed; // Matches lseed 1903656652
-	glSeedTbl[12] = sgGameInitInfo.dwSeed; // Matches lseed 2376709555
+	glSeedTbl[10] = sgGameInitInfo.dwSeed; // Matches level seed 618024415
+	glSeedTbl[11] = sgGameInitInfo.dwSeed; // Matches level seed 2376709555, dungeon seed 651290160
+	glSeedTbl[12] = sgGameInitInfo.dwSeed; // Matches level seed 1903656652
 
 	// Hell
 	quests[Q_WARLORD]._qactive = QUEST_NOTAVAIL;
-	glSeedTbl[13] = sgGameInitInfo.dwSeed; // Matches lseed 4250794344
-	glSeedTbl[14] = sgGameInitInfo.dwSeed; // Matches lseed 1005627431
-	glSeedTbl[15] = sgGameInitInfo.dwSeed; // Matches lseed 2844841604
-	glSeedTbl[16] = sgGameInitInfo.dwSeed; // Matches lseed 277866386
+	glSeedTbl[13] = sgGameInitInfo.dwSeed; // Matches level seed 4250794344
+	glSeedTbl[14] = sgGameInitInfo.dwSeed; // Matches level seed 1005627431
+	glSeedTbl[15] = sgGameInitInfo.dwSeed; // Matches level seed 2844841604, game seed 1342549707
+	glSeedTbl[16] = sgGameInitInfo.dwSeed; // Matches level seed 277866386
 
 	return false;
 }
