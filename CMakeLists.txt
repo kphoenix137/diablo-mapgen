@@ -6,6 +6,8 @@ endif()
 
 set(BIN_TARGET diablo-mapgen)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/parallel_mapgen.sh ${CMAKE_CURRENT_BINARY_DIR}/parallel_mapgen.sh COPYONLY)
+
 project(DiabloMapGen
   VERSION "0.1.0"
   LANGUAGES C CXX)
