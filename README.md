@@ -51,7 +51,7 @@ As an example, you can run the following command to scan for seeds where Naj's P
   - `stairs`: Look for stairs with a very short distance between them.
   - `pattern`: Search for levels specified by `--target` (default blank) based on tile patterns and print out there level seed.
   - `gameseed`: Search for GameSeeds that generates the LevelSeed given by `--target` (default 9:3916317768).
-- `--start <seed>`: The seed to start from.
+- `--start <offset>`: The seed to start from.
 - `--count <number_of_seeds>`: The number of seeds to process.
 - `--seeds <file>`: A file to read seeds from rather then using a sequental range.
 - `--target <value>`: A target value to set for the scanner.
@@ -87,7 +87,7 @@ This command splits up the seed range between processes concurrently. You can ad
 ### Options
 
 - `--scanner <type>`: How to analyze levels.
-- `--start <seed>`: The seed to start from.
+- `--start <offset>`: The seed to start from.
 - `--count <number_of_seeds>`: The number of seeds to process.
 - `--threads <number_of_processes>`: The number of concurrent processes (default is one less then CPU threads)
 
