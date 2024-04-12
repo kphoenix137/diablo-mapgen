@@ -10,7 +10,7 @@
 #include <string_view>
 
 static void showUsage(std::string_view programName) {
-	std::cout << "Usage: " << programName << " [level] <dungeon seed>\n";
+	std::cout << "Usage: " << programName << " <level> <dungeon seed>\n";
 	std::cout << "       " << programName << " <game seed>\n";
 }
 
