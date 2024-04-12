@@ -71,8 +71,8 @@ for ((i = 0; i < num_processes; i++)); do
 
     # Calculate the actual count for this batch
     end_offset=$((offset + batch_size))
-    if ((end_offset > total_count)); then
-        actual_count=$((total_count - offset))
+    if ((end_offset > start_offset + total_count)); then
+        actual_count=$((start_offset + total_count - offset))
     else
         actual_count=$((batch_size))
     fi
