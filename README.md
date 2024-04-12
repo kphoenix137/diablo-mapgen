@@ -10,6 +10,25 @@ Diablo MapGen is a tool designed to analyze maps generated in the game Diablo I 
 - Considers factors such as map layout, item distribution, and quest placement.
 - Designed to assist speedrunners in achieving faster completion times.
 
+## Building the Project
+
+Diablo MapGen is a CMake-based project, making it easy to build on various platforms. Follow these general steps to build the project on your specific system.
+
+### CLI
+
+As long as you have CMake and a C++ compiler installed you should be able to build using a process similar to
+
+```
+mkdir build
+cd build
+cmake ..
+make
+```
+
+### GUI
+
+If you use a IDE that support CMake it should be as simple as opening the project or the CMakeList.txt and then pressing the build buttonn in the IDE.
+
 ## Usage Examples
 
 As an example, you can run the following command to scan for seeds where Naj's Puzzler can be found on level 9, within a range of seeds that can be produced on all versions of Windows:
