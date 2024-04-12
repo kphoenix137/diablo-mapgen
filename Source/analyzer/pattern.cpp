@@ -264,10 +264,7 @@ bool ScannerPattern::skipSeed()
 
 bool ScannerPattern::skipLevel(int level)
 {
-	return level != 6
-	    && level != 7;
-
-	return level == 3 || level == 4 || level == 8; // Pattern is still not correct
+	return level == 3 || level == 4 || level == 6 || level == 7 || level == 8; // Pattern are still not correct
 }
 
 bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
