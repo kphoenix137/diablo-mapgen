@@ -188,10 +188,10 @@ static void renderSeedTable(const GameState &state) {
 	time_t startingTime = std::chrono::system_clock::to_time_t(std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(state.startingSeed)));
 	std::cout << "Game seed: " << state.startingSeed << " (" << std::put_time(std::gmtime(&startingTime), "%Y-%m-%d %H:%M:%S");
 	if (315532800 <= state.startingSeed && state.startingSeed <= 2177452799U) {
-		std::cout << " can be reached by setting the system time on windows)\n";
+		std::cout << " can be reached by setting the system time)\n";
 	}
 	else if (state.startingSeed < 315532800) {
-		std::cout << " requires an NT based Windows or using the mac version)\n";
+		std::cout << " requires an NT based Windows and an old BIOS or using the Mac version)\n";
 	}
 	else {
 		std::cout << " requires a modern recompile)\n";
