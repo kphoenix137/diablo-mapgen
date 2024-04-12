@@ -10,7 +10,8 @@
 #include <string_view>
 
 static void showUsage(std::string_view programName) {
-	std::cout << "Usage: " << programName << " [level] seed\n";
+	std::cout << "Usage: " << programName << " [level] <dungeon seed>\n";
+	std::cout << "       " << programName << " <game seed>\n";
 }
 
 template<typename resultType, typename intermediateType>
@@ -185,12 +186,12 @@ struct GameState {
 static void renderSeedTable(const GameState &state) {
 
 	time_t startingTime = std::chrono::system_clock::to_time_t(std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(state.startingSeed)));
-	std::cout << "Starting seed: " << state.startingSeed << " (" << std::put_time(std::gmtime(&startingTime), "%Y-%m-%d %H:%M:%S");
+	std::cout << "Game seed: " << state.startingSeed << " (" << std::put_time(std::gmtime(&startingTime), "%Y-%m-%d %H:%M:%S");
 	if (315532800 <= state.startingSeed && state.startingSeed <= 2177452799U) {
 		std::cout << " can be reached by setting the system time on windows)\n";
 	}
 	else if (state.startingSeed < 315532800) {
-		std::cout << " requires an NT based windows or using the mac version)\n";
+		std::cout << " requires an NT based Windows or using the mac version)\n";
 	}
 	else {
 		std::cout << " requires a modern recompile)\n";

@@ -14,7 +14,7 @@
 
 static void showUsage(std::string_view programName)
 {
-	std::cerr << "Usage: " << programName << " target_timestamp level seeds.txt\n";
+	std::cerr << "Usage: " << programName << " <target_timestamp> <level> seeds.txt\n";
 }
 
 template <typename resultType, typename intermediateType>
