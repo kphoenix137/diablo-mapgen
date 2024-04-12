@@ -263,14 +263,17 @@ void printProgress(uint32_t seedIndex, uint32_t seed)
 	int minutes = seconds / 60;
 	seconds %= 60;
 
-	std::cerr << "Progress: " << pct << "% eta: ";
+	std::ostringstream oss;
+	oss << "Progress: " << pct << "% eta: ";
 	if (days > 0)
-		std::cerr << days << "d";
+		oss << days << "d";
 	if (hours > 0 || days > 0)
-		std::cerr << std::setw(2) << std::setfill('0') << hours << "h";
+		oss << std::setw(2) << std::setfill('0') << hours << "h";
 	if (minutes > 0 || hours > 0 || days > 0)
-		std::cerr << std::setw(2) << std::setfill('0') << minutes << "m";
-	std::cerr << std::setw(2) << std::setfill('0') << seconds << "s (" << speed << " seed/s)" << std::endl;
+		oss << std::setw(2) << std::setfill('0') << minutes << "m";
+	oss << std::setw(2) << std::setfill('0') << seconds << "s (" << speed << " seed/s)" << std::endl;
+
+	std::cerr << oss.str();
 }
 
 void printHelp()
