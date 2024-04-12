@@ -2,7 +2,9 @@
 
 Diablo MapGen is a tool designed to analyze maps generated in the game Diablo I to identify optimal seed candidates for speedrunning. By analyzing various characteristics of the game maps, such as layout, item distribution, and quest placement, Diablo MapGen assists speedrunners in identifying promising seeds to achieve faster completion times.
 
-![image](https://github.com/Matthew-petroff/diablo-mapgen/assets/204594/b7f72623-87f1-43f9-9369-c2c7852b186c)
+<p align="center">
+<img width="512" height="512" src="https://github.com/Matthew-petroff/diablo-mapgen/assets/204594/b7f72623-87f1-43f9-9369-c2c7852b186c">
+</p>
 
 ## Features
 
