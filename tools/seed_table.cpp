@@ -231,7 +231,7 @@ static void renderSeedTable(const GameState &state) {
 			std::cout << " (with Anvil of Fury [Q_ANVIL])";
 		}
 		else if (i == 13 && activeQuests.warlord) {
-			std::cout << " (with Warlord of Blood [Q_ANVIL])";
+			std::cout << " (with Warlord of Blood [Q_WARLORD])";
 		}
 		std::cout << "\n";
 	}
