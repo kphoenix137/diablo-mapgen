@@ -279,7 +279,7 @@ bool IsGoodLevelSoursororStrategy()
 	if (Config.verbose)
 		std::cerr << "Path: Compleated dlvl " << (int)currlevel << " @ " << formatTime() << std::endl;
 
-	if (TotalTickLenth > Config.etc * 20) {
+	if (TotalTickLenth > *Config.target * 20) {
 		if (Config.verbose)
 			std::cerr << "Path: It's to slow to beat this one, giving up" << std::endl;
 		return false;

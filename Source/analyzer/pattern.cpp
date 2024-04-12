@@ -264,6 +264,8 @@ bool ScannerPattern::skipSeed()
 
 bool ScannerPattern::skipLevel(int level)
 {
+	if (Config.target)
+		return level != *Config.target;
 	return level == 3 || level == 4 || level == 6 || level == 7 || level == 8; // Pattern are still not correct
 }
 

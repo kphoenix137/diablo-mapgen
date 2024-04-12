@@ -6,10 +6,11 @@ total_count=2179583646
 scanner="pattern"
 num_threads=$(nproc)
 num_processes=$((num_threads - 1))
+target=""
 
 # Function to display usage information
 usage() {
-    echo "Usage: $0 [--scanner <${scanner}>] [--count <${total_count}>] [--start <${start_offset}>] [--threads <${num_processes}>]"
+    echo "Usage: $0 [--scanner <${scanner}>] [--start <${start_offset}>] [--count <${total_count}>] [--target <int>] [--threads <${num_processes}>]"
     exit 1
 }
 
@@ -37,6 +38,11 @@ while [[ $# -gt 0 ]]; do
             shift
             shift
             ;;
+        --target)
+            target="$2"
+            shift
+            shift
+            ;;
         *)
             usage
             ;;
@@ -56,6 +62,11 @@ batch_size=$((total_count / num_processes + 1))
 
 # Define the command to run
 command="./diablo-mapgen --scanner $scanner"
+
+# Add target argument if provided
+if [ ! -z "$target" ]; then
+    command+=" --target $target"
+fi
 
 # Function to send SIGTERM to the process group ID of the main script
 sigint_handler() {

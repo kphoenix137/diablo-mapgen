@@ -15,6 +15,20 @@ enum class Scanners {
 	GameSeed,
 };
 
+struct Configuration {
+	uint32_t startSeed = 0;
+	uint32_t seedCount = 1;
+	std::string seedFile;
+	Scanners scanner = Scanners::None;
+	bool quiet = false;
+	bool asciiLevels = false;
+	bool exportLevels = false;
+	std::optional<uint32_t> target = std::nullopt;
+	bool verbose = false;
+};
+
+extern Configuration Config;
+
 class Scanner {
 public:
 	virtual void init() {};
@@ -31,7 +45,7 @@ public:
 
 	virtual bool skipLevel(int level)
 	{
-		return false;
+		return Config.target && level != *Config.target;
 	};
 
 	virtual bool levelMatches(std::optional<uint32_t> levelSeed)
@@ -44,18 +58,6 @@ public:
 	}
 };
 
-struct Configuration {
-	uint32_t startSeed = 0;
-	uint32_t seedCount = 1;
-	std::string seedFile;
-	Scanners scanner = Scanners::None;
-	bool quiet = false;
-	bool asciiLevels = false;
-	bool exportLevels = false;
-	uint32_t etc = 420;
-	bool verbose = false;
-};
-
 extern int MonsterItems;
 extern int ObjectItems;
 
@@ -64,7 +66,5 @@ extern Point StairsDown;
 extern Point POI;
 
 extern char Path[MAX_PATH_LENGTH];
-
-extern Configuration Config;
 
 void InitDungeonMonsters();

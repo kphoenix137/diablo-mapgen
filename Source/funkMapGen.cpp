@@ -292,7 +292,7 @@ void printHelp()
 	std::cout << "--start <#>    The seed to start from" << std::endl;
 	std::cout << "--count <#>    The number of seeds to process" << std::endl;
 	std::cout << "--seeds <#>    A file to read seeds from" << std::endl;
-	std::cout << "--etc <#>      Max number of sec to complete the game [default: 420]" << std::endl;
+	std::cout << "--target <#>   The target for the current filter [default: 420]" << std::endl;
 	std::cout << "--quiet        Do print status messages" << std::endl;
 	std::cout << "--verbose      Print out details about seeds" << std::endl;
 }
@@ -363,13 +363,13 @@ void ParseArguments(int argc, char **argv)
 			}
 			hasCount = true;
 			Config.seedCount = std::stoll(argv[i]);
-		} else if (arg == "--etc") {
+		} else if (arg == "--target") {
 			i++;
 			if (argc <= i) {
-				std::cerr << "Missing value for --etc" << std::endl;
+				std::cerr << "Missing value for --target" << std::endl;
 				exit(255);
 			}
-			Config.etc = std::stoll(argv[i]);
+			Config.target = std::stoll(argv[i]);
 		} else if (arg == "--verbose") {
 			Config.verbose = true;
 		} else {
