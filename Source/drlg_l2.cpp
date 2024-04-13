@@ -3515,10 +3515,24 @@ void LoadPreL2Dungeon(const char *sFileName, int vx, int vy)
 
 std::optional<uint32_t> CreateL2Dungeon(DWORD rseed, int entry, DungeonMode mode)
 {
-	nSx1 = -1;
-	nSy1 = -1;
-	nSx2 = -1;
-	nSy2 = -1;
+	if (gbMaxPlayers == 1) {
+		if (currlevel == 7 && quests[Q_BLIND]._qactive == QUEST_NOTAVAIL) {
+			currlevel = 6;
+			CreateL2Dungeon(glSeedTbl[6], 4, breakOnSuccess);
+			currlevel = 7;
+		}
+		if (currlevel == 8) {
+			if (quests[Q_BLIND]._qactive == QUEST_NOTAVAIL) {
+				currlevel = 6;
+				CreateL2Dungeon(glSeedTbl[6], 4, breakOnSuccess);
+				currlevel = 8;
+			} else {
+				currlevel = 7;
+				CreateL2Dungeon(glSeedTbl[7], 4, breakOnSuccess);
+				currlevel = 8;
+			}
+		}
+	}
 
 	SetRndSeed(rseed);
 
