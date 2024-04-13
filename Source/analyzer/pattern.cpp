@@ -103,19 +103,6 @@ const uint8_t GROOBO7[TEMPLATEX][TEMPLATEY] = {
 	// clang-format on
 };
 
-const uint8_t GROOBO8[TEMPLATEX][TEMPLATEY] = {
-	// clang-format off
-    {   1, 89,  0,  0,  0,  0,  0,  0,  0 },
-    {  82,  0, 72, 77,  0, 48, 71,  0,  8 },
-    {   1,  0, 76,  0,  0, 50, 78,  0, 80 },
-    {  81,  0,  0,  0,  0,  0,  0, 48,  0 },
-    {   0,  0, 87,  2,  0,  7,  0, 50,  9 },
-    {   0,  0,  1,  0,  0,  4,  0,  0,  0 },
-    {   0,  0,  0,  0,  0, 81,  0,  0,  0 },
-    {   0,  0,  0,  0,  0, 83,  0,  0,  0 },
-	// clang-format on
-};
-
 const uint8_t GROOBO9[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
     {   0,  0,  0,  0,  8,  0,  0,  0,  0 },
@@ -220,14 +207,19 @@ const uint8_t GROOBO16[TEMPLATEX][TEMPLATEY] = {
 	// clang-format on
 };
 
-bool UseObjectScanenr()
+bool UseSolidScanner(int level)
 {
-	return currlevel == 3 || currlevel == 4 || currlevel == 8;
+	return level == 8;
+}
+
+bool UseObjectScanner(int level)
+{
+	return level == 3 || level == 4;
 }
 
 DungeonMode ScannerPattern::getDungeonMode()
 {
-	if (UseObjectScanenr())
+	if (UseObjectScanner(currlevel) || UseSolidScanner(currlevel))
 		return DungeonMode::Full;
 
 	return DungeonMode::BreakOnFailure;
@@ -235,9 +227,11 @@ DungeonMode ScannerPattern::getDungeonMode()
 
 bool ScannerPattern::skipSeed()
 {
-	if (UseObjectScanenr())
-		return false;
+	return false;
+}
 
+void ForceSeeds(int level)
+{
 	// Church
 	glSeedTbl[1] = sgGameInitInfo.dwSeed; // Matches level seed 1691869883, dungeon seed 1305510205, game seed 1230144506 24 18:48
 	quests[Q_BUTCHER]._qactive = QUEST_INIT;
@@ -270,15 +264,65 @@ bool ScannerPattern::skipSeed()
 	glSeedTbl[14] = sgGameInitInfo.dwSeed; // Matches level seed 1005627431, dungeon seed 2144005606, game seed 1229976755 22 20:12
 	glSeedTbl[15] = sgGameInitInfo.dwSeed; // Matches level seed 2844841604, dungeon seed 1342549707, game seed 1230053637 23 17:33
 	glSeedTbl[16] = sgGameInitInfo.dwSeed; // Matches level seed  277866386, dungeon seed  118068228, game seed 1230830247  1 17:17
-
-	return false;
 }
 
 bool ScannerPattern::skipLevel(int level)
 {
 	if (Config.target)
 		return level != *Config.target;
-	return level == 3 || level == 4 || level == 7 || level == 8; // Pattern are still not correct
+
+	if (!UseObjectScanner(level) && !UseSolidScanner(level))
+		ForceSeeds(level); // TODO unclober the seeds and quests
+
+	return level == 3 || level == 4 || level == 7; // Pattern are still not correct
+}
+
+const int Dlvl8Solid[19][24] = {
+	// clang-format off
+	{  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,-1,-1,-1,-1,-1,-1,-1,-1 },
+	{  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1 },
+	{  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1 },
+	{  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1 },
+	{  1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,-1,-1,-1,-1 },
+	{  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0,-1,-1,-1 },
+	{  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0,-1,-1 },
+	{  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,-1,-1 },
+	{  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,-1,-1 },
+	{  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,-1 },
+	{ -1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
+	{ -1,-1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1,-1,-1 },
+	{ -1,-1,-1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1 },
+	{ -1,-1,-1,-1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1 },
+	{ -1,-1,-1,-1,-1,-1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,-1,-1,-1 },
+	{ -1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,-1,-1,-1 },
+	{ -1,-1,-1,-1,-1,-1,-1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,-1,-1, 1,-1,-1,-1 },
+	{ -1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0, 0, 0, 1, 1, 1,-1,-1,-1,-1,-1,-1,-1 },
+	{ -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 1, 1,-1,-1,-1,-1,-1,-1,-1,-1 },
+	// clang-format on
+};
+
+bool matchesSolidPattern()
+{
+	int misses = 0;
+	for (int row = 0; row < 19; row++) {
+		for (int column = 0; column < 24; column++) {
+			if (Dlvl8Solid[row][column] == -1)
+				continue;
+			int x = Spawn.x + row - 7;
+			int y = Spawn.y + column - 6;
+
+			if (x < 0 || y < 0 || x >= MAXDUNX || y >= MAXDUNY || nSolidTable[dPiece[y][x]] != Dlvl8Solid[row][column]) {
+				misses++;
+				if (misses > 16) {
+					return false;
+				}
+			}
+		}
+	}
+
+	std::cout << "Game Seed for dlvl " << (int)currlevel << ": " << sgGameInitInfo.dwSeed << std::endl;
+
+	return true;
 }
 
 bool matchesObjectPattern()
@@ -326,10 +370,6 @@ bool matchesObjectPattern()
 		if (!dObject[Spawn.x + 3][Spawn.y + 7])
 			return false;
 	}
-	if (currlevel == 8) {
-		if (StairsDown != Point { Spawn.x + 5, Spawn.y + 1 })
-			return false;
-	}
 
 	std::cout << "Game Seed for dlvl " << (int)currlevel << ": " << sgGameInitInfo.dwSeed << std::endl;
 
@@ -364,9 +404,6 @@ bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 	} else if (currlevel == 7) {
 		stairTile = 71;
 		pattern = &GROOBO7;
-	} else if (currlevel == 8) {
-		stairTile = 77;
-		pattern = &GROOBO8;
 	} else if (currlevel == 9) {
 		stairTile = 51;
 		pattern = &GROOBO9;
@@ -421,7 +458,7 @@ bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 				continue;
 			int x = sx + column;
 			int y = sy + row;
-			if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXX || dungeon[x][y] != (*pattern)[row][column]) {
+			if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXY || dungeon[x][y] != (*pattern)[row][column]) {
 				misses++;
 				if (misses > 1) {
 					found = false;
@@ -440,8 +477,9 @@ bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 
 bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
 {
-	if (UseObjectScanenr())
+	if (UseObjectScanner(currlevel))
 		return matchesObjectPattern();
-
+	if (UseSolidScanner(currlevel))
+		return matchesSolidPattern();
 	return matchesTilePattern(levelSeed);
 }
