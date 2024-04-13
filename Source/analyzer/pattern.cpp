@@ -225,11 +225,6 @@ DungeonMode ScannerPattern::getDungeonMode()
 	return DungeonMode::BreakOnFailure;
 }
 
-bool ScannerPattern::skipSeed()
-{
-	return false;
-}
-
 void ForceSeeds(int level)
 {
 	// Church
