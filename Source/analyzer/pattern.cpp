@@ -79,11 +79,12 @@ const uint8_t GROOBO5[TEMPLATEX][TEMPLATEY] = {
 
 const uint8_t GROOBO6[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
-    {   0, 90,  0,  0,  0,  0,  0, 91,  0 },
-    { 133,135, 72, 77,  0, 48, 71, 89,  0 },
-    { 132,134, 76,  0,  0, 50, 78,  0, 90 },
-    {  82,  0,  0,  0, 89,  0,120,122,  0 },
-    {   0,  0, 90,  0,  0, 88,121,123,  0 },
+    {   0,  0,  0,  0, 91,  0,  0,  0,  0 },
+    {  77,  0, 48, 71, 89,  0,  0,  0,  0 },
+    {   0,  0, 50, 78,  0, 90,  0,  0,  0 },
+    {   0, 89,  0,120,122,  0,  0,  0,  0 },
+    {   0,  0, 88,121,123,  0,  0,  0,  0 },
+    {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
     {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
     {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
 	// clang-format on
@@ -292,7 +293,7 @@ bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
 		stairTile = 77;
 		pattern = &GROOBO5;
 	} else if (currlevel == 6) {
-		stairTile = 77;
+		stairTile = 71;
 		pattern = &GROOBO6;
 	} else if (currlevel == 7) {
 		stairTile = 77;
