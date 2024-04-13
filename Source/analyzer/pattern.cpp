@@ -315,7 +315,7 @@ bool matchesSolidPattern()
 		}
 	}
 
-	std::cout << "Game Seed for dlvl " << (int)currlevel << ": " << sgGameInitInfo.dwSeed << std::endl;
+	std::cout << sgGameInitInfo.dwSeed << " possible game Seed for dlvl " << (int)currlevel << std::endl;
 
 	return true;
 }
@@ -366,7 +366,7 @@ bool matchesObjectPattern()
 			return false;
 	}
 
-	std::cout << "Game Seed for dlvl " << (int)currlevel << ": " << sgGameInitInfo.dwSeed << std::endl;
+	std::cout << sgGameInitInfo.dwSeed << " possible game Seed for dlvl " << (int)currlevel << std::endl;
 
 	return true;
 }
