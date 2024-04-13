@@ -275,13 +275,14 @@ void ForceSeeds(int level)
 
 bool ScannerPattern::skipLevel(int level)
 {
+	bool skip = level == 3 || level == 4 || level == 7; // Pattern are still not correct
 	if (Config.target)
-		return level != *Config.target;
+		skip = level != *Config.target;
 
-	if (!UseObjectScanner(level) && !UseSolidScanner(level))
+	if (!skip && !UseObjectScanner(level) && !UseSolidScanner(level))
 		ForceSeeds(level); // TODO unclober the seeds and quests
 
-	return level == 3 || level == 4 || level == 7; // Pattern are still not correct
+	return skip;
 }
 
 const int Dlvl8Solid[19][24] = {
