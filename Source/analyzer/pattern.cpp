@@ -102,6 +102,19 @@ const uint8_t GROOBO7[TEMPLATEX][TEMPLATEY] = {
 	// clang-format on
 };
 
+const uint8_t GROOBO8[TEMPLATEX][TEMPLATEY] = {
+	// clang-format off
+    {   1, 89,  0,  0,  0,  0,  0,  0,  0 },
+    {  82,  0, 72, 77,  0, 48, 71,  0,  8 },
+    {   1,  0, 76,  0,  0, 50, 78,  0, 80 },
+    {  81,  0,  0,  0,  0,  0,  0, 48,  0 },
+    {   0,  0, 87,  2,  0,  7,  0, 50,  9 },
+    {   0,  0,  1,  0,  0,  4,  0,  0,  0 },
+    {   0,  0,  0,  0,  0, 81,  0,  0,  0 },
+    {   0,  0,  0,  0,  0, 83,  0,  0,  0 },
+	// clang-format on
+};
+
 const uint8_t GROOBO9[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
     {   0,  0,  0,  0,  8,  0,  0,  0,  0 },
@@ -399,6 +412,10 @@ bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 	} else if (currlevel == 7) {
 		stairTile = 71;
 		pattern = &GROOBO7;
+		xoffset = 6;
+	} else if (currlevel == 8) {
+		stairTile = 71;
+		pattern = &GROOBO8;
 		xoffset = 6;
 	} else if (currlevel == 9) {
 		stairTile = 51;
