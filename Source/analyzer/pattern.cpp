@@ -92,13 +92,12 @@ const uint8_t GROOBO6[TEMPLATEX][TEMPLATEY] = {
 
 const uint8_t GROOBO7[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
-    {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
-    {  77,  0, 48, 71,  0,  0,  0,  0,  0 },
-    {   0,  0, 50, 78,  0,  0,  0,  0,  0 },
-    {   0,106,  0,107,  0,  0,  0,  0,  0 },
-    { 128,130,  0,  0,  0,  0,  0,  0,  0 },
-    { 129,131,  0,  0,  0,  0,  0,  0,  0 },
-    {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
+    {   1,  0,  0,  0,  0,  0,  0,  0,  0 },
+    {  82,  0, 72, 77,  0, 48, 71,  0,  0 },
+    {   1,  0, 76,  0,  0, 50, 78,  0,  0 },
+    {  80,  0,  0,  0,106,  0,107,  0,  0 },
+    {   0,  0,  0,128,130,  0,  0,  0,  0 },
+    {   0,  0,  0,129,131,  0,  0,  0,  0 },
     {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
 	// clang-format on
 };
@@ -377,6 +376,7 @@ bool matchesObjectPattern()
 bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 {
 	int stairTile;
+	int xoffset = 3;
 	const uint8_t(*pattern)[TEMPLATEX][TEMPLATEY];
 	if (currlevel == 1) {
 		stairTile = 204;
@@ -399,6 +399,7 @@ bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 	} else if (currlevel == 7) {
 		stairTile = 71;
 		pattern = &GROOBO7;
+		xoffset = 6;
 	} else if (currlevel == 9) {
 		stairTile = 51;
 		pattern = &GROOBO9;
@@ -431,7 +432,7 @@ bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 	for (int y = 0; y < DMAXX && !foundStairs; y++) {
 		for (int x = 0; x < DMAXY; x++) {
 			if (dungeon[x][y] == stairTile) {
-				sx = x - 3;
+				sx = x - xoffset;
 				sy = y - 1;
 				foundStairs = true;
 				break;
