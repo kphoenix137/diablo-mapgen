@@ -221,7 +221,7 @@ const uint8_t GROOBO16[TEMPLATEX][TEMPLATEY] = {
 
 bool UseSolidScanner(int level)
 {
-	return level == 7 || level == 8;
+	return level == 8;
 }
 
 bool UseObjectScanner(int level)
@@ -255,7 +255,7 @@ void ForceSeeds(int level)
 	quests[Q_SCHAMB]._qactive = QUEST_INIT;
 	glSeedTbl[6] = sgGameInitInfo.dwSeed;  // Matches level seed 417801337, dungeon seed 2062861350, game seed 1230145611 24 19:06
 	quests[Q_BLIND]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
-	glSeedTbl[7] = sgGameInitInfo.dwSeed;
+	glSeedTbl[7] = sgGameInitInfo.dwSeed; // Matches level seed 3750712200, dungeon seed  894816128, game seed 1230145480 24 19:04
 	glSeedTbl[8] = sgGameInitInfo.dwSeed; // Matches level seed 4244777698, dungeon seed 1053729520, game seed 1230203099 25 11:04
 
 	// Caves
