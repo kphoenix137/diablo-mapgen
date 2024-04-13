@@ -373,9 +373,6 @@ bool matchesObjectPattern()
 
 bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 {
-	if (levelSeed == std::nullopt)
-		return false;
-
 	int stairTile;
 	const uint8_t(*pattern)[TEMPLATEX][TEMPLATEY];
 	if (currlevel == 1) {
@@ -472,6 +469,8 @@ bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 
 bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
 {
+	if (levelSeed == std::nullopt)
+		return false;
 	if (UseObjectScanner(currlevel))
 		return matchesObjectPattern();
 	if (UseSolidScanner(currlevel))
