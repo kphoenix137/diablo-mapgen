@@ -220,13 +220,24 @@ const uint8_t GROOBO16[TEMPLATEX][TEMPLATEY] = {
 	// clang-format on
 };
 
+bool UseObjectScanenr()
+{
+	return currlevel == 3 || currlevel == 4 || currlevel == 7 || currlevel == 8;
+}
+
 DungeonMode ScannerPattern::getDungeonMode()
 {
+	if (UseObjectScanenr())
+		return DungeonMode::Full;
+
 	return DungeonMode::BreakOnFailure;
 }
 
 bool ScannerPattern::skipSeed()
 {
+	if (UseObjectScanenr())
+		return false;
+
 	// Church
 	glSeedTbl[1] = sgGameInitInfo.dwSeed; // Matches level seed 1691869883, dungeon seed 1305510205, game seed 1230144506 24 18:48
 	quests[Q_BUTCHER]._qactive = QUEST_INIT;
@@ -242,7 +253,7 @@ bool ScannerPattern::skipSeed()
 	glSeedTbl[5] = sgGameInitInfo.dwSeed; // Matches level seed 3155785492, dungeon seed 1293295771, game seed 1229975451 22 19:50
 	quests[Q_SCHAMB]._qactive = QUEST_INIT;
 	glSeedTbl[6] = sgGameInitInfo.dwSeed;      // Matches level seed 417801337, dungeon seed 2062861350, game seed 1230145611 24 19:06
-	quests[Q_BLIND]._qactive = QUEST_NOTAVAIL; // QUEST_INIT;
+	quests[Q_BLIND]._qactive = QUEST_INIT; // QUEST_NOTAVAIL;
 	glSeedTbl[7] = sgGameInitInfo.dwSeed;
 	glSeedTbl[8] = sgGameInitInfo.dwSeed;
 
@@ -270,7 +281,62 @@ bool ScannerPattern::skipLevel(int level)
 	return level == 3 || level == 4 || level == 7 || level == 8; // Pattern are still not correct
 }
 
-bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
+bool matchesObjectPattern()
+{
+	if (currlevel == 3) {
+		if (StairsDown != Point { Spawn.x + 6, Spawn.y + 2 })
+			return false;
+		if (!dObject[Spawn.x + 2][Spawn.y + 3] || dObject[Spawn.x + 2][Spawn.y + 3] != abs(dObject[Spawn.x + 2][Spawn.y + 2]))
+			return false;
+		if (!dObject[Spawn.x + 3][Spawn.y + 3])
+			return false;
+		return true;
+	}
+	if (currlevel == 4) {
+		if (StairsDown != Point { Spawn.x + 6, Spawn.y + 2 })
+			return false;
+		if (!dObject[Spawn.x + 0][Spawn.y + 3] || dObject[Spawn.x + 0][Spawn.y + 3] != abs(dObject[Spawn.x + 0][Spawn.y + 2]))
+			return false;
+		if (!dObject[Spawn.x + 2][Spawn.y + 5] || dObject[Spawn.x + 2][Spawn.y + 5] != abs(dObject[Spawn.x + 2][Spawn.y + 4]))
+			return false;
+	}
+	if (currlevel == 6) {
+		if (StairsDown != Point { Spawn.x + 5, Spawn.y + 1 })
+			return false;
+		if (!dObject[Spawn.x + 1][Spawn.y + 3])
+			return false;
+		if (!dObject[Spawn.x + 2][Spawn.y + 3])
+			return false;
+		if (!dObject[Spawn.x + 1][Spawn.y + 4])
+			return false;
+		if (!dObject[Spawn.x + 2][Spawn.y + 4])
+			return false;
+		if (!dObject[Spawn.x + 3][Spawn.y + 5])
+			return false;
+	}
+	if (currlevel == 7) {
+		if (StairsDown != Point { Spawn.x + 5, Spawn.y + 1 })
+			return false;
+		if (!dObject[Spawn.x - 3][Spawn.y + 1])
+			return false;
+		if (!dObject[Spawn.x - 3][Spawn.y + 4])
+			return false;
+		if (!dObject[Spawn.x - 2][Spawn.y + 4])
+			return false;
+		if (!dObject[Spawn.x + 3][Spawn.y + 7])
+			return false;
+	}
+	if (currlevel == 8) {
+		if (StairsDown != Point { Spawn.x + 5, Spawn.y + 1 })
+			return false;
+	}
+
+	std::cout << "Game Seed for dlvl " << (int)currlevel << ": " << sgGameInitInfo.dwSeed << std::endl;
+
+	return true;
+}
+
+bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 {
 	if (levelSeed == std::nullopt)
 		return false;
@@ -370,4 +436,12 @@ bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
 	std::cout << "Level Seed for dlvl " << (int)currlevel << ": " << *levelSeed << std::endl;
 
 	return true;
+}
+
+bool ScannerPattern::levelMatches(std::optional<uint32_t> levelSeed)
+{
+	if (UseObjectScanenr())
+		return matchesObjectPattern();
+
+	return matchesTilePattern(levelSeed);
 }
