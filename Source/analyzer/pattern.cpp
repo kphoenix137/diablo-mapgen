@@ -92,12 +92,12 @@ const uint8_t GROOBO6[TEMPLATEX][TEMPLATEY] = {
 
 const uint8_t GROOBO7[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
-    {   1,  0,  0,  0,  0,  0,  0,  0,  0 },
-    {  82,  0, 72, 77,  0, 48, 71,  0,  0 },
-    {   1,  0, 76,  0,  0, 50, 78,  0,  0 },
-    {  80,  0,  0,  0,106,  0,107,  0,  0 },
-    {   0,  0,  0,128,130,  0,  0,  0,  0 },
-    {   0,  0,  0,129,131,  0,  0,  0,  0 },
+    {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
+    {  77,  0, 48, 71,  0,  0,  0,  0,  0 },
+    {   0,  0, 50, 78,  0,  0,  0,  0,  0 },
+    {   0,106,  0,107,  0,  0,  0,  0,  0 },
+    { 128,130,  0,  0,  0,  0,  0,  0,  0 },
+    { 129,131,  0,  0,  0,  0,  0,  0,  0 },
     {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
     {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
 	// clang-format on
@@ -222,7 +222,7 @@ const uint8_t GROOBO16[TEMPLATEX][TEMPLATEY] = {
 
 bool UseObjectScanenr()
 {
-	return currlevel == 3 || currlevel == 4 || currlevel == 7 || currlevel == 8;
+	return currlevel == 3 || currlevel == 4 || currlevel == 8;
 }
 
 DungeonMode ScannerPattern::getDungeonMode()
@@ -362,7 +362,7 @@ bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 		stairTile = 71;
 		pattern = &GROOBO6;
 	} else if (currlevel == 7) {
-		stairTile = 77;
+		stairTile = 71;
 		pattern = &GROOBO7;
 	} else if (currlevel == 8) {
 		stairTile = 77;
