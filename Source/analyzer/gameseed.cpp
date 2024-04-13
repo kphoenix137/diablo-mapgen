@@ -31,7 +31,10 @@ bool ScannerGameSeed::levelMatches(std::optional<uint32_t> levelSeed)
 	if (levelSeed == std::nullopt)
 		return false;
 
-	std::cout << sgGameInitInfo.dwSeed << std::endl;
+	if (levelSeed == *Config.target) {
+		std::cout << sgGameInitInfo.dwSeed << std::endl;
+		return true;
+	}
 
-	return levelSeed == *Config.target;
+	return false;
 }
