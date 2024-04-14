@@ -275,7 +275,7 @@ void ForceSeeds(int level)
 
 bool ScannerPattern::skipLevel(int level)
 {
-	bool skip = level == 3 || level == 4 || level == 7; // Pattern are still not correct
+	bool skip = level == 3 || level == 4; // Pattern are still not correct
 	if (Config.target)
 		skip = level != *Config.target;
 
