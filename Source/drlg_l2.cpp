@@ -3518,17 +3518,17 @@ std::optional<uint32_t> CreateL2Dungeon(DWORD rseed, int entry, DungeonMode mode
 	if (gbMaxPlayers == 1) {
 		if (currlevel == 7 && quests[Q_BLIND]._qactive == QUEST_NOTAVAIL) {
 			currlevel = 6;
-			CreateL2Dungeon(glSeedTbl[6], 4, breakOnSuccess);
+			CreateL2Dungeon(glSeedTbl[6], 4, mode);
 			currlevel = 7;
 		}
 		if (currlevel == 8) {
 			if (quests[Q_BLIND]._qactive == QUEST_NOTAVAIL) {
 				currlevel = 6;
-				CreateL2Dungeon(glSeedTbl[6], 4, breakOnSuccess);
+				CreateL2Dungeon(glSeedTbl[6], 4, mode);
 				currlevel = 8;
 			} else {
 				currlevel = 7;
-				CreateL2Dungeon(glSeedTbl[7], 4, breakOnSuccess);
+				CreateL2Dungeon(glSeedTbl[7], 4, mode);
 				currlevel = 8;
 			}
 		}
