@@ -53,11 +53,11 @@ const uint8_t GROOBO3[TEMPLATEX][TEMPLATEY] = {
 
 const uint8_t GROOBO4[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
-    {   0,  0, 66,  0,  0,  0,  0,122,  0 },
-    {   0, 63, 64, 65,  0,  0,  0,  0,  0 },
-    {   0,  0, 67, 68, 62, 57, 58,  0,  0 },
-    {   0,  0,  0,  0, 61, 59, 60,  0,  0 },
-    { 107,  0,  0,  0,  0,  0,  0,  0,  0 },
+    {   0,  0, 66,204,  0,  0,  0,122,  0 },
+    {   4, 63, 64, 65,  2,  0,  0, 16, 13 },
+    {   1,163, 67, 68, 62, 57, 58,162,162 },
+    {   1,163,  0,162, 61, 59, 60,  0, 13 },
+    { 107,163,  0,  0, 13,163, 13,163, 13 },
     {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
     {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
     {   0,  0,  0,  0,  0,  0,  0,  0,  0 },
@@ -540,7 +540,7 @@ bool matchesTilePattern(std::optional<uint32_t> levelSeed)
 			int y = sy + row;
 			if (x < 0 || y < 0 || x >= DMAXX || y >= DMAXY || dungeon[x][y] != (*pattern)[row][column]) {
 				misses++;
-				if (misses > 1) {
+				if (misses > 4) {
 					found = false;
 					break;
 				}
