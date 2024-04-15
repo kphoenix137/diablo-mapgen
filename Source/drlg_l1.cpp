@@ -2624,7 +2624,7 @@ static std::optional<uint32_t> DRLG_L5(int entry, DungeonMode mode)
 			InitL5Dungeon();
 			L5firstRoom();
 			failed = L5GetArea() < minarea;
-			if (mode == DungeonMode::BreakOnFailure && failed)
+			if ((mode == DungeonMode::BreakOnFailure || mode == DungeonMode::BreakOnFailureOrNoContent) && failed)
 				return std::nullopt;
 		} while (failed);
 
@@ -2739,7 +2739,7 @@ static std::optional<uint32_t> DRLG_L5(int entry, DungeonMode mode)
 			ViewY--;
 #endif
 		}
-		if (mode == DungeonMode::BreakOnFailure && doneflag == FALSE)
+		if ((mode == DungeonMode::BreakOnFailure || mode == DungeonMode::BreakOnFailureOrNoContent) && doneflag == FALSE)
 			return std::nullopt;
 	} while (doneflag == FALSE);
 

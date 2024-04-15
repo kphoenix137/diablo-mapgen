@@ -172,10 +172,10 @@ std::optional<uint32_t> CreateDungeon(DungeonMode mode)
 	if (leveltype == DTYPE_HELL)
 		levelSeed = CreateL4Dungeon(lseed, 0, mode);
 
-	if (mode == DungeonMode::Full || mode == DungeonMode::NoContent) {
+	if (mode == DungeonMode::Full || mode == DungeonMode::NoContent || mode == DungeonMode::BreakOnFailureOrNoContent) {
 		InitTriggers();
 
-		if (mode != DungeonMode::NoContent)
+		if (mode != DungeonMode::NoContent && mode != DungeonMode::BreakOnFailureOrNoContent)
 			CreateDungeonContent();
 
 		if (currlevel == 15) {

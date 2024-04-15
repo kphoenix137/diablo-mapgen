@@ -3554,4 +3554,5 @@ enum class DungeonMode {
 	NoContent,
 	BreakOnFailure,
 	BreakOnSuccess,
+	BreakOnFailureOrNoContent,
 };

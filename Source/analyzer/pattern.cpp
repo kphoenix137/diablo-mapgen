@@ -231,8 +231,10 @@ bool UseObjectScanner(int level)
 
 DungeonMode ScannerPattern::getDungeonMode()
 {
-	if (UseObjectScanner(currlevel) || UseSolidScanner(currlevel))
+	if (UseObjectScanner(currlevel))
 		return DungeonMode::Full;
+	if (UseSolidScanner(currlevel))
+		return DungeonMode::BreakOnFailureOrNoContent;
 
 	return DungeonMode::BreakOnFailure;
 }
