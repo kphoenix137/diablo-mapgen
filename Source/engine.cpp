@@ -20,8 +20,8 @@ DWORD glSeedTbl[NUMLEVELS];
 _gamedata sgGameInitInfo;
 BOOL light4flag;
 
-const int RndMult = 0x015A4E35;
-const int RndInc = 1;
+const uint32_t RndMult = 0x015A4E35;
+const uint32_t RndInc = 1;
 BYTE gbMaxPlayers = 1;
 BOOL leveldebug = false;
 bool zoomflag = false;
@@ -29,7 +29,7 @@ bool zoomflag = false;
 /** Seed value before the most recent call to SetRndSeed() */
 int orgseed;
 /** Current game seed */
-int sglGameSeed;
+uint32_t sglGameSeed;
 /** Number of times the current seed has been fetched */
 int SeedCount;
 
@@ -66,7 +66,8 @@ int GetRndSeed()
 {
 	SeedCount++;
 	sglGameSeed = RndMult * sglGameSeed + RndInc;
-	return abs(sglGameSeed);
+	int32_t seed = (int32_t)sglGameSeed;
+	return seed == std::numeric_limits<int32_t>::min() ? std::numeric_limits<int32_t>::min() : std::abs(seed);
 }
 
 int GetRndState()
