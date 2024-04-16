@@ -252,7 +252,7 @@ void printProgress(uint32_t seedIndex, uint32_t seed)
 		return;
 	ProgressseedMicros += elapsed;
 
-	uint64_t pct = 100 * seedIndex / Config.seedCount;
+	uint64_t pct = 100 * (uint64_t)seedIndex / Config.seedCount;
 	int speed = (seedIndex - ProgressseedIndex) / 10;
 	int seconds = (Config.seedCount - seedIndex) / speed;
 	ProgressseedIndex = seedIndex;
