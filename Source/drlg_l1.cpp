@@ -2879,7 +2879,8 @@ std::optional<uint32_t> CreateL5Dungeon(DWORD rseed, int entry, DungeonMode mode
 		DRLG_FreeL1SP();
 		return levelSeed;
 	}
-	DRLG_L1Pass3();
+	if (levelSeed)
+		DRLG_L1Pass3();
 	DRLG_FreeL1SP();
 
 #ifdef HELLFIRE
