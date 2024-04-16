@@ -29,7 +29,11 @@ make
 
 ### GUI
 
-If you use a IDE that support CMake it should be as simple as opening the project or the CMakeList.txt and then pressing the build buttonn in the IDE.
+If you use a IDE that support CMake it should be as simple as opening the project or the CMakeList.txt and then pressing the build button in the IDE.
+
+### Required files
+
+To run the tool you must extract and place the `levels` folder from the diabdat.mpq, that comes with Diablo, and place it next to the tool. The file names should be in lower case, to ensure this you can use the list file from [here](https://raw.githubusercontent.com/diasurgical/devilutionx-mpq-tools/main/data/diabdat-listfile.txt).
 
 ## Usage Examples
 
