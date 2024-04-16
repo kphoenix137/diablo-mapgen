@@ -242,7 +242,7 @@ DungeonMode ScannerPattern::getDungeonMode()
 void ForceSeeds(int level)
 {
 	// Church
-	glSeedTbl[1] = sgGameInitInfo.dwSeed; // Matches level seed 1691869883, dungeon seed 1305510205, game seed 1230144506 24 18:48
+	glSeedTbl[1] = sgGameInitInfo.dwSeed; // Matches level seed 1691869883, dungeon seed 1342003104, game seed 1230144506 24 18:48
 	quests[Q_BUTCHER]._qactive = QUEST_INIT;
 	quests[Q_PWATER]._qactive = QUEST_INIT;
 	glSeedTbl[2] = sgGameInitInfo.dwSeed;         // Matches level seed 3227087147, dungeon seed  755133500, game seed 1229972777 22 19:06
