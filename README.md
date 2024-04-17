@@ -58,7 +58,7 @@ As an example, you can run the following command to scan for seeds where Naj's P
 - `--start <offset>`: The seed to start from.
 - `--count <number_of_seeds>`: The number of seeds to process.
 - `--seeds <file>`: A file to read seeds from rather then using a sequental range.
-- `--target <value>`: A target value to set for the scanner.
+- `--target <value>`: A target value to set for the scanner (level, time, or seed).
 - `--quiet`: Do not print progress messages.
 - `--verbose`: Print out details about seeds.
 
@@ -90,7 +90,8 @@ This command splits up the seed range between processes concurrently. You can ad
 
 ### Options
 
-- `--scanner <type>`: How to analyze levels.
+- `--scanner <type>`: How to analyze levels (default pattern).
+- `--target <value>`: A target value to set for the scanner (level, time, or seed).
 - `--start <offset>`: The seed to start from.
 - `--count <number_of_seeds>`: The number of seeds to process.
 - `--threads <number_of_processes>`: The number of concurrent processes (default is one less then CPU threads)
