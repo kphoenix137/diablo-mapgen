@@ -122,7 +122,7 @@ void DropAllItems()
 
 bool ScannerPuzzler::skipLevel(int level)
 {
-	return level != 9;
+	return level != *Config.target;
 }
 
 void LocatePuzzler()
