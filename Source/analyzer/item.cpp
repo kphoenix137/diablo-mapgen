@@ -127,202 +127,141 @@ static bool AffixValueMatches(ItemStruct &item, int affix, bool isPrefix, int va
 
 	switch (power) {
 	case IPL_TOHIT:
-		if (item._iPLToHit == value)
-			return true;
+		return item._iPLToHit == value;
 	case IPL_TOHIT_CURSE:
-		if (item._iPLToHit == value)
-			return true;
+		return item._iPLToHit == value;
 	case IPL_DAMP:
-		if (item._iPLDam == value)
-			return true;
+		return item._iPLDam == value;
 	case IPL_DAMP_CURSE:
-		if (item._iPLDam == value)
-			return true;
+		return item._iPLDam == value;
 	case IPL_TOHIT_DAMP:
-		if (item._iPLDam == value)
-			// if (item._iPLToHit)
-			return true;
+		return item._iPLDam == value;
+		// if (item._iPLToHit)
 	case IPL_TOHIT_DAMP_CURSE:
-		if (item._iPLDam == value)
-			// if (item._iPLToHit)
-			return true;
+		return item._iPLDam == value;
+		// if (item._iPLToHit)
 	case IPL_ACP:
-		if (item._iPLAC == value)
-			return true;
+		return item._iPLAC == value;
 	case IPL_ACP_CURSE:
-		if (item._iPLAC == value)
-			return true;
+		return item._iPLAC == value;
 	case IPL_SETAC:
-		if (item._iAC == value)
-			return true;
+		return item._iAC == value;
 	case IPL_AC_CURSE:
-		if (item._iAC == value)
-			return true;
+		return item._iAC == value;
 	case IPL_FIRERES:
-		if (item._iPLFR == value)
-			return true;
+		return item._iPLFR == value;
 	case IPL_LIGHTRES:
-		if (item._iPLLR == value)
-			return true;
+		return item._iPLLR == value;
 	case IPL_MAGICRES:
-		if (item._iPLMR == value)
-			return true;
+		return item._iPLMR == value;
 	case IPL_ALLRES:
-		if (item._iPLFR == value && item._iPLLR == value && item._iPLMR == value)
-			return true;
+		return item._iPLFR == value
+		    && item._iPLLR == value
+		    && item._iPLMR == value;
 	case IPL_SPLLVLADD:
-		if (item._iSplLvlAdd == value)
-			return true;
+		return item._iSplLvlAdd == value;
 	case IPL_CHARGES:
-		if (item._iMaxCharges == value)
-			return true;
+		return item._iMaxCharges == value;
 	case IPL_SPELL:
-		if (item._iSpell == value)
-			return true;
+		return item._iSpell == value;
 	case IPL_FIREDAM:
-		if (item._iFMinDam == value)
-			return true;
+		return item._iFMinDam == value;
 	case IPL_LIGHTDAM:
-		if (item._iLMinDam == value)
-			return true;
+		return item._iLMinDam == value;
 	case IPL_STR:
-		if (item._iPLStr == value)
-			return true;
+		return item._iPLStr == value;
 	case IPL_STR_CURSE:
-		if (item._iPLStr == value)
-			return true;
+		return item._iPLStr == value;
 	case IPL_MAG:
-		if (item._iPLMag == value)
-			return true;
+		return item._iPLMag == value;
 	case IPL_MAG_CURSE:
-		if (item._iPLMag == value)
-			return true;
+		return item._iPLMag == value;
 	case IPL_DEX:
-		if (item._iPLDex == value)
-			return true;
+		return item._iPLDex == value;
 	case IPL_DEX_CURSE:
-		if (item._iPLDex == value)
-			return true;
+		return item._iPLDex == value;
 	case IPL_VIT:
-		if (item._iPLVit == value)
-			return true;
+		return item._iPLVit == value;
 	case IPL_VIT_CURSE:
-		if (item._iPLVit == value)
-			return true;
+		return item._iPLVit == value;
 	case IPL_ATTRIBS:
-		if (item._iPLStr == value && item._iPLMag == value && item._iPLDex == value && item._iPLVit == value)
-			return true;
+		return item._iPLStr == value
+		    && item._iPLMag == value
+		    && item._iPLDex == value
+		    && item._iPLVit == value;
 	case IPL_ATTRIBS_CURSE:
-		if (item._iPLStr == value && item._iPLMag == value && item._iPLDex == value && item._iPLVit == value)
-			return true;
+		return item._iPLStr == value
+		    && item._iPLMag == value
+		    && item._iPLDex == value
+		    && item._iPLVit == value;
 	case IPL_GETHIT_CURSE:
-		if (item._iPLGetHit == value)
-			return true;
+		return item._iPLGetHit == value;
 	case IPL_GETHIT:
-		if (item._iPLGetHit == value)
-			return true;
+		return item._iPLGetHit == value;
 	case IPL_LIFE:
-		if (item._iPLHP == value)
-			return true;
+		return item._iPLHP == value;
 	case IPL_LIFE_CURSE:
-		if (item._iPLHP == value)
-			return true;
+		return item._iPLHP == value;
 	case IPL_MANA:
-		if (item._iPLMana == value)
-			return true;
+		return item._iPLMana == value;
 	case IPL_MANA_CURSE:
-		if (item._iPLMana == value)
-			return true;
+		return item._iPLMana == value;
 	case IPL_DUR:
-		if (item._iMaxDur == value)
-			return true;
+		return item._iMaxDur == value;
 	case IPL_DUR_CURSE:
-		if (item._iMaxDur == value)
-			return true;
+		return item._iMaxDur == value;
 	case IPL_INDESTRUCTIBLE:
 		return true;
 	case IPL_LIGHT:
-		if (item._iPLLight == value)
-			return true;
+		return item._iPLLight == value;
 	case IPL_LIGHT_CURSE:
-		if (item._iPLLight == value)
-			return true;
+		return item._iPLLight == value;
 	case IPL_FIRE_ARROWS:
-		if (item._iFMinDam == value)
-			return true;
+		return item._iFMinDam == value;
 	case IPL_LIGHT_ARROWS:
-		if (item._iLMinDam == value)
-			return true;
+		return item._iLMinDam == value;
 	case IPL_THORNS:
-		return true;
 	case IPL_NOMANA:
-		return true;
 	case IPL_NOHEALPLR:
-		return true;
 	case IPL_ABSHALFTRAP:
-		return true;
 	case IPL_KNOCKBACK:
-		return true;
 	case IPL_3XDAMVDEM:
-		return true;
 	case IPL_ALLRESZERO:
-		return true;
 	case IPL_NOHEALMON:
 		return true;
 	case IPL_STEALMANA:
-		if ((item._iFlags |= ISPL_STEALMANA_3 && value == 3) || (item._iFlags |= ISPL_STEALMANA_5 && value == 5))
-			return true;
+		return (value == 3 && item._iFlags & ISPL_STEALMANA_3)
+		    || (value == 5 && item._iFlags & ISPL_STEALMANA_5);
 	case IPL_STEALLIFE:
-		if ((item._iFlags |= ISPL_STEALLIFE_3 && value == 3) || (item._iFlags |= ISPL_STEALLIFE_5 && value == 5))
-			return true;
+		return (value == 3 && item._iFlags & ISPL_STEALLIFE_3)
+		    || (value == 5 && item._iFlags & ISPL_STEALLIFE_5);
 	case IPL_TARGAC:
-		if (item._iPLEnAc == value)
-			return true;
+		return item._iPLEnAc == value;
 	case IPL_FASTATTACK:
-		if (item._iFlags |= ISPL_QUICKATTACK && value == 1)
-			return true;
-		else if (item._iFlags |= ISPL_FASTATTACK && value == 2)
-			return true;
-		else if (item._iFlags |= ISPL_FASTERATTACK && value == 3)
-			return true;
-		else if (item._iFlags |= ISPL_FASTESTATTACK && value == 4)
-			return true;
+		return (value == 1 && (item._iFlags & ISPL_QUICKATTACK))
+		    || (value == 2 && (item._iFlags & ISPL_FASTATTACK))
+		    || (value == 3 && (item._iFlags & ISPL_FASTERATTACK))
+		    || (value == 4 && (item._iFlags & ISPL_FASTESTATTACK));
 	case IPL_FASTRECOVER:
-		if (item._iFlags |= ISPL_FASTRECOVER && value == 1)
-			return true;
-		else if (item._iFlags |= ISPL_FASTERRECOVER && value == 2)
-			return true;
-		else if (item._iFlags |= ISPL_FASTESTRECOVER && value == 3)
-			return true;
+		return (value == 1 && (item._iFlags & ISPL_FASTRECOVER))
+		    || (value == 2 && (item._iFlags & ISPL_FASTERRECOVER))
+		    || (value == 3 && (item._iFlags & ISPL_FASTESTRECOVER));
 	case IPL_FASTBLOCK:
 		return true;
 	case IPL_DAMMOD:
-		if (item._iPLDamMod == value)
-			return true;
+		return item._iPLDamMod == value;
 	case IPL_RNDARROWVEL:
-		return true;
 	case IPL_SETDAM:
-		return true;
 	case IPL_SETDUR:
-		return true;
 	case IPL_FASTSWING:
-		return true;
 	case IPL_ONEHAND:
-		return true;
 	case IPL_DRAINLIFE:
-		return true;
 	case IPL_RNDSTEALLIFE:
-		return true;
 	case IPL_INFRAVISION:
-		return true;
 	case IPL_NOMINSTR:
-		return true;
 	case IPL_INVCURS:
-		return true;
 	case IPL_ADDACLIFE:
-		return true;
 	case IPL_ADDMANAAC:
-		return true;
 	case IPL_FIRERESCLVL:
 		return true;
 	default:
