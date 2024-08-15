@@ -77,7 +77,7 @@ static void CreateItemsFromObject(int oid)
 	case OBJ_WARWEAP:
 	case OBJ_WEAPONRACK: {
 		SetRndSeed(object[oid]._oRndSeed);
-		int weaponType;
+		int weaponType = ITYPE_MISC;
 
 		switch (random_(0, 4) + ITYPE_SWORD) {
 		case ITYPE_SWORD:

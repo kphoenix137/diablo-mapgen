@@ -59,6 +59,7 @@ As an example, you can run the following command to scan for seeds where Naj's P
 - `--count <number_of_seeds>`: The number of seeds to process.
 - `--seeds <file>`: A file to read seeds from rather then using a sequental range.
 - `--target <value>`: A target value to set for the scanner (level, time, or seed).
+- `--mp`: Runs game logic in multiplayer mode.
 - `--quiet`: Do not print progress messages.
 - `--verbose`: Print out details about seeds.
 
