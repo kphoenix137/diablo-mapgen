@@ -67,7 +67,8 @@ add_executable(${BIN_TARGET}
   Source/spelldat.cpp
   #Source/stores.cpp
   Source/themes.cpp
-  Source/trigs.cpp)
+  Source/trigs.cpp
+  )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND CMAKE_BUILD_TYPE MATCHES "Debug")
 	target_link_libraries(${BIN_TARGET} PUBLIC "-fsanitize=undefined")
@@ -81,8 +82,8 @@ if(CMAKE_STRIP)
     ARGS $<TARGET_FILE:${BIN_TARGET}>)
 endif()
 
-add_executable (seed_table "tools/seed_table.cpp" "Source/analyzer/item.h")
+add_executable (seed_table "tools/seed_table.cpp")
 target_compile_features(seed_table PUBLIC cxx_std_20)
 
-add_executable (sort_candidates "tools/sort_candidates.cpp" "Source/analyzer/item.h")
+add_executable (sort_candidates "tools/sort_candidates.cpp")
 target_compile_features(sort_candidates PUBLIC cxx_std_20)
