@@ -13,6 +13,7 @@ enum class Scanners {
 	Warp,
 	Pattern,
 	GameSeed,
+	Item,
 };
 
 std::optional<Scanners> Scanners_FromDisplayName(std::string_view name);

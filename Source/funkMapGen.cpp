@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "analyzer/gameseed.h"
+#include "analyzer/item.h"
 #include "analyzer/path.h"
 #include "analyzer/pattern.h"
 #include "analyzer/puzzler.h"
@@ -73,6 +74,8 @@ void InitEngine()
 		scanner = new ScannerPattern();
 	} else if (Config.scanner == Scanners::GameSeed) {
 		scanner = new ScannerGameSeed();
+	} else if (Config.scanner == Scanners::Item) {
+		scanner = new ScannerItem();
 	}
 }
 
