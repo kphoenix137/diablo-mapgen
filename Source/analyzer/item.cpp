@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "../itemdat.h"
 #include "../items.h"
 #include "../monster.h"
 #include "../objects.h"
@@ -121,172 +120,9 @@ static void DropAllItems()
 	}
 }
 
-static bool AffixValueMatches(ItemStruct &item, int affix, bool isPrefix, int value)
-{
-	int power = isPrefix ? PL_Prefix[affix].PLPower : PL_Suffix[affix].PLPower;
-
-	switch (power) {
-	case IPL_TOHIT:
-		return item._iPLToHit == value;
-	case IPL_TOHIT_CURSE:
-		return item._iPLToHit == value;
-	case IPL_DAMP:
-		return item._iPLDam == value;
-	case IPL_DAMP_CURSE:
-		return item._iPLDam == value;
-	case IPL_TOHIT_DAMP:
-		return item._iPLDam == value;
-		// if (item._iPLToHit)
-	case IPL_TOHIT_DAMP_CURSE:
-		return item._iPLDam == value;
-		// if (item._iPLToHit)
-	case IPL_ACP:
-		return item._iPLAC == value;
-	case IPL_ACP_CURSE:
-		return item._iPLAC == value;
-	case IPL_SETAC:
-		return item._iAC == value;
-	case IPL_AC_CURSE:
-		return item._iAC == value;
-	case IPL_FIRERES:
-		return item._iPLFR == value;
-	case IPL_LIGHTRES:
-		return item._iPLLR == value;
-	case IPL_MAGICRES:
-		return item._iPLMR == value;
-	case IPL_ALLRES:
-		return item._iPLFR == value
-		    && item._iPLLR == value
-		    && item._iPLMR == value;
-	case IPL_SPLLVLADD:
-		return item._iSplLvlAdd == value;
-	case IPL_CHARGES:
-		return item._iMaxCharges == value;
-	case IPL_SPELL:
-		return item._iSpell == value;
-	case IPL_FIREDAM:
-		return item._iFMinDam == value;
-	case IPL_LIGHTDAM:
-		return item._iLMinDam == value;
-	case IPL_STR:
-		return item._iPLStr == value;
-	case IPL_STR_CURSE:
-		return item._iPLStr == value;
-	case IPL_MAG:
-		return item._iPLMag == value;
-	case IPL_MAG_CURSE:
-		return item._iPLMag == value;
-	case IPL_DEX:
-		return item._iPLDex == value;
-	case IPL_DEX_CURSE:
-		return item._iPLDex == value;
-	case IPL_VIT:
-		return item._iPLVit == value;
-	case IPL_VIT_CURSE:
-		return item._iPLVit == value;
-	case IPL_ATTRIBS:
-		return item._iPLStr == value
-		    && item._iPLMag == value
-		    && item._iPLDex == value
-		    && item._iPLVit == value;
-	case IPL_ATTRIBS_CURSE:
-		return item._iPLStr == value
-		    && item._iPLMag == value
-		    && item._iPLDex == value
-		    && item._iPLVit == value;
-	case IPL_GETHIT_CURSE:
-		return item._iPLGetHit == value;
-	case IPL_GETHIT:
-		return item._iPLGetHit == value;
-	case IPL_LIFE:
-		return item._iPLHP == value;
-	case IPL_LIFE_CURSE:
-		return item._iPLHP == value;
-	case IPL_MANA:
-		return item._iPLMana == value;
-	case IPL_MANA_CURSE:
-		return item._iPLMana == value;
-	case IPL_DUR:
-		return item._iMaxDur == value;
-	case IPL_DUR_CURSE:
-		return item._iMaxDur == value;
-	case IPL_INDESTRUCTIBLE:
-		return true;
-	case IPL_LIGHT:
-		return item._iPLLight == value;
-	case IPL_LIGHT_CURSE:
-		return item._iPLLight == value;
-	case IPL_FIRE_ARROWS:
-		return item._iFMinDam == value;
-	case IPL_LIGHT_ARROWS:
-		return item._iLMinDam == value;
-	case IPL_THORNS:
-	case IPL_NOMANA:
-	case IPL_NOHEALPLR:
-	case IPL_ABSHALFTRAP:
-	case IPL_KNOCKBACK:
-	case IPL_3XDAMVDEM:
-	case IPL_ALLRESZERO:
-	case IPL_NOHEALMON:
-		return true;
-	case IPL_STEALMANA:
-		return (value == 3 && item._iFlags & ISPL_STEALMANA_3)
-		    || (value == 5 && item._iFlags & ISPL_STEALMANA_5);
-	case IPL_STEALLIFE:
-		return (value == 3 && item._iFlags & ISPL_STEALLIFE_3)
-		    || (value == 5 && item._iFlags & ISPL_STEALLIFE_5);
-	case IPL_TARGAC:
-		return item._iPLEnAc == value;
-	case IPL_FASTATTACK:
-		return (value == 1 && (item._iFlags & ISPL_QUICKATTACK))
-		    || (value == 2 && (item._iFlags & ISPL_FASTATTACK))
-		    || (value == 3 && (item._iFlags & ISPL_FASTERATTACK))
-		    || (value == 4 && (item._iFlags & ISPL_FASTESTATTACK));
-	case IPL_FASTRECOVER:
-		return (value == 1 && (item._iFlags & ISPL_FASTRECOVER))
-		    || (value == 2 && (item._iFlags & ISPL_FASTERRECOVER))
-		    || (value == 3 && (item._iFlags & ISPL_FASTESTRECOVER));
-	case IPL_FASTBLOCK:
-		return true;
-	case IPL_DAMMOD:
-		return item._iPLDamMod == value;
-	case IPL_RNDARROWVEL:
-	case IPL_SETDAM:
-	case IPL_SETDUR:
-	case IPL_FASTSWING:
-	case IPL_ONEHAND:
-	case IPL_DRAINLIFE:
-	case IPL_RNDSTEALLIFE:
-	case IPL_INFRAVISION:
-	case IPL_NOMINSTR:
-	case IPL_INVCURS:
-	case IPL_ADDACLIFE:
-	case IPL_ADDMANAAC:
-	case IPL_FIRERESCLVL:
-		return true;
-	default:
-		return false;
-	}
-}
-
 bool ScannerItem::skipLevel(int level)
 {
 	return level != *Config.target;
-}
-
-static inline bool FindPrefix()
-{
-	return *Config.prefix;
-}
-
-static inline bool FindSuffix()
-{
-	return *Config.suffix;
-}
-
-static inline bool FindUnique()
-{
-	return *Config.uid;
 }
 
 bool LocateItem()
@@ -298,32 +134,14 @@ bool LocateItem()
 	for (int i = 0; i < numitems; i++) {
 		int ii = itemactive[i];
 		ItemStruct &searchItem = item[ii];
-		if (FindUnique) { // Puzzler = 60
-			if (searchItem._iMagical != ITEM_QUALITY_UNIQUE || searchItem._iUid != *Config.uid)
-				return false;
-		} else if (FindPrefix() || FindSuffix()) {
-			if (FindPrefix()) {
-				uint8_t prefix = *Config.prefix;
-				uint32_t prefixval = Config.prefixval.value_or(0);
 
-				if (searchItem._iPrePower != prefix || !AffixValueMatches(searchItem, prefix, true, prefixval))
-					return false;
-			}
-
-			if (FindSuffix()) {
-				uint8_t suffix = *Config.suffix;
-				uint32_t suffixval = Config.suffixval.value_or(0);
-
-				if (searchItem._iSufPower != suffix || !AffixValueMatches(searchItem, suffix, false, suffixval))
-					return false;
-			}
-		} else {
-			return false;
+		if (strcmp(*Config.targetStr, searchItem._iIName) == 0) {
+			POI = { searchItem._ix, searchItem._iy };
+			return true;
 		}
-
-		POI = { searchItem._ix, searchItem._iy };
-		return true;
 	}
+
+	return false;
 }
 
 bool ScannerItem::levelMatches(std::optional<uint32_t> levelSeed)

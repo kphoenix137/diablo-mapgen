@@ -31,11 +31,6 @@ static void printHelp()
 	std::cout << "--target <#>    The target for the current filter [default: 420]" << std::endl;
 	std::cout << "--quiet         Do print status messages" << std::endl;
 	std::cout << "--verbose       Print out details about seeds" << std::endl;
-	std::cout << "--prefix <#>    The prefix to search for" << std::endl;
-	std::cout << "--suffix <#>    The suffix to search for" << std::endl;
-	std::cout << "--prefixval <#> The prefix value to search for" << std::endl;
-	std::cout << "--suffixval <#> The suffix value to search for" << std::endl;
-	std::cout << "--uid <#>       The unique identifier to search for" << std::endl;
 }
 
 } // namespace
@@ -101,41 +96,13 @@ Configuration Configuration::ParseArguments(int argc, char **argv)
 				exit(255);
 			}
 			config.target = std::stoll(argv[i]);
-		} else if (arg == "--prefix") {
+		} else if (arg == "--targetStr") {
 			i++;
 			if (argc <= i) {
-				std::cerr << "Missing value for --prefix" << std::endl;
+				std::cerr << "Missing value for --targetStr" << std::endl;
 				exit(255);
 			}
-			config.target = std::stoll(argv[i]);
-		} else if (arg == "--suffix") {
-			i++;
-			if (argc <= i) {
-				std::cerr << "Missing value for --suffix" << std::endl;
-				exit(255);
-			}
-			config.target = std::stoll(argv[i]);
-		} else if (arg == "--prefixval") {
-			i++;
-			if (argc <= i) {
-				std::cerr << "Missing value for --prefixval" << std::endl;
-				exit(255);
-			}
-			config.target = std::stoll(argv[i]);
-		} else if (arg == "--suffixval") {
-			i++;
-			if (argc <= i) {
-				std::cerr << "Missing value for --suffixval" << std::endl;
-				exit(255);
-			}
-			config.target = std::stoll(argv[i]);
-		} else if (arg == "--uid") {
-			i++;
-			if (argc <= i) {
-				std::cerr << "Missing value for --uid" << std::endl;
-				exit(255);
-			}
-			config.target = std::stoll(argv[i]);
+			config.targetStr = argv[i];
 		} else if (arg == "--verbose") {
 			config.verbose = true;
 		} else {

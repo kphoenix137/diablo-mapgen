@@ -22,7 +22,7 @@ BOOL light4flag;
 
 const uint32_t RndMult = 0x015A4E35;
 const uint32_t RndInc = 1;
-BYTE gbMaxPlayers = 1;
+BYTE gbMaxPlayers = 4;
 BOOL leveldebug = false;
 bool zoomflag = false;
 

@@ -398,7 +398,7 @@ const PLStruct PL_Suffix[] = {
 	{  "the sky",       IPL_ATTRIBS,          1,        3,        5, PLT_ARMO | PLT_SHLD | PLT_WEAP |             PLT_BOW | PLT_MISC,     GOE_ANY,  FALSE,    TRUE,       800,     4000,         5 },
 	{  "the moon",      IPL_ATTRIBS,          4,        7,       11, PLT_ARMO | PLT_SHLD | PLT_WEAP |             PLT_BOW | PLT_MISC,     GOE_ANY,  FALSE,    TRUE,      4800,     8000,        10 },
 #endif
-	{  "the stars",     IPL_ATTRIBS,          8,       11,       17, PLT_ARMO |            PLT_WEAP |             PLT_BOW | PLT_MISC,     GOE_ANY,  FALSE,    TRUE,      8800,    12000,        15 },
+/*45*/	{  "the stars",     IPL_ATTRIBS,          8,       11,       17, PLT_ARMO |            PLT_WEAP |             PLT_BOW | PLT_MISC,     GOE_ANY,  FALSE,    TRUE,      8800,    12000,        15 },
 	{  "the heavens",   IPL_ATTRIBS,         12,       15,       25,                       PLT_WEAP |             PLT_BOW | PLT_MISC,     GOE_ANY,  FALSE,    TRUE,     12800,    20000,        20 },
 	{  "the zodiac",    IPL_ATTRIBS,         16,       20,       30,                                                        PLT_MISC,     GOE_ANY,  FALSE,    TRUE,     20800,    40000,        30 },
 	{  "the vulture",   IPL_LIFE_CURSE,      11,       25,        4, PLT_ARMO | PLT_SHLD |                                  PLT_MISC,     GOE_EVIL, FALSE,    FALSE,        0,        0,        -4 },

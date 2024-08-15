@@ -17,10 +17,6 @@ struct Configuration {
 	bool asciiLevels = false;
 	bool exportLevels = false;
 	std::optional<uint32_t> target = std::nullopt;
-	std::optional<uint8_t> prefix = std::nullopt;
-	std::optional<uint8_t> suffix = std::nullopt;
-	std::optional<uint32_t> prefixval = std::nullopt;
-	std::optional<uint32_t> suffixval = std::nullopt;
-	std::optional<uint32_t> uid = std::nullopt;
+	std::optional<const char *> targetStr = std::nullopt;
 	bool verbose = false;
 };
