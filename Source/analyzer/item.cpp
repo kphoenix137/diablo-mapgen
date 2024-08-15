@@ -122,6 +122,8 @@ static void DropAllItems()
 
 bool ScannerItem::skipLevel(int level)
 {
+	if (level == 0)
+		return false;
 	return level != *Config.target;
 }
 

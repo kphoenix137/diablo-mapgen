@@ -8,7 +8,6 @@ enum class Scanners {
 	None,
 	Path,
 	Quest,
-	Puzzler,
 	Stairs,
 	Warp,
 	Pattern,

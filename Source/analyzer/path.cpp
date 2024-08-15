@@ -4,7 +4,7 @@
 
 #include "../../types.h"
 
-#include "puzzler.h"
+#include "item.h"
 #include "../funkMapGen.h"
 #include "../objects.h"
 #include "../path.h"
@@ -185,7 +185,7 @@ bool IsGoodLevelSoursororStrategy()
 		}
 		tickLenth += walkTicks;
 	} else if (currlevel == 9) {
-		LocatePuzzler();
+		LocateItem();
 		int pathToPuzzler = -1;
 		if (POI != Point { -1, -1 }) {
 			int walkTicks = GetWalkTime(Spawn, POI);

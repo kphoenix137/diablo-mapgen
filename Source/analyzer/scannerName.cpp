@@ -17,7 +17,6 @@ std::optional<Scanners> Scanners_FromDisplayName(std::string_view name)
 		{ "none", Scanners::None },
 		{ "path", Scanners::Path },
 		{ "pattern", Scanners::Pattern },
-		{ "puzzler", Scanners::Puzzler },
 		{ "quest", Scanners::Quest },
 		{ "stairs", Scanners::Stairs },
 		{ "warp", Scanners::Warp },
@@ -55,10 +54,6 @@ std::optional<std::string> Scanners_ToDisplayName(Scanners scanner)
 		}
 		case Scanners::Quest: {
 			static constexpr std::string_view displayName = "quest";
-			return std::string(displayName);
-		}
-		case Scanners::Puzzler: {
-			static constexpr std::string_view displayName = "puzzler";
 			return std::string(displayName);
 		}
 		case Scanners::Stairs: {

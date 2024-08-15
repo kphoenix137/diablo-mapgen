@@ -13,24 +13,24 @@ namespace {
 
 static void printHelp()
 {
-	std::cout << "--help          Print this message and exit" << std::endl;
-	std::cout << "--ascii         Print ASCII version of levels" << std::endl;
-	std::cout << "--export        Export levels as .dun files" << std::endl;
-	std::cout << "--scanner <#>   How to analyze levels [default: none]" << std::endl;
-	std::cout << "                    none: No analyzing" << std::endl;
-	std::cout << "                    puzzler: Search for Naj's Puzzler on level 9" << std::endl;
-	std::cout << "                    path: Estimate the time to complete the game" << std::endl;
-	std::cout << "                    warp: Find seeds with a warp on level 15" << std::endl;
-	std::cout << "                    stairs: Look for stairs with a very short distance to level 9" << std::endl;
-	std::cout << "                    pattern: Search a set tile pattern" << std::endl;
-	std::cout << "                    gameseed: Search for GameSeeds with LevelSeed" << std::endl;
-	std::cout << "                    item: Search for a specific item" << std::endl;
-	std::cout << "--start <#>     The seed to start from" << std::endl;
-	std::cout << "--count <#>     The number of seeds to process" << std::endl;
-	std::cout << "--seeds <#>     A file to read seeds from" << std::endl;
-	std::cout << "--target <#>    The target for the current filter [default: 420]" << std::endl;
-	std::cout << "--quiet         Do print status messages" << std::endl;
-	std::cout << "--verbose       Print out details about seeds" << std::endl;
+	std::cout << "--help         Print this message and exit" << std::endl;
+	std::cout << "--ascii        Print ASCII version of levels" << std::endl;
+	std::cout << "--export       Export levels as .dun files" << std::endl;
+	std::cout << "--scanner <#>  How to analyze levels [default: none]" << std::endl;
+	std::cout << "                   none: No analyzing" << std::endl;
+	std::cout << "                   path: Estimate the time to complete the game" << std::endl;
+	std::cout << "                   warp: Find seeds with a warp on level 15" << std::endl;
+	std::cout << "                   stairs: Look for stairs with a very short distance to level 9" << std::endl;
+	std::cout << "                   pattern: Search a set tile pattern" << std::endl;
+	std::cout << "                   gameseed: Search for GameSeeds with LevelSeed" << std::endl;
+	std::cout << "                   item: Search for a specific item on a specific dlvl" << std::endl;
+	std::cout << "--start <#>    The seed to start from" << std::endl;
+	std::cout << "--count <#>    The number of seeds to process" << std::endl;
+	std::cout << "--seeds <#>    A file to read seeds from" << std::endl;
+	std::cout << "--target <#>   The target for the current filter [default: 420]" << std::endl;
+	std::cout << "--targetStr <#> The target item name for the item filter [default: none]" << std::endl;
+	std::cout << "--quiet        Do print status messages" << std::endl;
+	std::cout << "--verbose      Print out details about seeds" << std::endl;
 }
 
 } // namespace
