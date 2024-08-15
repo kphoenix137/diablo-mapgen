@@ -267,8 +267,6 @@ static bool AffixValueMatches(ItemStruct &item, int affix, bool isPrefix, int va
 	default:
 		return false;
 	}
-
-	return false;
 }
 
 bool ScannerItem::skipLevel(int level)
