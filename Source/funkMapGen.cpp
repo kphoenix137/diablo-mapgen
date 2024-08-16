@@ -11,9 +11,9 @@
 #include <vector>
 
 #include "analyzer/gameseed.h"
+#include "analyzer/item.h"
 #include "analyzer/path.h"
 #include "analyzer/pattern.h"
-#include "analyzer/puzzler.h"
 #include "analyzer/quest.h"
 #include "analyzer/scannerName.h"
 #include "analyzer/stairs.h"
@@ -63,8 +63,6 @@ void InitEngine()
 		scanner = new ScannerPath();
 	} else if (Config.scanner == Scanners::Quest) {
 		scanner = new ScannerQuest();
-	} else if (Config.scanner == Scanners::Puzzler) {
-		scanner = new ScannerPuzzler();
 	} else if (Config.scanner == Scanners::Warp) {
 		scanner = new ScannerWarp();
 	} else if (Config.scanner == Scanners::Stairs) {
@@ -73,6 +71,8 @@ void InitEngine()
 		scanner = new ScannerPattern();
 	} else if (Config.scanner == Scanners::GameSeed) {
 		scanner = new ScannerGameSeed();
+	} else if (Config.scanner == Scanners::Item) {
+		scanner = new ScannerItem();
 	}
 }
 

@@ -8,11 +8,11 @@ enum class Scanners {
 	None,
 	Path,
 	Quest,
-	Puzzler,
 	Stairs,
 	Warp,
 	Pattern,
 	GameSeed,
+	Item,
 };
 
 std::optional<Scanners> Scanners_FromDisplayName(std::string_view name);

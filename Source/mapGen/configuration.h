@@ -17,5 +17,6 @@ struct Configuration {
 	bool asciiLevels = false;
 	bool exportLevels = false;
 	std::optional<uint32_t> target = std::nullopt;
+	std::optional<const char *> targetStr = std::nullopt;
 	bool verbose = false;
 };

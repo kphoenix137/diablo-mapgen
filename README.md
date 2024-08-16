@@ -40,7 +40,7 @@ To run the tool you must extract and place the `levels` folder from the diabdat.
 As an example, you can run the following command to scan for seeds where Naj's Puzzler can be found on level 9, within a range of seeds that can be produced on all versions of Windows:
 
 ```bash
-./diablo-mapgen --scanner puzzler --start 315532800 --count 1864050846
+./diablo-mapgen --scanner item --target 9 --targetStr "Naj's Puzzler" --start 315532800 --count 1864050846
 ```
 
 ### Options
@@ -50,15 +50,16 @@ As an example, you can run the following command to scan for seeds where Naj's P
 - `--scanner <type>`: How to analyze levels. Available options:
   - `none`: No analysis (default).
   - `warp`: Find seeds with a warp on level 15.
-  - `puzzler`: Search for Naj's Puzzler on the level specified by `--target` (default 9).
   - `path`: Estimate the time to complete the levels, skip seeds that take longer then number of secound specified by `--target` (default 420).
   - `stairs`: Look for stairs with a very short distance between them.
   - `pattern`: Search for levels specified by `--target` (default blank) based on tile patterns and print out there level seed.
   - `gameseed`: Search for GameSeeds that generates the LevelSeed given by `--target` (default 9:3916317768).
+  - `item`: Search for items on the level specified by `--target` (default [Scan Every Dlvl]), using item name string specified by `--targetStr` (default "Naj's Puzzler").
 - `--start <offset>`: The seed to start from.
 - `--count <number_of_seeds>`: The number of seeds to process.
 - `--seeds <file>`: A file to read seeds from rather then using a sequental range.
 - `--target <value>`: A target value to set for the scanner (level, time, or seed).
+- `--mp`: Runs game logic in multiplayer mode.
 - `--quiet`: Do not print progress messages.
 - `--verbose`: Print out details about seeds.
 

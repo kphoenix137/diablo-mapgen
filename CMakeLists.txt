@@ -43,9 +43,10 @@ add_executable(${BIN_TARGET}
   Source/drlg_l4.cpp
   Source/engine.cpp
   Source/analyzer/gameseed.cpp
+  Source/analyzer/item.cpp
   Source/analyzer/path.cpp
   Source/analyzer/pattern.cpp
-  Source/analyzer/puzzler.cpp
+  
   Source/analyzer/quest.cpp
   Source/analyzer/scannerName.cpp
   Source/analyzer/stairs.cpp
