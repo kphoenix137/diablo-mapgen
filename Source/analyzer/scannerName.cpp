@@ -13,10 +13,10 @@ std::optional<Scanners> Scanners_FromDisplayName(std::string_view name)
 	// For any new scanners, just add to the pre-sorted lookup table.
 	constexpr std::pair<std::string_view, Scanners> displayNames[] = {
 		{ "gameseed", Scanners::GameSeed },
-		{ "item", Scanners::Item },
 		{ "none", Scanners::None },
 		{ "path", Scanners::Path },
 		{ "pattern", Scanners::Pattern },
+		{ "puzzler", Scanners::Puzzler },
 		{ "quest", Scanners::Quest },
 		{ "stairs", Scanners::Stairs },
 		{ "warp", Scanners::Warp },
@@ -56,6 +56,10 @@ std::optional<std::string> Scanners_ToDisplayName(Scanners scanner)
 			static constexpr std::string_view displayName = "quest";
 			return std::string(displayName);
 		}
+		case Scanners::Puzzler: {
+			static constexpr std::string_view displayName = "puzzler";
+			return std::string(displayName);
+		}
 		case Scanners::Stairs: {
 			static constexpr std::string_view displayName = "stairs";
 			return std::string(displayName);
@@ -71,10 +75,6 @@ std::optional<std::string> Scanners_ToDisplayName(Scanners scanner)
 		case Scanners::GameSeed: {
 			static constexpr std::string_view displayName = "gameseed";
 			return std::string(displayName);
-		}
-	    case Scanners::Item: {
-		    static constexpr std::string_view displayName = "item";
-		    return std::string(displayName);
 		}
 		default: {
 			return std::nullopt;
