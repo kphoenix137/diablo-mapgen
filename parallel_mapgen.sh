@@ -81,7 +81,7 @@ fi
 
 # Add targetStr argument if provided
 if [ ! -z "$targetStr" ]; then
-    command+=" --targetStr $targetStr"
+    command+=" --targetStr \"$targetStr\""
 fi
 
 # Add mp argument if provided
@@ -110,7 +110,7 @@ for ((i = 0; i < num_processes; i++)); do
     fi
 
     # Run the command with the current offset and count
-    $command --start $offset --count $actual_count &
+    eval $command --start $offset --count $actual_count &
 done
 
 # Wait for the processes to finish
