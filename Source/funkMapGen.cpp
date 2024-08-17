@@ -181,6 +181,9 @@ std::optional<uint32_t> CreateDungeon(DungeonMode mode)
 		if (mode != DungeonMode::NoContent && mode != DungeonMode::BreakOnFailureOrNoContent)
 			CreateDungeonContent();
 
+		if (leveltype == DTYPE_HELL)
+			InitL4PentagramTriggers();
+
 		if (currlevel == 15) {
 			// Locate Lazarus warp point
 			Point point = { quests[Q_BETRAYER]._qtx, quests[Q_BETRAYER]._qty };
