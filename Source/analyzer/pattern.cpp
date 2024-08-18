@@ -210,11 +210,11 @@ const uint8_t GROOBO16[TEMPLATEX][TEMPLATEY] = {
 	// clang-format off
     {   0,  0,  0, 96,  6,  6,  0,119,117 },
     {   0, 36, 38, 35, 51,  6,  0,116,  9 },
-    {   0, 37, 34, 33, 32,  6,  0, 15, 12 },
-    {   0, 96,  6, 31,  6,  6,  0,  0,  0 },
-    {   0,  6, 51,  6,  6,  6,  0,  0,  0 },
-    {   0,  0, 50, 51,  6,  6,  0,  0,  0 },
-    {   0,  0,  6, 97,  6,  6,  0,119, 16 },
+    {   0, 37, 34, 33, 32,  6,  0,116,  0 },
+    {   0, 96,  6, 31,  6,  6,  0,116,  0 },
+    {   0,  6, 51,  6,  6,  6,  0,116,  0 },
+    {   0,  0, 50, 51,  6,  6,  0,116,  0 },
+    {   0,  0,  6, 97,  6,  6,  0,116,  0 },
     {   0,  0,  0,  0,  0,  0,  0,116,125 },
 	// clang-format on
 };
@@ -272,7 +272,7 @@ void ForceSeeds(int level)
 	glSeedTbl[13] = sgGameInitInfo.dwSeed; // Matches level seed 4250794344, dungeon seed  723487375, game seed 1229976431 22 20:07
 	glSeedTbl[14] = sgGameInitInfo.dwSeed; // Matches level seed 1005627431, dungeon seed 2144005606, game seed 1229976755 22 20:12
 	glSeedTbl[15] = sgGameInitInfo.dwSeed; // Matches level seed 2844841604, dungeon seed 1342549707, game seed 1230053637 23 17:33
-	glSeedTbl[16] = sgGameInitInfo.dwSeed; // Matches level seed  277866386, dungeon seed  118068228, game seed 1230830247  1 17:17
+	glSeedTbl[16] = sgGameInitInfo.dwSeed; // Matches level seed  277866386, dungeon seed 1993034597, game seed 1230059906 23 17:17
 }
 
 bool ScannerPattern::skipLevel(int level)
